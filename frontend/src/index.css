@@ -1,0 +1,95 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@theme {
+  --spacing-base: 8px;
+  --spacing-container-max: 1280px;
+  --spacing-sm: 12px;
+  --spacing-md: 24px;
+  --spacing-xs: 4px;
+  --spacing-lg: 48px;
+  --spacing-xl: 80px;
+  --spacing-gutter: 24px;
+}
+
+@layer utilities {
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    }
+    .glass-panel-dark {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    }
+}
+
+/* Optimistic UI Interaction Classes */
+.active-scale:active {
+    transform: scale(0.97);
+    transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: theme('boxShadow.level-1');
+}
+
+@layer base {
+  body {
+      background-color: theme('colors.background');
+      color: theme('colors.on-background');
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+  }
+
+  /* Minimalist outlines for focus states */
+  *:focus-visible {
+      outline: 2px solid theme('colors.secondary');
+      outline-offset: 2px;
+  }
+
+  /* Base styles to prevent total breakage of unmigrated components temporarily */
+  input, select, textarea { font-family: inherit; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; background: transparent; font-family: inherit; }
+}
+
+@layer components {
+  .btn-primary {
+      @apply bg-primary text-white font-bold tracking-wide rounded-full px-8 py-3.5 shadow-level-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-level-2 hover:bg-primary-fixed active:scale-95 active:shadow-sm;
+  }
+  .btn-secondary {
+      @apply bg-secondary text-white font-bold tracking-wide rounded-full px-8 py-3.5 shadow-level-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-level-2 hover:bg-secondary-fixed active:scale-95 active:shadow-sm;
+  }
+  .btn-outline {
+      @apply border border-outline bg-surface text-primary font-bold tracking-wide rounded-full px-8 py-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-outline-variant hover:bg-surface-variant active:scale-95;
+  }
+}
+
+@layer utilities {
+  [class*="rounded"] {
+    border-radius: 3px !important;
+  }
+  .rounded-none {
+    border-radius: 0 !important;
+  }
+  
+  /* Force all icons to match extralight text */
+  svg {
+    stroke-width: 1px !important;
+  }
+}
