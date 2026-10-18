@@ -16,7 +16,7 @@ export default /**
 function AdminProductCreate() {
   const navigate = useNavigate();
   const {
-    isSeller
+    isAdmin
   } = useAuth();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -146,7 +146,7 @@ function AdminProductCreate() {
     };
     try {
       await api.post('/products', payload);
-      navigate(isSeller ? '/seller/products' : '/admin/products');
+      navigate(isAdmin ? '/admin/products' : '/seller/products');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create product.');
       setLoading(false);
@@ -154,7 +154,7 @@ function AdminProductCreate() {
   };
   return <div className="w-full max-w-4xl mx-auto pb-12">
       <div className="flex items-center gap-6 mb-8">
-        <button type="button" className="w-12 h-12 rounded-full flex items-center justify-center bg-surface border border-outline/50 hover:border-primary text-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isSeller ? '/seller/products' : '/admin/products')}>
+        <button type="button" className="w-12 h-12 rounded-full flex items-center justify-center bg-surface border border-outline/50 hover:border-primary text-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
           <IconArrowLeft size={24} stroke={1.5} />
         </button>
         <div>
@@ -297,7 +297,7 @@ function AdminProductCreate() {
 
         {/* Actions */}
         <div className="flex justify-end gap-4 mt-4">
-          <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isSeller ? '/seller/products' : '/admin/products')}>
+          <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
             Cancel
           </button>
           <button type="submit" className="px-8 py-3.5 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95" disabled={loading}>

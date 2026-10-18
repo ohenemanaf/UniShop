@@ -5,6 +5,8 @@
  */
 const express = require('express');
 const router = express.Router();
+let contactsReady;
+const ensureContacts=()=>contactsReady || (contactsReady=db.query("CREATE TABLE IF NOT EXISTS contact_messages (id INT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(120) NOT NULL,email VARCHAR(254) NOT NULL,message TEXT NOT NULL,status ENUM('NEW','READ','RESOLVED') NOT NULL DEFAULT 'NEW',created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)").catch(error=>{contactsReady=undefined;throw error;}));
 const db = require('../config/db');
 const {
   authenticate,
@@ -45,13 +47,16 @@ router.post('/contact', asyncHandler(async (req, res) => {
     });
   }
 
-  // Currently we just mock the success. In production, this would send an email to support or save to a contact_messages table.
-  console.log(`[Contact Form] From: ${name} (${email}) - ${message}`);
+  if(typeof name!=='string'||name.trim().length>120||typeof email!=='string'||email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||typeof message!=='string'||message.trim().length>5000) return res.status(400).json({error:'Enter a valid name, email, and message under 5001 characters.'});
+  await ensureContacts();
+  await db.query('INSERT INTO contact_messages (name,email,message) VALUES (?,?,?)',[name.trim(),email.trim(),message.trim()]);
   res.status(200).json({
     message: 'Message received successfully. We will get back to you soon!'
   });
 }));
 
+router.get('/contacts',authenticate,requireAdmin,asyncHandler(async(req,res)=>{await ensureContacts();const [messages]=await db.query('SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 100');res.json({messages});}));
+router.patch('/contacts/:id',authenticate,requireAdmin,asyncHandler(async(req,res)=>{if(!['NEW','READ','RESOLVED'].includes(req.body.status))return res.status(400).json({error:'Invalid message status.'});await ensureContacts();const [result]=await db.query('UPDATE contact_messages SET status=? WHERE id=?',[req.body.status,req.params.id]);if(!result.affectedRows)return res.status(404).json({error:'Message not found.'});res.json({message:'Message status updated.'});}));
 // GET /api/v1/crm/tickets/me - Customer views their tickets
 router.get('/tickets/me', authenticate, asyncHandler(async (req, res) => {
   const [tickets] = await db.query('SELECT * FROM support_tickets WHERE user_id = ? ORDER BY created_at DESC', [req.user.id]);

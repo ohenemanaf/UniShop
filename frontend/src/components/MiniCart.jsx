@@ -8,11 +8,14 @@ import { useCart } from '../context/CartContext';
 import { IconX, IconTrash, IconArrowRight } from '@tabler/icons-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GHS from '../utils/currency';
+import {useToast} from '../context/ToastContext';
 export default /**
  * Function MiniCart
  * @returns {any}
  */
 function MiniCart() {
+  const {showToast}=useToast();
+  const report=err=>showToast(err.response?.data?.error || 'Could not update cart.','error');
   const {
     cart,
     isCartOpen,
@@ -45,7 +48,7 @@ function MiniCart() {
       }} className="fixed top-0 right-0 h-[100dvh] w-full max-w-[400px] bg-surface shadow-level-3 z-[70] flex flex-col border-l border-outline/30">
             <div className="flex items-center justify-between p-6 border-b border-outline/30 bg-surface-variant/30">
               <h2 className="text-2xl font-bold text-primary tracking-tight">Your Cart</h2>
-              <button onClick={() => setIsCartOpen(false)} className="p-2 bg-surface rounded-full text-on-surface-variant hover:text-primary hover:bg-outline transition-colors active:scale-95">
+              <button aria-label="Close cart" onClick={() => setIsCartOpen(false)} className="p-2 bg-surface rounded-full text-on-surface-variant hover:text-primary hover:bg-outline transition-colors active:scale-95">
                 <IconX size={20} stroke={1.5} />
               </button>
             </div>
@@ -73,11 +76,11 @@ function MiniCart() {
                         </div>
                         <div className="flex items-center justify-between mt-2">
                           <div className="flex items-center gap-3 bg-surface border border-outline rounded-lg px-2 py-1">
-                            <button onClick={() => updateQuantity(item.sku, item.quantity - 1)} className="text-on-surface-variant hover:text-primary transition-colors font-bold text-lg leading-none">-</button>
+                            <button onClick={() => updateQuantity(item.sku, item.quantity - 1).catch(report)} className="text-on-surface-variant hover:text-primary transition-colors font-bold text-lg leading-none">-</button>
                             <span className="text-sm font-bold text-primary w-4 text-center">{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.sku, item.quantity + 1)} className="text-on-surface-variant hover:text-primary transition-colors font-bold text-lg leading-none">+</button>
+                            <button onClick={() => updateQuantity(item.sku, item.quantity + 1).catch(report)} disabled={item.quantity >= item.available_stock} className="text-on-surface-variant hover:text-primary transition-colors font-bold text-lg leading-none">+</button>
                           </div>
-                          <button onClick={() => removeFromCart(item.sku)} className="p-1.5 text-error/70 hover:text-error hover:bg-error/10 rounded-lg transition-colors">
+                          <button onClick={() => removeFromCart(item.sku).catch(report)} className="p-1.5 text-error/70 hover:text-error hover:bg-error/10 rounded-lg transition-colors">
                             <IconTrash size={18} stroke={1.5} />
                           </button>
                         </div>

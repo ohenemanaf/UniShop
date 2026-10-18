@@ -39,6 +39,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [pagination, setPagination] = useState({});
+  const [error,setError]=useState('');
   const [loading, setLoading] = useState(true);
   const search = searchParams.get('search') || '';
   const category = searchParams.get('category') || '';
@@ -47,12 +48,13 @@ function Products() {
   const maxPrice = searchParams.get('maxPrice') || '';
   const color = searchParams.get('color') || '';
   const size = searchParams.get('size') || '';
-  const page = parseInt(searchParams.get('page') || '1');
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1',10) || 1);
   const [priceRange, setPriceRange] = useState([parseInt(minPrice) || 0, parseInt(maxPrice) || 2000]);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  const fetchProducts = useCallback(async () => {
+  const fetchProducts = useCallback(async signal => {
     setLoading(true);
+    setError('');
     try {
       const params = {
         page,
@@ -66,19 +68,24 @@ function Products() {
       if (color) params.color = color;
       if (size) params.size = size;
       const res = await api.get('/products', {
-        params
+        params, signal
       });
       setProducts(res.data.products);
       setPagination(res.data.pagination);
     } catch (err) {
-      console.error(err);
+      if(signal?.aborted) return;
+      setProducts([]);setPagination({});
+      setError(err.response?.data?.error || 'Products could not load. Please try again.');
     } finally {
-      setLoading(false);
+      if(!signal?.aborted) setLoading(false);
     }
   }, [search, category, sort, minPrice, maxPrice, color, size, page]);
   useEffect(() => {
-    fetchProducts();
+    const controller=new AbortController();
+    fetchProducts(controller.signal);
+    return ()=>controller.abort();
   }, [fetchProducts]);
+  useEffect(()=>setPriceRange([Number(minPrice)||0,maxPrice===''?2000:Number(maxPrice)]),[minPrice,maxPrice]);
   useEffect(() => {
     api.get('/categories').then(res => setCategories(res.data)).catch(() => {});
   }, []);
@@ -118,7 +125,7 @@ function Products() {
   };
   const pageTitle = search ? `Search Results for "${search}"` : category ? `${categories.find(c => c.slug === category)?.name || category}` : 'All Products';
   return (
-    <PageTransition className="max-w-[1440px] mx-auto px-4 md:px-8 pt-24 pb-20">
+    <PageTransition className="max-w-[1440px] mx-auto px-4 md:px-8 pt-6 pb-20">
       <SEO title={`${pageTitle} | UniShop`} description={`Browse ${pageTitle.toLowerCase()} on UniShop. Find the best deals and premium products.`} />
       
       {/* Page Header */}
@@ -225,7 +232,7 @@ function Products() {
             <div className="flex items-center space-x-3">
               {/* Hamburger Menu Toggle (Mobile Only) */}
               <button onClick={() => setIsMobileFilterOpen(true)} className="lg:hidden flex items-center gap-2 text-sm font-bold bg-primary text-white px-4 py-2 rounded-full shadow-md active:scale-95 transition-all">
-                <IconMenu2 size={18} /> Menu
+                <IconMenu2 size={18} /> Filters
               </button>
 
               <span className="hidden md:inline font-bold text-xs uppercase tracking-widest text-on-surface-variant">Sort by</span>
@@ -240,7 +247,7 @@ function Products() {
             </div>
           </div>
 
-          {loading ? <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {error ? <div role="alert" className="bg-surface rounded-2xl border border-outline p-8 text-center"><p className="text-error">{error}</p><button onClick={()=>fetchProducts()} className="btn-primary mt-5">Try again</button></div> : loading ? <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {[...Array(12)].map((_, i) => <div key={i} className="flex flex-col bg-surface border border-outline/30 rounded-2xl overflow-hidden min-w-0 h-full shadow-sm">
                   <div className="aspect-[4/5] bg-surface-variant animate-pulse shrink-0" />
                   <div className="p-4 flex flex-col flex-grow">
@@ -281,7 +288,7 @@ function Products() {
                     {[...Array(pagination.totalPages)].map((_, i) => {
                 const p = i + 1;
                 if (p === 1 || p === pagination.totalPages || Math.abs(p - page) <= 1) {
-                  return <button key={p} onClick={() => setParam('page', p)} className={`w-8 h-8 rounded-[3px] flex items-center justify-center font-bold text-sm transition-all ${p === page ? 'bg-primary text-white shadow-md' : 'text-on-surface-variant border border-transparent hover:border-outline hover:bg-surface-variant'}`}>
+                  return <button key={p} onClick={() => setParam('page', p)} className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm transition-all ${p === page ? 'bg-primary text-white shadow-md' : 'text-on-surface-variant border border-transparent hover:border-outline hover:bg-surface-variant'}`}>
                             {p}
                           </button>;
                 }

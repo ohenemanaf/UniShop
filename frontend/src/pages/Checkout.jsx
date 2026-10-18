@@ -12,7 +12,7 @@ import GHS from '../utils/currency';
 import { IconCircleCheck, IconPackage, IconCreditCard, IconDeviceMobile, IconBuildingBank, IconCash, IconAlertTriangle } from '@tabler/icons-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx');
+const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) : null;
 /**
  * Function CheckoutFormWrapper
  * @param {any} props
@@ -81,7 +81,7 @@ function Checkout() {
     region: '',
     zip: '',
     country: 'Ghana',
-    payment_method: 'momo_mtn'
+    payment_method: 'card'
   });
   const [validation, setValidation] = useState({});
   const [step, setStep] = useState(1);
@@ -93,9 +93,9 @@ function Checkout() {
  */
   const validateField = (name, value) => {
     let err = '';
-    if (name === 'zip' && value && !/^\d{5,6}$/.test(value.replace(/\s/g, ''))) err = 'ZIP code format appears invalid.';
+    if (name === 'zip' && value && !/^[a-zA-Z0-9 -]{3,20}$/.test(value.trim())) err = 'Enter a valid postal code or GhanaPost GPS address.';
     if (name === 'line1' && value && value.length < 5) err = 'Please provide a full street address.';
-    if (name === 'city' && value && /\d/.test(value)) err = 'City name should not contain numbers.';
+
     setValidation(prev => ({
       ...prev,
       [name]: err
@@ -117,15 +117,15 @@ function Checkout() {
   const [isMocked, setIsMocked] = useState(false);
   useEffect(() => {
     api.get('/auth/me').then(res => {
-      if (res.data.address_line1) {
+      if (res.data.address?.line1) {
         setForm(f => ({
           ...f,
-          line1: res.data.address_line1 || '',
-          line2: res.data.address_line2 || '',
-          city: res.data.city || '',
-          region: res.data.state || '',
-          zip: res.data.zip || '',
-          country: res.data.country || 'Ghana'
+          line1: res.data.address.line1 || '',
+          line2: res.data.address.line2 || '',
+          city: res.data.address.city || '',
+          region: res.data.address.state || '',
+          zip: res.data.address.zip || '',
+          country: res.data.address.country || 'Ghana'
         }));
       }
     }).catch(() => {});
@@ -135,11 +135,8 @@ function Checkout() {
  * @param {any} e
  * @returns {any}
  */
-  const handleChange = e => setForm({
-    ...form,
-    [e.target.name]: e.target.value
-  });
-  const subtotal = cart.total || 0;
+  const handleChange = e => {setForm({...form,[e.target.name]:e.target.value});validateField(e.target.name,e.target.value);};
+  const subtotal = Number(cart.total) || 0;
   let discountAmount = 0;
   if (appliedPromo) {
     discountAmount = subtotal * appliedPromo.discount_percentage / 100;
@@ -156,7 +153,7 @@ function Checkout() {
     if (!promoCodeInput) return;
     try {
       const res = await api.post('/orders/validate-promo', {
-        promoCode: promoCodeInput
+        promoCode: promoCodeInput.trim().toUpperCase()
       });
       setAppliedPromo(res.data);
     } catch (err) {
@@ -171,7 +168,7 @@ function Checkout() {
  */
   const initPaymentIntent = async () => {
     setError('');
-    if (!form.line1 || !form.city || !form.zip) {
+    if (!form.line1.trim() || !form.city.trim() || !form.region || !form.zip.trim() || Object.values(validation).some(Boolean)) {
       setError('Please fill in all required address fields first.');
       return;
     }
@@ -193,8 +190,8 @@ function Checkout() {
       setClientSecret(res.data.clientSecret);
       setIsMocked(res.data.mocked);
       setOrderId(res.data.orderId);
-    } catch {
-      setError('Failed to initialize payment.');
+    } catch(err) {
+      setError(err.response?.data?.error || 'Failed to initialize payment. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -205,7 +202,7 @@ function Checkout() {
  */
   const handlePaymentSuccess = () => {
     setSuccess(orderId);
-    clearCart();
+    clearCart().catch(() => {});
   };
   /**
  * Arrow Function handleAlternativeSubmit
@@ -256,7 +253,7 @@ function Checkout() {
   }
   return <div className="w-full pb-20 pt-24 bg-background">
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-        
+
         <div className="mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">Checkout</h1>
           <p className="text-lg text-on-surface-variant">Complete your order securely.</p>
@@ -265,14 +262,14 @@ function Checkout() {
         <div className="flex flex-col lg:flex-row gap-12">
           {/* Checkout Form */}
           <div className="w-full lg:w-2/3 flex flex-col gap-8">
-            
+
             {/* Stepper */}
             <div className="flex items-center justify-between mb-2 relative px-4">
               <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-1 bg-outline/50 -z-10 rounded-full"></div>
               <div className="absolute left-4 top-1/2 -translate-y-1/2 h-1 bg-primary -z-10 rounded-full transition-all duration-500" style={{
               width: step === 1 ? '0%' : step === 2 ? '50%' : 'calc(100% - 32px)'
             }}></div>
-              
+
               {[{
               num: 1,
               label: 'Shipping'
@@ -298,7 +295,7 @@ function Checkout() {
                   </div>
                   Shipping Address
                 </h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="md:col-span-2 flex flex-col gap-1.5">
                     <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 1 *</label>
@@ -316,14 +313,14 @@ function Checkout() {
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Region *</label>
-                    <select name="region" className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
+                    <select name="region" required className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
                       <option value="">Select Region</option>
-                      {['Greater Accra', 'Ashanti', 'Western', 'Central', 'Eastern', 'Northern', 'Upper East', 'Upper West', 'Volta', 'Brong-Ahafo', 'Savannah', 'North East', 'Bono East', 'Ahafo', 'Oti', 'Western North'].map(r => <option key={r} value={r}>{r}</option>)}
+                      {['Greater Accra', 'Ashanti', 'Western', 'Central', 'Eastern', 'Northern', 'Upper East', 'Upper West', 'Volta', 'Bono', 'Savannah', 'North East', 'Bono East', 'Ahafo', 'Oti', 'Western North'].map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">ZIP Code *</label>
-                    <input name="zip" onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.zip ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="ZIP" value={form.zip} onChange={handleChange} required />
+                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Postal code / GhanaPost GPS *</label>
+                    <input maxLength={20} name="zip" onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.zip ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="e.g. GA-123-4567" value={form.zip} onChange={handleChange} required />
                     {validation.zip && <span className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.zip}</span>}
                   </div>
                   <div className="flex flex-col gap-1.5">
@@ -354,7 +351,7 @@ function Checkout() {
                   </div>
                   Payment Method
                 </h2>
-                
+
                 <div className="flex flex-col gap-3">
                   {[{
                 id: 'momo_mtn',
@@ -386,7 +383,7 @@ function Checkout() {
                 label: 'Cash on Delivery',
                 sub: 'Pay when item arrives',
                 icon: <IconCash size={20} stroke={1.5} />
-              }].map(method => <label key={method.id} className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2
+              }].filter(method => method.id === 'card').map(method => <label key={method.id} className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2
                         ${form.payment_method === method.id ? 'border-primary bg-surface-variant/30 shadow-sm' : 'border-transparent bg-surface-variant/50 hover:bg-surface-variant'}
                       `}>
                       <input type="radio" name="payment_method" value={method.id} checked={form.payment_method === method.id} onChange={e => {
@@ -419,7 +416,7 @@ function Checkout() {
                   </div>
                   Review & Complete
                 </h2>
-                
+
                 <div className="mb-8 p-5 bg-surface-variant/30 rounded-2xl border border-outline/30">
                   <p className="text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Shipping To</p>
                   <p className="text-primary font-bold text-lg mb-1">{user?.name || 'Customer'}</p>
@@ -443,10 +440,10 @@ function Checkout() {
                         {loading ? 'Initializing...' : 'Proceed to Card Details'}
                       </button> : isMocked ? <div className="flex flex-col gap-4">
                          <div className="bg-error/10 text-error p-4 rounded-xl text-sm font-medium border border-error/20">
-                           Stripe Secret Key is missing in backend (.env). Mocking payment success.
+                           Demo checkout: no money will be charged.
                          </div>
                          <button className="btn-primary w-full" onClick={handleAlternativeSubmit} disabled={loading}>
-                           {loading ? 'Processing...' : `Place Mock Order — ${GHS(grandTotal)}`}
+                           {loading ? 'Processing...' : `Complete Demo Order — ${GHS(grandTotal)}`}
                          </button>
                        </div> : <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Elements stripe={stripePromise} options={{
@@ -454,8 +451,8 @@ function Checkout() {
                   appearance: {
                     theme: 'flat',
                     variables: {
-                      fontFamily: 'Inter, sans-serif',
-                      colorPrimary: '#4F46E5',
+                      fontFamily: 'Manrope, sans-serif',
+                      colorPrimary: '#185C43',
                       borderRadius: '12px'
                     }
                   }
@@ -482,7 +479,7 @@ function Checkout() {
           <div className="w-full lg:w-1/3">
             <div className="bg-surface rounded-[2rem] p-6 md:p-8 sticky top-24 border border-outline/30 shadow-sm">
               <h2 className="text-xl font-bold text-primary mb-6 border-b border-outline/30 pb-4">Order Summary</h2>
-              
+
               <div className="flex flex-col gap-4 mb-6 max-h-[300px] overflow-y-auto pr-2 hide-scrollbar">
                 {cart.items.map(item => <div key={item.sku} className="flex gap-4 items-center">
                     <div className="relative w-16 h-16 bg-surface-variant rounded-lg overflow-hidden shrink-0 border border-outline/30">
@@ -524,9 +521,9 @@ function Checkout() {
                   <span className="font-bold text-primary">{shipping === 0 ? 'FREE' : GHS(shipping)}</span>
                 </div>
               </div>
-              
+
               <div className="h-px bg-outline/30 w-full mb-6" />
-              
+
               <div className="flex justify-between items-end">
                 <span className="text-lg text-primary font-bold">Total</span>
                 <span className="text-3xl font-black text-primary leading-none tracking-tight">{GHS(grandTotal)}</span>

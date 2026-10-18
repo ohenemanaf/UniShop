@@ -329,7 +329,7 @@ function SellerOrders() {
           type: "spring",
           stiffness: 300,
           damping: 25
-        }} className="bg-surface w-full max-w-md p-8 rounded-[2rem] shadow-level-3 border border-outline/20 relative overflow-hidden">
+        }} className="bg-surface w-full max-w-[28rem] p-8 rounded-[2rem] shadow-level-3 border border-outline/20 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10"></div>
               
               <h2 className="text-2xl font-black text-primary mb-6 flex items-center gap-3">

@@ -23,7 +23,7 @@ api.interceptors.request.use(config => {
 
 // ── Response interceptor: handle 401 globally ─────────────────────────────
 api.interceptors.response.use(response => response, error => {
-  if (error.response?.status === 401) {
+  if (error.response?.status === 401 && error.config?.headers?.Authorization && !error.config?.url?.startsWith('/auth/')) {
     localStorage.removeItem('UniShop_token');
     localStorage.removeItem('UniShop_user');
     // Redirect to login

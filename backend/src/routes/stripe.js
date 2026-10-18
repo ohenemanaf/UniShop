@@ -13,6 +13,7 @@ const {
 } = require('../middleware/errorHandler');
 const db = require('../config/db');
 const router = express.Router();
+const {randomUUID}=require('crypto');
 router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const {
@@ -41,7 +42,7 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
     JOIN product_variants pv ON pv.sku = ci.sku
     JOIN products p ON p.id = pv.product_id
     LEFT JOIN inventory inv ON inv.sku = ci.sku
-    WHERE ci.cart_id = ?
+    WHERE ci.cart_id = ? AND pv.is_active = 1 AND p.is_active = 1
   `, [cart[0].id]);
   if (cartItems.length === 0) return res.status(400).json({
     error: 'Your cart is empty.'
@@ -49,6 +50,7 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();
+    const orderId = randomUUID();
 
     // 1. Check & reserve inventory
     for (const item of cartItems) {
@@ -58,7 +60,8 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
           status: 400
         });
       }
-      await conn.query('UPDATE inventory SET reserved = reserved + ? WHERE sku = ?', [item.quantity, item.sku]);
+      const [reservation] = await conn.query('UPDATE inventory SET reserved = reserved + ? WHERE sku = ? AND stock - reserved >= ?', [item.quantity, item.sku, item.quantity]);
+      if (!reservation.affectedRows) throw Object.assign(new Error('Stock changed. Please review your cart.'), {status:400});
     }
 
     // 2. Calculate totals
@@ -83,10 +86,8 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
       INSERT INTO orders (id, user_id, status, shipping_line1, shipping_line2, shipping_city,
                           shipping_state, shipping_zip, shipping_country,
                           subtotal, shipping_fee, discount, total, payment_method, payment_status, notes)
-      VALUES (UUID(), ?, 'PENDING', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?)
-    `, [userId, shipping_address.line1, shipping_address.line2 || null, shipping_address.city, shipping_address.state || null, shipping_address.zip, shipping_address.country || 'Ghana', subtotal.toFixed(2), shipping_fee.toFixed(2), discount_amount.toFixed(2), total.toFixed(2), payment_method, notes || null]);
-    const [orderRows] = await conn.query('SELECT id FROM orders WHERE user_id = ? ORDER BY created_at DESC LIMIT 1', [userId]);
-    const orderId = orderRows[0].id;
+      VALUES (?, ?, 'PENDING', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDING', ?)
+    `, [orderId, userId, shipping_address.line1, shipping_address.line2 || null, shipping_address.city, shipping_address.state || null, shipping_address.zip, shipping_address.country || 'Ghana', subtotal.toFixed(2), shipping_fee.toFixed(2), discount_amount.toFixed(2), total.toFixed(2), payment_method, notes || null]);
 
     // 4. Create Order Items
     for (const item of cartItems) {
@@ -95,10 +96,11 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `, [orderId, item.sku, item.product_name, item.variant_name || null, item.quantity, item.price, item.product_image || null, item.seller_id || null]);
     }
-    await conn.commit();
 
     // 5. Create Stripe PaymentIntent or Mock Response
-    if (!process.env.STRIPE_SECRET_KEY) {
+    if (process.env.PORTFOLIO_DEMO === 'true' || !process.env.STRIPE_SECRET_KEY) {
+      if(process.env.NODE_ENV === 'production' && process.env.PORTFOLIO_DEMO !== 'true') throw Object.assign(new Error('Payments are not configured.'),{status:503});
+      await conn.commit();
       return res.json({
         clientSecret: 'mock_client_secret_because_no_stripe_key_provided',
         mocked: true,
@@ -118,6 +120,7 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
         user_id: userId
       }
     });
+    await conn.commit();
     res.json({
       clientSecret: paymentIntent.client_secret,
       mocked: false,

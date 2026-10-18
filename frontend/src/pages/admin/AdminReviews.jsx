@@ -92,7 +92,7 @@ function AdminReviews() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <div className="max-w-xs min-w-[250px]">
+                        <div className="max-w-[20rem] min-w-[250px]">
                           {r.title && <strong className="block text-sm font-bold text-primary mb-1 truncate">{r.title}</strong>}
                           <p className="text-sm font-medium text-on-surface-variant line-clamp-2" title={r.body}>{r.body}</p>
                         </div>

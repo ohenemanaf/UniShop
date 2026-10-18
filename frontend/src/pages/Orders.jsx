@@ -61,11 +61,11 @@ function Orders() {
         <SEO title="My Orders | UniShop" />
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8 tracking-tight">My Orders</h1>
         <div className="flex flex-col gap-6 animate-pulse">
-          {[1, 2, 3].map(i => <div key={i} className="w-full h-24 bg-surface-variant/50 rounded-[3px]" />)}
+          {[1, 2, 3].map(i => <div key={i} className="w-full h-24 bg-surface-variant/50 rounded-xl" />)}
         </div>
       </div>;
   }
-  return <div className="w-full pb-20 pt-24 bg-background min-h-[80vh]">
+  return <div className="w-full pb-20 pt-6 bg-background min-h-[80vh]">
       <SEO title="My Orders | UniShop" />
       <div className="max-w-[1440px] mx-auto px-4 md:px-8">
         
@@ -76,22 +76,22 @@ function Orders() {
           </div>
         </div>
 
-        {orders.length === 0 ? <div className="w-full min-h-[50vh] flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-[3px] p-8 shadow-sm">
-            <div className="w-24 h-24 bg-surface-variant/50 border border-outline/30 rounded-[3px] flex items-center justify-center text-primary mb-6">
+        {orders.length === 0 ? <div className="w-full min-h-[50vh] flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-xl p-8 shadow-sm">
+            <div className="w-24 h-24 bg-surface-variant/50 border border-outline/30 rounded-xl flex items-center justify-center text-primary mb-6">
               <IconPackage size={48} stroke={1.5} />
             </div>
             <h2 className="text-3xl font-bold text-primary mb-3 tracking-tight">No orders yet</h2>
-            <p className="text-lg text-on-surface-variant mb-10 w-full min-w-[300px] max-w-md">Once you place an order, it will appear here so you can easily track its status.</p>
-            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-[3px] font-bold uppercase tracking-widest text-sm active:scale-95 shadow-sm hover:shadow-md transition-all">
+            <p className="text-lg text-on-surface-variant mb-10 w-full min-w-[300px] max-w-[28rem]">Once you place an order, it will appear here so you can easily track its status.</p>
+            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm active:scale-95 shadow-sm hover:shadow-md transition-all">
               Start Shopping
             </Link>
           </div> : <div className="flex flex-col gap-6">
-            {orders.map(order => <Link key={order.id} to={`/orders/${order.id}`} className="group block bg-surface border border-outline/30 rounded-[3px] p-6 md:p-8 hover:shadow-sm hover:border-outline/50 transition-all duration-300">
+            {orders.map(order => <Link key={order.id} to={`/orders/${order.id}`} className="group block bg-surface border border-outline/30 rounded-xl p-6 md:p-8 hover:shadow-sm hover:border-outline/50 transition-all duration-300">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   
                   {/* Left Side: Order Meta */}
                   <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-[3px] bg-surface-variant border border-outline/30 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                    <div className="w-16 h-16 rounded-xl bg-surface-variant border border-outline/30 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                       <IconPackage size={28} stroke={1.5} />
                     </div>
                     <div>
@@ -115,7 +115,7 @@ function Orders() {
                       <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mt-1">Total Amount</p>
                     </div>
 
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-[3px] text-xs font-bold uppercase tracking-widest border ${STATUS_COLORS[order.status] || STATUS_COLORS.PENDING}`}>
+                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border ${STATUS_COLORS[order.status] || STATUS_COLORS.PENDING}`}>
                       {getStatusIcon(order.status)} {order.status}
                     </div>
 

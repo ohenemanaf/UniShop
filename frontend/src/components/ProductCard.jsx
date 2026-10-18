@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
+import {useToast} from '../context/ToastContext';
 import { IconStar, IconStarFilled, IconHeart, IconHeartFilled, IconPlus, IconLoader2 } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { GHS0 } from '../utils/currency';
@@ -43,6 +44,7 @@ function ProductCard({
     isAuthenticated
   } = useAuth();
   const navigate = useNavigate();
+  const {showToast}=useToast();
   const [wishlisted, setWishlisted] = useState(wishlistIds.includes(product.id));
   const [adding, setAdding] = useState(false);
 
@@ -50,7 +52,7 @@ function ProductCard({
   const toggleWishlist = async e => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) { navigate('/login'); return; }
     const wasWishlisted = wishlisted;
     setWishlisted(!wasWishlisted);
     try {
@@ -64,6 +66,7 @@ function ProductCard({
       onWishlistChange?.(product.id, !wasWishlisted);
     } catch {
       setWishlisted(wasWishlisted);
+      showToast('Could not update your wishlist. Please try again.','error');
     }
   };
   /**
@@ -84,10 +87,10 @@ function ProductCard({
       // Fetch the first active variant SKU — product list doesn't return SKUs
       const res = await api.get(`/products/${product.id}`);
       const firstVariant = res.data.variants?.[0];
-      if (!firstVariant) return;
+      if (!firstVariant) { showToast('This product is unavailable.', 'error'); return; }
       await addToCart(firstVariant.sku, 1);
     } catch (err) {
-      console.error('Quick add failed:', err);
+      showToast(err.response?.data?.error || 'Could not add this item to your cart.', 'error');
     } finally {
       setAdding(false);
     }
@@ -110,8 +113,8 @@ function ProductCard({
         <img src={product.image_url || 'https://placehold.co/800x1000/F1F5F9/333333.png?text=Product'} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply" loading="lazy" />
         
         {/* Wishlist Button */}
-        <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 md:opacity-100">
-          <button onClick={toggleWishlist} className={`bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-90 border border-white/40 ${wishlisted ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
+        <div className="absolute top-3 right-3 z-10 opacity-100 transition-opacity duration-300">
+          <button aria-label={wishlisted ? "Remove from wishlist" : "Save to wishlist"} onClick={toggleWishlist} className={`bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-90 border border-white/40 ${wishlisted ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
             {wishlisted ? <IconHeartFilled size={18} className="text-secondary w-4 h-4 md:w-5 md:h-5" /> : <IconHeart size={18} className="w-4 h-4 md:w-5 md:h-5" stroke={1.5} />}
           </button>
         </div>
@@ -136,14 +139,14 @@ function ProductCard({
           <span className="text-[10px] md:text-xs text-on-surface-variant font-bold uppercase tracking-widest truncate w-auto min-w-0">{product.category_name || 'Category'}</span>
         </div>
         
-        <h3 className="text-sm md:text-base text-primary font-bold mb-2 leading-snug line-clamp-2 min-w-0 break-words group-hover:text-secondary transition-colors">
+        <h3 className="text-sm md:text-base text-on-surface font-semibold mb-2 leading-snug line-clamp-2 min-w-0 break-words group-hover:text-secondary transition-colors">
           {product.name}
         </h3>
 
         <div className="mt-auto flex justify-between items-end min-w-0 w-full pt-1">
            <div className="flex flex-col gap-1.5 shrink min-w-0">
              <div className="flex items-baseline gap-2 flex-wrap">
-               <span className="font-headline-md text-lg md:text-xl font-black text-primary tracking-tight">{GHS0(price || 0)}</span>
+               <span className="font-headline-md text-lg md:text-xl font-bold text-on-surface tracking-tight">{GHS0(price || 0)}</span>
                {discount && <span className="line-through text-on-surface-variant text-[11px] md:text-xs font-medium">{GHS0(comparePrice)}</span>}
              </div>
              <StarRating rating={product.avg_rating || 0} count={product.review_count || 0} />

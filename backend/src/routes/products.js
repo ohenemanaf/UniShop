@@ -214,6 +214,7 @@ router.post('/', authenticate, requireSellerOrAdmin, asyncHandler(async (req, re
   if (!name || !slug) return res.status(400).json({
     error: 'name and slug are required.'
   });
+  try {require('../config/productValidation').validateVariants(variants);}catch(error){return res.status(400).json({error:error.message});}
   const seller_id = req.user.role === 'seller' ? req.user.id : null;
   const conn = await db.getConnection();
   try {
@@ -241,40 +242,36 @@ router.post('/', authenticate, requireSellerOrAdmin, asyncHandler(async (req, re
 }));
 
 // ── Admin & Seller: PATCH /api/v1/products/:id ────────────────────────────────────
-router.patch('/:id', authenticate, requireSellerOrAdmin, asyncHandler(async (req, res) => {
-  const {
-    name,
-    description,
-    category_id,
-    brand,
-    image_url,
-    gallery_images,
-    tags,
-    is_active
-  } = req.body;
-  if (req.user.role === 'seller') {
-    const [prods] = await db.query('SELECT seller_id FROM products WHERE id = ?', [req.params.id]);
-    if (prods.length === 0 || prods[0].seller_id !== req.user.id) {
-      return res.status(403).json({
-        error: 'You do not own this product.'
-      });
+router.patch('/:id', authenticate, requireSellerOrAdmin, asyncHandler(async(req,res)=>{
+  const allowed=['name','description','category_id','brand','image_url','gallery_images','tags','is_active'];
+  const fields=allowed.filter(key=>Object.hasOwn(req.body,key));
+  let variants;
+  try {if(Object.hasOwn(req.body,'variants')) variants=require('../config/productValidation').validateVariants(req.body.variants);}
+  catch(error){return res.status(400).json({error:error.message});}
+  if(!fields.length && !variants)return res.status(400).json({error:'No changes provided.'});
+  if(fields.includes('name') && (typeof req.body.name!=='string'||!req.body.name.trim()||req.body.name.length>255))return res.status(400).json({error:'A product name under 256 characters is required.'});
+  if(fields.includes('gallery_images') && (!Array.isArray(req.body.gallery_images)||req.body.gallery_images.length>4||req.body.gallery_images.some(url=>typeof url!=='string')))return res.status(400).json({error:'Provide up to four gallery image URLs.'});
+  if(fields.includes('is_active') && ![true,false,0,1].includes(req.body.is_active))return res.status(400).json({error:'Invalid product visibility.'});
+  for(const key of ['description','category_id','brand','image_url','tags'])if(fields.includes(key) && req.body[key]!=null && typeof req.body[key]!=='string')return res.status(400).json({error:'Invalid '+key});
+  const conn=await db.getConnection();
+  try {
+    await conn.beginTransaction();
+    const [products]=await conn.query('SELECT seller_id FROM products WHERE id = ? FOR UPDATE',[req.params.id]);
+    if(!products.length)throw Object.assign(new Error('Product not found.'),{status:404});
+    if(req.user.role==='seller' && products[0].seller_id!==req.user.id)throw Object.assign(new Error('You do not own this product.'),{status:403});
+    if(fields.length){
+      const values=fields.map(key=>key==='gallery_images'?JSON.stringify(req.body[key]):key==='name'?req.body[key].trim():req.body[key]);
+      await conn.query('UPDATE products SET '+fields.map(key=>key+' = ?').join(', ')+' WHERE id = ?',[...values,req.params.id]);
     }
-  }
-  await db.query(`
-    UPDATE products SET
-      name           = COALESCE(?, name),
-      description    = COALESCE(?, description),
-      category_id    = COALESCE(?, category_id),
-      brand          = COALESCE(?, brand),
-      image_url      = COALESCE(?, image_url),
-      gallery_images = COALESCE(?, gallery_images),
-      tags           = COALESCE(?, tags),
-      is_active      = COALESCE(?, is_active)
-    WHERE id = ?
-  `, [name || null, description || null, category_id || null, brand || null, image_url || null, gallery_images ? JSON.stringify(gallery_images) : null, tags || null, is_active ?? null, req.params.id]);
-  res.json({
-    message: 'Product updated.'
-  });
+    if(variants)for(const variant of variants){
+      const [rows]=await conn.query('SELECT pv.sku,inv.reserved FROM product_variants pv JOIN inventory inv ON inv.sku=pv.sku WHERE pv.sku=? AND pv.product_id=? FOR UPDATE',[variant.sku,req.params.id]);
+      if(!rows.length)throw Object.assign(new Error('Variant does not belong to this product.'),{status:400});
+      if(variant.stock<rows[0].reserved)throw Object.assign(new Error('Stock cannot be below reserved units for '+variant.sku),{status:400});
+      await conn.query('UPDATE product_variants SET name=?,price=?,compare_price=? WHERE sku=?',[variant.name,variant.price,variant.compare_price,variant.sku]);
+      await conn.query('UPDATE inventory SET stock=? WHERE sku=?',[variant.stock,variant.sku]);
+    }
+    await conn.commit();res.json({message:'Product and variants updated.'});
+  }catch(error){await conn.rollback();throw error;}finally{conn.release();}
 }));
 
 // ── Admin & Seller: DELETE /api/v1/products/:id ───────────────────────────────────

@@ -4,6 +4,7 @@
  * Date: 2026-07-21
  */
 import { useState } from 'react';
+import {useStoreSettings} from '../context/StoreSettingsContext';
 import SEO from '../components/SEO';
 import { IconMail, IconPhone, IconMapPin, IconSend } from '@tabler/icons-react';
 import api from '../api';
@@ -13,6 +14,7 @@ export default /**
  * @returns {any}
  */
 function ContactUs() {
+  const {settings}=useStoreSettings();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -44,7 +46,7 @@ function ContactUs() {
       setLoading(false);
     }
   };
-  return <div className="min-h-screen bg-background pt-24 pb-20 px-4 md:px-8">
+  return <div className="min-h-[75vh] bg-background pt-6 pb-20 px-4 md:px-8">
       <SEO title="Contact Us | UniShop" />
       <div className="max-w-[1280px] mx-auto">
         <div className="text-center mb-16 animate-fade-in-up">
@@ -64,7 +66,7 @@ function ContactUs() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Email</p>
-                  <p className="text-lg font-medium text-primary">support@unishop.edu</p>
+                  <p className="text-lg font-medium text-primary">{settings.support_email || 'Use the message form'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-6">
@@ -72,8 +74,8 @@ function ContactUs() {
                   <IconPhone size={28} stroke={1.5} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Phone</p>
-                  <p className="text-lg font-medium text-primary">+1 (555) 123-4567</p>
+                  <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Demo support</p>
+                  <p className="text-lg font-medium text-primary">Messages appear in the admin support inbox.</p>
                 </div>
               </div>
               <div className="flex items-center gap-6">
@@ -81,8 +83,8 @@ function ContactUs() {
                   <IconMapPin size={28} stroke={1.5} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Office</p>
-                  <p className="text-lg font-medium text-primary">Student Union Building, Room 204</p>
+                  <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-1">Project scope</p>
+                  <p className="text-lg font-medium text-primary">University marketplace · Portfolio demonstration</p>
                 </div>
               </div>
             </div>

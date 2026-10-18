@@ -1,272 +1,88 @@
-/**
- * File: Home.jsx
- * Description: Auto-generated documentation for Home.jsx
- * Date: 2026-07-21
- */
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { IconArrowRight, IconSparkles, IconShoppingBag, IconSchool, IconMessageCircle } from '@tabler/icons-react';
 import api from '../api';
 import ProductCard from '../components/ProductCard';
 import SEO from '../components/SEO';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { IconSparkles, IconArrowRight } from '@tabler/icons-react';
-import { GHS0 } from '../utils/currency';
 import PageTransition from '../components/PageTransition';
-export default /**
- * Function Home
- * @returns {any}
- */
-function Home() {
-  const {
-    scrollY
-  } = useScroll();
-  const y = useTransform(scrollY, [0, 800], [0, 200]);
+import {portfolioDemo} from '../utils/demo';
+import {useStoreSettings} from '../context/StoreSettingsContext';
+
+const collections = [
+  { title: 'Make room for you.', subtitle: 'Little upgrades for your everyday space.', image_url: '/images/cozy_corner.png', link_url: '/products?category=home-living' },
+  { title: 'Ready for the semester.', subtitle: 'Find your focus. Bring your best.', image_url: '/images/study_focus.png', link_url: '/products?category=electronics' },
+  { title: 'A fresh start.', subtitle: 'Campus essentials, all in one place.', image_url: '/images/freshman_bundle.png', link_url: '/products' },
+];
+export default function Home() {
+  const {settings} = useStoreSettings();
   const [products, setProducts] = useState([]);
-  const [banners, setBanners] = useState([]);
-  const [edits, setEdits] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [recentProducts, setRecentProducts] = useState([]);
+  const [edits, setEdits] = useState([]);
+  const [banner, setBanner] = useState(null);
+  const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
-    setLoading(true);
-    Promise.all([api.get('/products', {
-      params: {
-        limit: 8,
-        sort: 'popular'
-      }
-    }), api.get('/storefront/banners'), api.get('/storefront/edits'), api.get('/categories')]).then(([productsRes, bannersRes, editsRes, categoriesRes]) => {
-      setProducts(productsRes.data.products);
-      setBanners(bannersRes.data.banners || []);
-      setEdits(editsRes.data.edits || []);
-      setCategories(categoriesRes.data || []);
-    }).catch(console.error).finally(() => setLoading(false));
-
-    // Load recently viewed from localStorage
+    let cancelled = false;
+    Promise.allSettled([
+      api.get('/products', { params: { limit: 8, sort: 'popular' } }),
+      api.get('/categories'), api.get('/storefront/edits'), api.get('/storefront/banners'),
+    ]).then(([p, c, e, b]) => {
+      if (cancelled) return;
+      if (p.status === 'fulfilled') setProducts(p.value.data.products || []);
+      else setFailed(true);
+      if (c.status === 'fulfilled') setCategories(c.value.data || []);
+      if (e.status === 'fulfilled') setEdits(e.value.data.edits || []);
+      if (b.status === 'fulfilled') setBanner((b.value.data.banners || []).find(item => item.position === 'hero') || null);
+      setLoading(false);
+    });
     try {
-      const recent = JSON.parse(localStorage.getItem('UniShop_recent') || '[]');
-      if (recent.length >= 2) {
-        Promise.all(recent.slice(0, 5).map(id => api.get(`/products/${id}`))).then(results => {
-          setRecentProducts(results.map(r => r.data));
-        }).catch(() => {});
-      }
-    } catch (e) {
-      // ignore localStorage errors
-    }
+      const ids = JSON.parse(localStorage.getItem('UniShop_recent') || '[]');
+      if (Array.isArray(ids) && ids.length >= 2) Promise.allSettled(ids.slice(0, 4).map(id => api.get('/products/' + id))).then(results => {
+        if (!cancelled) setRecent(results.filter(r => r.status === 'fulfilled').map(r => r.value.data));
+      });
+    } catch { /* Browsing history is optional. */ }
+    return () => { cancelled = true; };
   }, []);
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
-  const heroBanners = banners.filter(b => b.position === 'hero');
-  const activeBanners = heroBanners.length > 0 ? heroBanners : [{
-    id: 'fallback',
-    title: 'Elevate Your\n<span class="text-secondary">Space</span>',
-    subtitle: 'Curated essentials for a space that feels like you, designed for effortless living and learning.',
-    image_url: '/images/hero_bg.png',
-    link_url: '/products'
-  }];
-  const currentBanner = activeBanners[currentBannerIndex];
-  useEffect(() => {
-    if (activeBanners.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentBannerIndex(prev => (prev + 1) % activeBanners.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [activeBanners.length]);
-  const [largeEditIndex, setLargeEditIndex] = useState(0);
-  const [smallEditIndex, setSmallEditIndex] = useState(0);
-  useEffect(() => {
-    const largeCount = edits.filter(e => e.size === 'LARGE').length;
-    const smallCount = edits.filter(e => e.size === 'SMALL').length;
-    if (largeCount <= 1 && smallCount <= 2) return;
-    const interval = setInterval(() => {
-      if (largeCount > 1) {
-        setLargeEditIndex(prev => (prev + 1) % largeCount);
-      }
-      if (smallCount > 2) {
-        setSmallEditIndex(prev => (prev + 1) % smallCount);
-      }
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [edits]);
-  const largeEdits = edits.filter(e => e.size === 'LARGE');
-  const displayLargeEdit = largeEdits.length > 0 ? [largeEdits[largeEditIndex]] : [];
-  const smallEdits = edits.filter(e => e.size === 'SMALL');
-  const displaySmallEdits = smallEdits.length > 2 ? [smallEdits[smallEditIndex], smallEdits[(smallEditIndex + 1) % smallEdits.length]] : smallEdits.slice(0, 2);
-  return (
-    <PageTransition>
-      <SEO title="Premium Tech & Style" description="Discover premium electronics, fashion, and university essentials." />
-
-      {/* Hero Section */}
-      <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 mb-16 md:mb-24">
-        <div className="relative w-full h-[480px] md:h-[600px] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-surface flex items-center shadow-level-1 border border-outline/30 group">
-          <AnimatePresence mode="wait">
-            <motion.div key={currentBanner.id} initial={{
-            opacity: 0
-          }} animate={{
-            opacity: 1
-          }} exit={{
-            opacity: 0
-          }} transition={{
-            duration: 0.8
-          }} className="absolute inset-0 z-0">
-              {/* Full-bleed background image */}
-              <motion.div className="absolute inset-0 z-0 bg-cover bg-center" style={{
-              y,
-              backgroundImage: `url('${currentBanner.image_url}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center right'
-            }} />
-              {/* Left-to-right gradient for text legibility only */}
-              <div className="absolute inset-0 z-0 bg-gradient-to-r from-background via-background/70 to-transparent"></div>
-
-              <div className="absolute inset-0 z-10 ml-6 md:ml-16 lg:ml-24 p-4 md:p-8 max-w-[90%] md:max-w-[500px] flex flex-col justify-center">
-                <motion.div initial={{
-                opacity: 0,
-                x: -20
-              }} animate={{
-                opacity: 1,
-                x: 0
-              }} transition={{
-                delay: 0.2,
-                duration: 0.5
-              }} className="inline-flex items-center gap-2 bg-secondary/10 text-secondary font-medium text-sm px-4 py-1.5 rounded-full mb-6 border border-secondary/20 shadow-sm backdrop-blur-sm w-fit">
-                  <IconSparkles size={16} stroke={1.5} /> Featured Collection
-                </motion.div>
-                <motion.h1 initial={{
-                opacity: 0,
-                y: 20
-              }} animate={{
-                opacity: 1,
-                y: 0
-              }} transition={{
-                delay: 0.3,
-                duration: 0.6
-              }} className="text-5xl md:text-[4rem] lg:text-[4.5rem] font-black text-primary mb-4 leading-[1.05] tracking-tight" dangerouslySetInnerHTML={{
-                __html: currentBanner.title || 'Elevate Your<br/><span class="text-secondary">Space</span>'
-              }} />
-                <motion.p initial={{
-                opacity: 0,
-                y: 20
-              }} animate={{
-                opacity: 1,
-                y: 0
-              }} transition={{
-                delay: 0.4,
-                duration: 0.6
-              }} className="text-base md:text-lg text-on-surface-variant mt-6 mb-8 leading-relaxed max-w-[400px]">
-                  {currentBanner.subtitle || 'Discover premium products curated just for you.'}
-                </motion.p>
-                <motion.div initial={{
-                opacity: 0,
-                y: 20
-              }} animate={{
-                opacity: 1,
-                y: 0
-              }} transition={{
-                delay: 0.5,
-                duration: 0.6
-              }}>
-                  <Link to={currentBanner.link_url || '/products'} className="inline-flex items-center gap-2 justify-center bg-primary text-white font-semibold text-base px-8 py-4 rounded-full shadow-level-2 hover:shadow-level-3 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group">
-                    Shop Now
-                    <IconArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {activeBanners.length > 1 && <div className="absolute bottom-6 left-0 right-0 z-20 flex justify-center gap-2">
-              {activeBanners.map((b, idx) => <button key={b.id || idx} onClick={() => setCurrentBannerIndex(idx)} className={`h-2 rounded-full transition-all duration-500 ${idx === currentBannerIndex ? 'w-8 bg-primary' : 'w-2 bg-primary/30 hover:bg-primary/50'}`} aria-label={`Go to slide ${idx + 1}`} />)}
-            </div>}
-        </div>
-      </section>
-
-      {/* Category Chips */}
-      <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 mb-16 md:mb-24">
-        <div className="flex items-center gap-3 overflow-x-auto pb-4 hide-scrollbar mask-edges">
-          <Link to="/products" className="whitespace-nowrap px-6 py-2.5 rounded-full font-medium text-sm bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">All Products</Link>
-          {categories.map(cat => <Link key={cat.id} to={`/products?category=${cat.slug}`} className="whitespace-nowrap px-6 py-2.5 rounded-full font-medium text-sm bg-surface text-on-surface hover:bg-surface-variant transition-all border border-outline/50 active:scale-95">{cat.name}</Link>)}
-        </div>
-      </section>
-
-      {/* Curated Bundles Bento Grid */}
-      <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 mb-16 md:mb-24">
-        <div className="flex justify-between items-end mb-8 md:mb-12">
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight text-primary">Curated <span className="text-secondary">Edits</span></h2>
-          <Link to="/products" className="font-bold text-sm text-secondary hover:underline flex items-center gap-1 group pb-2">
-            View all <IconArrowRight size={16} className="group-hover:translate-x-1 transition-transform" stroke={2} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Large featured bundle */}
-          {displayLargeEdit.map(edit => <Link key={edit.id} to={edit.link_url} className="lg:col-span-2 group relative h-[400px] md:h-[500px] bg-surface rounded-[2rem] overflow-hidden shadow-sm hover:shadow-level-2 transition-all duration-500 block min-w-0">
-              <img src={edit.image_url} alt={edit.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-500"></div>
-              <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 z-10">
-                <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl transition-transform duration-500 group-hover:-translate-y-2">
-                  <div className="inline-flex items-center gap-2 bg-secondary text-white text-xs font-bold px-4 py-2 rounded-full mb-4 uppercase tracking-widest shadow-md"><IconSparkles size={14} /> Most Popular</div>
-                  <h3 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight">{edit.title}</h3>
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
-                    <p className="text-base text-white/90 max-w-[400px] font-medium leading-relaxed">{edit.subtitle}</p>
-                    <span className="text-4xl md:text-5xl font-black text-white shrink-0 tracking-tighter drop-shadow-lg">{GHS0(edit.price)}</span>
-                  </div>
-                </div>
-              </div>
-            </Link>)}
-
-          <div className="flex flex-col gap-4 md:gap-6">
-            {/* Smaller bundles */}
-            {displaySmallEdits.map(edit => <Link key={edit.id} to={edit.link_url} className="group relative h-[200px] md:h-[238px] bg-surface rounded-[2rem] overflow-hidden shadow-sm hover:shadow-level-2 transition-all duration-500 block min-w-0">
-                <img src={edit.image_url} alt={edit.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-500"></div>
-                <div className="absolute bottom-0 left-0 w-full p-5 md:p-6 z-10">
-                  <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-5 rounded-2xl flex flex-col justify-between h-full transition-transform duration-500 group-hover:-translate-y-1">
-                    <h3 className="text-xl font-bold text-white mb-1">{edit.title}</h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-sm font-medium text-white/80">{edit.item_count}</span>
-                      <span className="text-2xl text-white font-black tracking-tight">{GHS0(edit.price)}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>)}
+  // Banner titles may contain legacy formatting; render the text safely.
+  const title = banner?.title?.replace(/<[^>]*>/g, '').trim() || settings.hero_title;
+  return <PageTransition className="gap-12 md:gap-16">
+    {settings.announcement && <div className="max-w-7xl mx-auto w-full px-4 md:px-8"><p className="bg-secondary-container text-on-secondary-container rounded-xl px-5 py-3 text-center text-sm">{settings.announcement}</p></div>}
+    <SEO title="Your campus. Your marketplace." description="Shop tech, style, and everyday university essentials at UniShop." />
+    {portfolioDemo && <div className="max-w-7xl mx-auto w-full px-4 md:px-8"><div className="flex flex-wrap justify-between gap-2 text-xs text-on-surface-variant"><span>Portfolio demo · Sample data · No real charges</span><Link className="font-semibold text-primary" to="/demo">Explore all three roles →</Link></div></div>}
+    <section className="w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="shop-hero">
+        <div className="shop-hero-copy">
+          <span className="shop-eyebrow"><IconSparkles size={16} /> The campus edit</span>
+          <h1>{title}</h1>
+          <p>{banner?.subtitle || settings.hero_subtitle}</p>
+          <div className="flex flex-wrap items-center gap-5 mt-8">
+            <Link to={banner?.link_url || '/products'} className="btn-primary inline-flex items-center gap-3">Explore the shop <IconArrowRight size={18} /></Link>
+            <Link to="/products?category=electronics" className="text-sm font-semibold text-primary hover:underline">Discover tech</Link>
           </div>
+          <div className="mt-8 pt-5 border-t border-primary/15 text-xs text-on-surface-variant">Tech. Style. Your everyday essentials.</div>
         </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 mb-16">
-        <div className="flex justify-between items-end mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Trending Now</h2>
-          <Link to="/products" className="font-semibold text-sm text-secondary hover:underline flex items-center gap-1 group">
-            View all <IconArrowRight size={16} className="group-hover:translate-x-1 transition-transform" stroke={1.5} />
-          </Link>
-        </div>
-
-        {loading ? <div className="flex overflow-x-auto gap-4 md:gap-6 lg:gap-8 pb-8 hide-scrollbar mask-edges">
-            {[...Array(4)].map((_, i) => <div key={i} className="w-[70vw] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-24px)] shrink-0 aspect-[3/4] bg-surface-variant/50 animate-pulse rounded-[2rem]" />)}
-          </div> : <motion.div initial="hidden" animate="show" variants={{
-              show: { transition: { staggerChildren: 0.05 } }
-            }} className="flex overflow-x-auto gap-4 md:gap-6 lg:gap-8 pb-8 hide-scrollbar mask-edges snap-x snap-mandatory">
-            {products.map(product => <div key={product.id} className="w-[70vw] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-24px)] shrink-0 snap-start">
-                <ProductCard product={product} />
-              </div>)}
-          </motion.div>}
-      </section>
-
-      {/* Recently Viewed */}
-      {recentProducts.length >= 2 && <section className="w-full max-w-[1440px] mx-auto px-4 md:px-8 mb-16">
-          <div className="flex justify-between items-end mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-primary">Recently <span className="text-secondary">Viewed</span></h2>
-            <Link to="/products" className="font-semibold text-sm text-secondary hover:underline flex items-center gap-1 group">
-              Browse all <IconArrowRight size={16} className="group-hover:translate-x-1 transition-transform" stroke={1.5} />
-            </Link>
-          </div>
-          <motion.div initial="hidden" animate="show" variants={{
-              show: { transition: { staggerChildren: 0.05 } }
-            }} className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
-            {recentProducts.slice(0, 5).map(product => <ProductCard key={product.id} product={product} />)}
-          </motion.div>
-        </section>}
-
-    </PageTransition>
-  );
+        <img className="shop-hero-image" src={banner?.image_url || '/images/hero_bg.png'} alt="" fetchPriority="high" />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 py-6 border-b border-outline-variant">
+        {[{Icon: IconSchool, title: 'Made for campus life', text: 'Essentials for your daily routine.'}, {Icon: IconShoppingBag, title: 'One place, more possibilities', text: 'Explore tech, fashion, and home.'}, {Icon: IconMessageCircle, title: 'A little help, whenever', text: 'Questions? Talk to our support team.'}].map(({Icon, title, text}) => <div key={title} className="flex gap-3 items-center"><span className="p-2.5 rounded-xl bg-primary-container text-primary"><Icon size={21} /></span><div><p className="text-sm font-semibold">{title}</p><p className="text-xs text-on-surface-variant mt-1">{text}</p></div></div>)}
+      </div>
+    </section>
+    <section className="w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="flex items-end justify-between gap-4 mb-5"><div><p className="shop-eyebrow mb-2">Find your next favourite</p><h2 className="shop-heading">Shop by category</h2></div></div>
+      <div className="flex flex-wrap gap-2.5">
+        <Link to="/products" className="bg-primary text-white px-5 py-3 rounded-full text-sm font-semibold">All products</Link>
+        {(categories.length ? categories : [{id:'electronics',slug:'electronics',name:'Tech & electronics'},{id:'fashion',slug:'fashion',name:'Fashion'},{id:'home',slug:'home-living',name:'Home & dorm'}]).map(cat => <Link key={cat.id} to={'/products?category=' + encodeURIComponent(cat.slug)} className="bg-surface border border-outline-variant hover:border-primary hover:text-primary px-5 py-3 rounded-full text-sm font-medium transition-colors">{cat.name}</Link>)}
+      </div>
+    </section>
+    {settings.show_trending && <section className="w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="flex justify-between items-end gap-4 mb-6"><div><p className="shop-eyebrow mb-2">Worth a closer look</p><h2 className="shop-heading">Trending on campus</h2></div><Link to="/products" className="text-sm font-semibold text-primary flex items-center gap-2 shrink-0">Shop all <IconArrowRight size={16} /></Link></div>
+      {loading ? <div aria-label="Loading products" role="status" className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">{Array.from({length:4}, (_, i) => <div key={i} className="aspect-[3/4] rounded-2xl bg-surface-variant animate-pulse" />)}</div> : products.length ? <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">{products.map(product => <ProductCard key={product.id} product={product} />)}</div> : <div className="rounded-2xl border border-outline-variant bg-surface p-8 text-center"><p className="font-semibold">{failed ? 'We could not load products right now.' : 'New finds are on their way.'}</p><Link to="/products" className="inline-block mt-3 text-primary text-sm underline">Browse the shop</Link></div>}
+    </section>}
+    {settings.show_collections && <section className="w-full max-w-7xl mx-auto px-4 md:px-8">
+      <div className="mb-6"><p className="shop-eyebrow mb-2">A little inspiration</p><h2 className="shop-heading">For every side of campus life</h2></div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">{(edits.length ? edits.slice(0,3) : collections).map((item,i) => <Link to={item.link_url || '/products'} className="shop-collection group" key={item.id || i}><img src={item.image_url} alt="" loading="lazy" /><div className="shop-collection-copy"><h3 className="text-2xl font-bold tracking-tight">{item.title}</h3><p className="text-sm text-white/90 mt-2">{item.subtitle}</p><span className="mt-5 flex items-center gap-2 text-sm font-semibold">Explore collection <IconArrowRight size={17} /></span></div></Link>)}</div>
+    </section>}
+    {recent.length >= 2 && <section className="w-full max-w-7xl mx-auto px-4 md:px-8"><h2 className="shop-heading mb-6">Another look?</h2><div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">{recent.map(product => <ProductCard key={product.id} product={product} />)}</div></section>}
+  </PageTransition>;
 }

@@ -61,7 +61,7 @@ function Register() {
       setLoading(false);
     }
   };
-  return <div className="min-h-screen flex bg-background">
+  return <div className="min-h-[75vh] flex bg-background">
       {/* Left Side: Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 md:px-16 lg:px-24 xl:px-32 relative z-10 py-12">
         
@@ -109,7 +109,7 @@ function Register() {
 
             {error && <div className="bg-error/10 border border-error/20 text-error p-4 rounded-xl text-sm font-semibold">{error}</div>}
 
-            <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 mt-2 rounded-[3px] font-bold text-lg active:scale-95 shadow-md hover:bg-primary-fixed transition-all disabled:opacity-50">
+            <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 mt-2 rounded-xl font-bold text-lg active:scale-95 shadow-md hover:bg-primary-fixed transition-all disabled:opacity-50">
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
@@ -125,7 +125,7 @@ function Register() {
         <div className="absolute inset-0 bg-primary"></div>
         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80" alt="Login Banner" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30" />
         
-        <div className="relative z-10 w-full min-w-[300px] lg:min-w-[450px] max-w-lg text-center text-white">
+        <div className="relative z-10 w-full min-w-0 max-w-[32rem] text-center text-white">
           <IconSparkles size={64} className="mb-8 mx-auto opacity-80" stroke={1.5} />
           <h2 className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight leading-tight">Elevate your lifestyle.</h2>
           <p className="text-lg opacity-80 font-medium">Join the marketplace trusted by thousands of premium brands and shoppers.</p>

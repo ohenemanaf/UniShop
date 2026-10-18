@@ -17,7 +17,10 @@ function AuthProvider({
   const [user, setUser] = useState(() => {
     try {
       const stored = localStorage.getItem('UniShop_user');
-      return stored ? JSON.parse(stored) : null;
+      const token = localStorage.getItem('UniShop_token');
+      if (!stored || !token) return null;
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return payload.exp * 1000 > Date.now() ? JSON.parse(stored) : null;
     } catch {
       return null;
     }

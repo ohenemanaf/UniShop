@@ -92,24 +92,18 @@ router.get('/:id', asyncHandler(async (req, res) => {
 // ── POST /api/v1/orders/:id/cancel ────────────────────────────────────────
 router.post('/:id/cancel', asyncHandler(async (req, res) => {
   const userId = req.user.id;
-  const [orders] = await db.query('SELECT id, status FROM orders WHERE id = ? AND user_id = ?', [req.params.id, userId]);
-  if (orders.length === 0) return res.status(404).json({
-    error: 'Order not found.'
-  });
-  const order = orders[0];
-  if (['SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED'].includes(order.status)) {
-    return res.status(400).json({
-      error: `Cannot cancel an order with status: ${order.status}.`
-    });
-  }
   const conn = await db.getConnection();
   try {
     await conn.beginTransaction();
-
+    const [orders] = await conn.query('SELECT id, status, payment_status FROM orders WHERE id = ? AND user_id = ? FOR UPDATE',[req.params.id,userId]);
+    if(!orders.length) {await conn.rollback(); return res.status(404).json({error:'Order not found.'});}
+    const order=orders[0];
+    if(['SHIPPED','DELIVERED','CANCELLED','REFUNDED'].includes(order.status)) {await conn.rollback(); return res.status(400).json({error:'This order cannot be cancelled.'});}
+    if(order.payment_status === 'PAID') {await conn.rollback(); return res.status(400).json({error:'Please contact support to cancel a paid order and arrange a refund.'});}
     // Restore inventory
     const [items] = await conn.query('SELECT sku, quantity FROM order_items WHERE order_id = ?', [order.id]);
     for (const item of items) {
-      await conn.query('UPDATE inventory SET stock = stock + ? WHERE sku = ?', [item.quantity, item.sku]);
+      await conn.query('UPDATE inventory SET reserved = GREATEST(0, reserved - ?) WHERE sku = ?', [item.quantity, item.sku]);
     }
     await conn.query('UPDATE orders SET status = ? WHERE id = ?', ['CANCELLED', order.id]);
     await conn.commit();

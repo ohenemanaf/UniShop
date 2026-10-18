@@ -80,16 +80,34 @@
   }
 }
 
-@layer utilities {
-  [class*="rounded"] {
-    border-radius: 3px !important;
-  }
-  .rounded-none {
-    border-radius: 0 !important;
-  }
-  
-  /* Force all icons to match extralight text */
-  svg {
-    stroke-width: 1px !important;
-  }
+
+/* Shared surfaces keep storefront and account pages visually aligned. */
+@layer base {
+  body { margin: 0; font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
+  button:disabled { cursor: not-allowed; }
+  ::selection { background: #c8e2ce; color: #182d26; }
+}
+.storefront-main { padding-top: 112px; }
+.shop-header { background: rgba(247,248,244,.96); border-bottom: 1px solid #e1e7de; }
+.product-card { background: #fff; border: 1px solid #e1e7de; border-radius: 16px; overflow: hidden; padding: 10px; }
+.product-card > div:first-child { border-radius: 10px; box-shadow: none; }
+.product-card > div:last-child { padding: 16px 6px 8px; }
+.shop-hero { display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; border-radius: 24px; background: #eaf0e9; border: 1px solid #dde5da; }
+.shop-hero-copy { padding: clamp(28px,5vw,64px); align-self: center; }
+.shop-hero-copy h1 { font-size: clamp(38px,4.6vw,64px); line-height: 1.06; letter-spacing: -.045em; font-weight: 800; color: #182d26; margin: 20px 0; }
+.shop-hero-copy p { max-width: 400px; color: #59675f; line-height: 1.75; }
+.shop-hero-image { width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
+.shop-eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #185c43; }
+.shop-heading { font-size: clamp(24px,3vw,32px); line-height: 1.2; font-weight: 800; letter-spacing: -.035em; }
+.shop-collection { border-radius: 18px; overflow: hidden; position: relative; min-height: 250px; background: #182d26; }
+.shop-collection img { width: 100%; height: 280px; object-fit: cover; transition: transform .3s; }
+.shop-collection:hover img { transform: scale(1.03); }
+.shop-collection-copy { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: end; padding: 24px; color: white; background: linear-gradient(transparent,rgba(12,30,20,.85)); }
+@media (max-width: 767px) {
+  .storefront-main { padding-top: 96px; }
+  .shop-hero { grid-template-columns: 1fr; }
+  .shop-hero-image { min-height: 0; height: 240px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }

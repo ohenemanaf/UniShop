@@ -3,7 +3,9 @@
  * Description: Auto-generated documentation for app.js
  * Date: 2026-07-21
  */
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) throw new Error('Configure JWT_SECRET with at least 32 characters');
 const express = require('express');
 const http = require('http');
 const {
@@ -33,7 +35,6 @@ const inventoryRoutes = require('./routes/inventory');
 const stripeRoutes = require('./routes/stripe');
 const uploadRoutes = require('./routes/upload');
 const publicSellersRoutes = require('./routes/publicSellers');
-const path = require('path');
 const app = express();
 
 // Serve the uploads directory statically
@@ -54,7 +55,7 @@ io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   if (!token) return next(new Error('Authentication error'));
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_super_secret_jwt_key_change_in_production_please');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     socket.user = decoded;
     next();
   } catch (err) {
@@ -68,7 +69,7 @@ io.on('connection', socket => {
   socket.join(`user_${socket.user.id}`);
   if (socket.user.role === 'admin' || socket.user.role === 'seller') {
     socket.join('sellers'); // A room for all sellers
-    socket.join('admins');
+    if (socket.user.role === 'admin') socket.join('admins');
   }
 
   // Live Chat Events
@@ -170,9 +171,10 @@ app.use(cors({
 }));
 
 // Stripe webhook must receive raw body, so we mount it BEFORE express.json()
-app.use('/api/v1/stripe/webhook', express.raw({
-  type: 'application/json'
-}), require('./routes/webhook'));
+app.use('/api/v1/stripe/webhook', (req,res,next) => {
+  if(req.path === '/mock') return next();
+  return express.raw({type:'application/json'})(req,res,next);
+}, require('./routes/webhook'));
 app.use(express.json());
 app.use('/api', apiLimiter);
 
@@ -184,6 +186,7 @@ app.use('/api/v1/cart', cartRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 app.use('/api/v1/wishlist', wishlistRoutes);
+app.use('/api/v1', require('./routes/storeSettings'));
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/seller', sellerRoutes);
 app.use('/api/v1/crm', crmRoutes);

@@ -21,6 +21,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@unishop.com';
  * @returns {any}
  */
 const sendOrderConfirmationEmail = async (user, order, items) => {
+  if(process.env.PORTFOLIO_DEMO === 'true') return;
   const line = '-'.repeat(50);
   const textContent = `
 Hello ${user.name},
@@ -76,6 +77,7 @@ ${order.shipping_country}
  * @returns {any}
  */
 const sendFulfillmentUpdateEmail = async (userEmail, orderId, item, trackingNumber, carrier) => {
+  if(process.env.PORTFOLIO_DEMO === 'true') return;
   const line = '-'.repeat(50);
   const textContent = `
 Great news! A portion of your order has been shipped by the seller.

@@ -173,7 +173,7 @@ function AdminBanners() {
                       <td className="p-4">
                         <p className="text-base font-bold text-primary mb-1">{b.title || <span className="italic opacity-50">No title</span>}</p>
                         <p className="text-sm text-on-surface-variant mb-1">{b.subtitle || '-'}</p>
-                        <p className="text-xs font-mono text-secondary truncate max-w-xs">{b.link_url || 'No link'}</p>
+                        <p className="text-xs font-mono text-secondary truncate max-w-[20rem]">{b.link_url || 'No link'}</p>
                       </td>
                       <td className="p-4">
                         <label className="relative inline-flex items-center cursor-pointer">

@@ -41,7 +41,7 @@ router.get('/', asyncHandler(async (req, res) => {
   res.json({
     items,
     total: parseFloat(total.toFixed(2)),
-    item_count: items.length
+    item_count: items.reduce((sum,item)=>sum+Number(item.quantity),0)
   });
 }));
 
@@ -55,7 +55,7 @@ router.post('/items', asyncHandler(async (req, res) => {
   if (!sku) return res.status(400).json({
     error: 'sku is required.'
   });
-  if (quantity < 1) return res.status(400).json({
+  if (!Number.isSafeInteger(quantity) || quantity < 1) return res.status(400).json({
     error: 'quantity must be ≥ 1.'
   });
 
@@ -63,8 +63,9 @@ router.post('/items', asyncHandler(async (req, res) => {
   const [variant] = await db.query(`
     SELECT pv.sku, inv.stock, inv.reserved
     FROM product_variants pv
+    JOIN products p ON p.id = pv.product_id
     LEFT JOIN inventory inv ON inv.sku = pv.sku
-    WHERE pv.sku = ? AND pv.is_active = 1
+    WHERE pv.sku = ? AND pv.is_active = 1 AND p.is_active = 1
   `, [sku]);
   if (variant.length === 0) return res.status(404).json({
     error: 'Product variant not found.'
@@ -111,14 +112,17 @@ router.patch('/items/:sku', asyncHandler(async (req, res) => {
   const {
     quantity
   } = req.body;
-  if (!quantity || quantity < 1) return res.status(400).json({
+  if (!Number.isSafeInteger(quantity) || quantity < 1) return res.status(400).json({
     error: 'quantity must be ≥ 1.'
   });
   const [cart] = await db.query('SELECT id FROM cart WHERE user_id = ?', [userId]);
   if (cart.length === 0) return res.status(404).json({
     error: 'Cart not found.'
   });
-  await db.query('UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND sku = ?', [quantity, cart[0].id, sku]);
+  const [variants] = await db.query('SELECT pv.sku, (COALESCE(inv.stock,0) - COALESCE(inv.reserved,0)) AS available FROM product_variants pv JOIN products p ON p.id = pv.product_id LEFT JOIN inventory inv ON inv.sku = pv.sku WHERE pv.sku = ? AND pv.is_active = 1 AND p.is_active = 1', [sku]);
+  if (!variants.length || quantity > variants[0].available) return res.status(400).json({error:'Requested quantity is unavailable.'});
+  const [result] = await db.query('UPDATE cart_items SET quantity = ? WHERE cart_id = ? AND sku = ?', [quantity, cart[0].id, sku]);
+  if (!result.affectedRows) return res.status(404).json({error:'Cart item not found.'});
   res.json({
     message: 'Quantity updated.'
   });

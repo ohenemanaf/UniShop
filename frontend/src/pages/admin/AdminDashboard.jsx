@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import GHS from '../../utils/currency';
 import { Link } from 'react-router-dom';
 import api from '../../api';
-import { IconWallet, IconTrendingUp, IconUsers, IconShoppingBag, IconHeadset, IconArrowRight, IconAlertTriangle, IconBox, IconUserPlus, IconSpeakerphone, IconUserCog, IconMessages, IconDownload } from '@tabler/icons-react';
+import { IconWallet, IconUsers, IconShoppingBag, IconArrowRight, IconSpeakerphone, IconUserCog, IconMessages, IconDownload } from '@tabler/icons-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 export default /**
  * Function AdminDashboard
@@ -57,15 +57,9 @@ function AdminDashboard() {
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 <IconWallet size={24} stroke={1.5} />
               </div>
-              <span className="text-xs font-bold text-success flex items-center gap-1 bg-success/10 px-3 py-1.5 rounded-full border border-success/20">
-                <IconTrendingUp size={14} stroke={2} /> +8.2%
-              </span>
             </div>
             <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Total Revenue</p>
-            <p className="text-4xl font-black text-primary">${stats.revenue.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            })}</p>
+            <p className="text-4xl font-black text-primary">{GHS(stats.revenue)}</p>
           </div>
 
           {/* Users */}
@@ -90,22 +84,8 @@ function AdminDashboard() {
             <p className="text-4xl font-black text-primary">{stats.orders.toLocaleString()}</p>
           </div>
 
-          {/* Support Tickets */}
-          <div className="bg-error border border-error/20 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 relative overflow-hidden group">
-            <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-on-error/10 rounded-full blur-2xl"></div>
-            <div className="flex justify-between items-start mb-6 relative z-10">
-              <div className="w-12 h-12 rounded-full bg-on-error/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                <IconHeadset size={24} stroke={1.5} />
-              </div>
-              <span className="text-xs font-bold text-error flex items-center gap-1 bg-surface px-3 py-1.5 rounded-full shadow-sm">
-                Action Needed
-              </span>
-            </div>
-            <div className="relative z-10">
-              <p className="text-sm font-semibold text-white/80 uppercase tracking-wider mb-2">Open Support Tickets</p>
-              <p className="text-4xl font-black text-white">24</p>
-            </div>
-          </div>
+          {/* Active products */}
+          <Link to="/admin/products" className="bg-surface border border-outline-variant rounded-[2rem] p-6 shadow-sm"><IconShoppingBag size={24} className="text-primary mb-6"/><p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Active Products</p><p className="text-4xl font-black text-primary">{stats.products.toLocaleString()}</p></Link>
         </div>
       </section>
 
@@ -126,32 +106,32 @@ function AdminDashboard() {
               }}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="rgb(var(--color-primary))" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="rgb(var(--color-primary))" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#185C43" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#185C43" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(var(--color-outline), 0.3)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E1E7DE" />
                   <XAxis dataKey="formattedDate" axisLine={false} tickLine={false} tick={{
                   fontSize: 12,
-                  fill: 'rgb(var(--color-on-surface-variant))'
+                  fill: '#59675F'
                 }} dy={10} />
                   <YAxis axisLine={false} tickLine={false} tick={{
                   fontSize: 12,
-                  fill: 'rgb(var(--color-on-surface-variant))'
-                }} tickFormatter={value => `$${value}`} />
+                  fill: '#59675F'
+                }} tickFormatter={value => GHS(value)} />
                   <Tooltip contentStyle={{
                   borderRadius: '16px',
-                  border: '1px solid rgba(var(--color-outline), 0.3)',
+                  border: '1px solid #E1E7DE',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                  backgroundColor: 'rgb(var(--color-surface))'
+                  backgroundColor: '#FFFFFF'
                 }} itemStyle={{
-                  color: 'rgb(var(--color-primary))',
+                  color: '#185C43',
                   fontWeight: 'bold'
-                }} formatter={value => [`{GHS(value)}`, 'Revenue']} />
-                  <Area type="monotone" dataKey="revenue" stroke="rgb(var(--color-primary))" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" activeDot={{
+                }} formatter={value => [GHS(value), 'Revenue']} />
+                  <Area type="monotone" dataKey="revenue" stroke="#185C43" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" activeDot={{
                   r: 6,
-                  fill: 'rgb(var(--color-primary))',
-                  stroke: 'rgb(var(--color-surface))',
+                  fill: '#185C43',
+                  stroke: '#FFFFFF',
                   strokeWidth: 2
                 }} />
                 </AreaChart>
@@ -206,34 +186,8 @@ function AdminDashboard() {
         {/* System Alerts & Quick Actions */}
         <section className="xl:col-span-1 flex flex-col gap-8 h-full">
           
-          {/* System Alerts */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8 flex flex-col gap-6">
-            <h2 className="text-xl font-bold text-primary">System Alerts</h2>
-            <div className="flex flex-col gap-4">
-              <div className="flex gap-4 p-4 bg-error/10 rounded-2xl border border-error/20 items-start">
-                <IconAlertTriangle size={24} stroke={1.5} className="text-error shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="text-sm font-bold text-error uppercase tracking-wider mb-1">High Server Load</h4>
-                  <p className="text-sm font-medium text-error/80">Database CPU usage reached 85% in the last 15 mins.</p>
-                </div>
-              </div>
-              <div className="flex gap-4 p-4 hover:bg-surface-variant/30 rounded-2xl border border-transparent hover:border-outline/30 transition-colors cursor-pointer group items-start">
-                <IconBox size={24} stroke={1.5} className="text-secondary shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <div>
-                  <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-1 group-hover:text-secondary transition-colors">Low Stock Warning</h4>
-                  <p className="text-sm font-medium text-on-surface-variant">15 products have dropped below minimum stock levels.</p>
-                </div>
-              </div>
-              <div className="flex gap-4 p-4 hover:bg-surface-variant/30 rounded-2xl border border-transparent hover:border-outline/30 transition-colors cursor-pointer group items-start">
-                <IconUserPlus size={24} stroke={1.5} className="text-primary shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                <div>
-                  <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-1 group-hover:text-secondary transition-colors">New Seller Approvals</h4>
-                  <p className="text-sm font-medium text-on-surface-variant">3 new seller accounts are waiting for manual review.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          {/* Store management */}
+          <div className="bg-surface border border-outline-variant rounded-2xl p-6"><h2 className="text-xl font-bold mb-4">Manage your store</h2><p className="text-sm text-on-surface-variant mb-5">Review inventory, seller applications, and support requests in their dedicated sections.</p><Link to="/admin" className="text-primary font-semibold">Open control center →</Link></div>
           {/* Quick Actions */}
           <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
             <h2 className="text-xl font-bold text-primary mb-6">Quick Actions</h2>
@@ -250,7 +204,7 @@ function AdminDashboard() {
                 <IconMessages size={28} stroke={1.5} className="text-primary group-hover:scale-110 transition-transform" />
                 <span className="text-sm font-bold text-primary group-hover:text-secondary transition-colors">Support Chat</span>
               </Link>
-              <button className="bg-surface border border-outline/30 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-primary active:scale-95 transition-all flex flex-col items-center justify-center gap-3 text-center group">
+              <button onClick={() => { const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'}); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'unishop-overview.json'; link.click(); URL.revokeObjectURL(url); }} className="bg-surface border border-outline/30 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-primary active:scale-95 transition-all flex flex-col items-center justify-center gap-3 text-center group">
                 <IconDownload size={28} stroke={1.5} className="text-primary group-hover:scale-110 transition-transform" />
                 <span className="text-sm font-bold text-primary group-hover:text-secondary transition-colors">Export Data</span>
               </button>

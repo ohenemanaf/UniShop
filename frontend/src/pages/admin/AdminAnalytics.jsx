@@ -9,7 +9,7 @@ import api from '../../api';
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { IconTrendingUp, IconUsers, IconShoppingBag, IconWallet, IconCalendar, IconDownload, IconRefresh } from '@tabler/icons-react';
 const RADIAN = Math.PI / 180;
-const COLORS = ['rgb(var(--color-primary))', 'rgb(var(--color-secondary))', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+const COLORS = ['#185C43', '#8A5210', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 const PERIODS = [{
   label: '7 Days',
   value: 7
@@ -35,7 +35,7 @@ function StatCard({
 }) {
   return <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
       <div className="flex justify-between items-start mb-6">
-        <div className={`w-12 h-12 rounded-full bg-${color}/10 flex items-center justify-center text-${color} group-hover:scale-110 transition-transform`}>
+        <div className={'w-12 h-12 rounded-full flex items-center justify-center transition-transform ' + (color==='secondary'?'bg-secondary/10 text-secondary':'bg-primary/10 text-primary')}>
           <Icon size={24} stroke={1.5} />
         </div>
         {trend != null && <span className={`text-xs font-bold flex items-center gap-1 px-3 py-1.5 rounded-full border ${trend >= 0 ? 'bg-success/10 text-success border-success/20' : 'bg-error/10 text-error border-error/20'}`}>
@@ -76,7 +76,7 @@ export default /**
 function AdminAnalytics() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [period, setPeriod] = useState(30);
+  const [period, setPeriod] = useState(90);
   /**
  * Arrow Function fetchData
  * @returns {any}
@@ -84,7 +84,7 @@ function AdminAnalytics() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/admin/dashboard');
+      const res = await api.get('/admin/analytics',{params:{days:period}});
       setData(res.data);
     } catch (err) {
       console.error('Failed to load analytics:', err);
@@ -137,17 +137,17 @@ function AdminAnalytics() {
   (recent_orders || []).forEach(o => {
     statusCounts[o.status] = (statusCounts[o.status] || 0) + 1;
   });
-  const statusData = Object.entries(statusCounts).map(([name, value]) => ({
+  const statusData = data.status_counts || Object.entries(statusCounts).map(([name, value]) => ({
     name,
     value
   }));
-  const avgOrderValue = stats.orders > 0 ? stats.revenue / stats.orders : 0;
+  const avgOrderValue = stats.paid_orders > 0 ? stats.revenue / stats.paid_orders : 0;
   return <div className="w-full">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-primary mb-2">Analytics & Reports</h1>
-          <p className="text-on-surface-variant font-medium">Track performance, revenue, and growth metrics.</p>
+          <p className="text-on-surface-variant font-medium">Explore sample store performance over a selected period.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 bg-surface border border-outline/30 rounded-xl p-1 shadow-sm">
@@ -163,10 +163,10 @@ function AdminAnalytics() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <StatCard icon={IconWallet} label="Total Revenue" value={GHS(stats.revenue)} sub="From paid orders" trend={8.2} />
-        <StatCard icon={IconUsers} label="Total Customers" value={stats.users.toLocaleString()} sub="Registered accounts" color="secondary" trend={12.5} />
-        <StatCard icon={IconShoppingBag} label="Total Orders" value={stats.orders.toLocaleString()} sub="All time orders" trend={5.1} />
-        <StatCard icon={IconCalendar} label="Avg. Order Value" value={GHS(avgOrderValue)} sub="Per completed order" trend={3.7} />
+        <StatCard icon={IconWallet} label="Total Revenue" value={GHS(stats.revenue)} sub="From paid orders" />
+        <StatCard icon={IconUsers} label="Total Customers" value={stats.users.toLocaleString()} sub="New customers in selected period" color="secondary" />
+        <StatCard icon={IconShoppingBag} label="Total Orders" value={stats.orders.toLocaleString()} sub="Orders in selected period" />
+        <StatCard icon={IconCalendar} label="Avg. Order Value" value={GHS(avgOrderValue)} sub="Per paid order" />
       </div>
 
       {/* Revenue Chart + Status Pie */}
@@ -175,7 +175,7 @@ function AdminAnalytics() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-primary">Revenue Trend</h2>
             <span className="text-xs font-semibold text-on-surface-variant bg-surface-variant px-3 py-1.5 rounded-full border border-outline/30">
-              Last 7 Days (from DB)
+              Last {period} days
             </span>
           </div>
           <div className="h-[300px]">
@@ -188,31 +188,31 @@ function AdminAnalytics() {
             }}>
                 <defs>
                   <linearGradient id="colorRevAdmin" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="rgb(var(--color-primary))" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="rgb(var(--color-primary))" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#185C43" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#185C43" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(var(--color-outline), 0.3)" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E1E7DE" />
                 <XAxis dataKey="formattedDate" axisLine={false} tickLine={false} tick={{
                 fontSize: 12,
-                fill: 'rgb(var(--color-on-surface-variant))'
+                fill: '#59675F'
               }} dy={10} />
                 <YAxis axisLine={false} tickLine={false} tick={{
                 fontSize: 12,
-                fill: 'rgb(var(--color-on-surface-variant))'
+                fill: '#59675F'
               }} tickFormatter={v => GHS(v)} />
                 <Tooltip contentStyle={{
                 borderRadius: '16px',
-                border: '1px solid rgba(var(--color-outline), 0.3)',
-                backgroundColor: 'rgb(var(--color-surface))'
+                border: '1px solid #E1E7DE',
+                backgroundColor: '#FFFFFF'
               }} itemStyle={{
-                color: 'rgb(var(--color-primary))',
+                color: '#185C43',
                 fontWeight: 'bold'
               }} formatter={value => [GHS(value), 'Revenue']} />
-                <Area type="monotone" dataKey="revenue" stroke="rgb(var(--color-primary))" strokeWidth={3} fillOpacity={1} fill="url(#colorRevAdmin)" activeDot={{
+                <Area type="monotone" dataKey="revenue" stroke="#185C43" strokeWidth={3} fillOpacity={1} fill="url(#colorRevAdmin)" activeDot={{
                 r: 6,
-                fill: 'rgb(var(--color-primary))',
-                stroke: 'rgb(var(--color-surface))',
+                fill: '#185C43',
+                stroke: '#FFFFFF',
                 strokeWidth: 2
               }} />
               </AreaChart>
@@ -260,26 +260,26 @@ function AdminAnalytics() {
               left: 0,
               bottom: 0
             }} barSize={28}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(var(--color-outline), 0.3)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E1E7DE" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{
                 fontSize: 11,
-                fill: 'rgb(var(--color-on-surface-variant))'
+                fill: '#59675F'
               }} />
                   <YAxis axisLine={false} tickLine={false} tick={{
                 fontSize: 11,
-                fill: 'rgb(var(--color-on-surface-variant))'
+                fill: '#59675F'
               }} tickFormatter={v => GHS(v)} />
                   <Tooltip contentStyle={{
                 borderRadius: '16px',
-                border: '1px solid rgba(var(--color-outline), 0.3)',
-                backgroundColor: 'rgb(var(--color-surface))'
+                border: '1px solid #E1E7DE',
+                backgroundColor: '#FFFFFF'
               }} formatter={(value, name) => [name === 'revenue' ? GHS(value) : value, name === 'revenue' ? 'Revenue' : 'Units Sold']} />
                   <Legend formatter={v => v === 'revenue' ? 'Revenue' : 'Units Sold'} wrapperStyle={{
                 fontSize: '12px',
                 fontWeight: '600'
               }} />
-                  <Bar dataKey="revenue" fill="rgb(var(--color-primary))" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="units" fill="rgb(var(--color-secondary))" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="revenue" fill="#185C43" radius={[8, 8, 0, 0]} />
+
                 </BarChart>
               </ResponsiveContainer>
             </div> : <div className="flex items-center justify-center h-[280px] text-on-surface-variant">No product sales data yet.</div>}
@@ -312,8 +312,12 @@ function AdminAnalytics() {
       <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
         <div className="flex items-center justify-between p-6 md:p-8 border-b border-outline/30">
           <h2 className="text-xl font-bold text-primary">Recent Orders</h2>
-          <button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm">
-            <IconDownload size={16} stroke={1.5} /> Export CSV
+          <button onClick={()=>{
+ const rows=[['Order ID','Customer','Date','Status','Amount (GHS)'],...(recent_orders||[]).map(o=>[o.id,o.customer_name,new Date(o.created_at).toISOString(),o.status,o.total])];
+ const csv=rows.map(row=>row.map(value=>{let text=String(value??'');if(/^[=+@\-]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';}).join(',')).join('\r\n');
+ const url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='unishop-recent-orders-'+period+'-days.csv';link.click();URL.revokeObjectURL(url);
+ }} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm">
+            <IconDownload size={16} stroke={1.5} /> Export recent orders
           </button>
         </div>
         <div className="overflow-x-auto">

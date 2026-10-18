@@ -28,9 +28,9 @@ function AdminLayout() {
     logout();
     navigate('/');
   };
-  const navItems = [{
+  const navItems = [{ name: 'Control Center', path: '/admin', icon: IconShieldLock }, { name: 'Contact Inbox', path: '/admin/messages', icon: IconMessageCircle }, { name: 'Store Settings', path: '/admin/settings', icon: IconCategory }, {
     name: 'Dashboard',
-    path: '/admin',
+    path: '/admin/overview',
     icon: IconLayoutGrid
   }, {
     name: 'Analytics',
@@ -45,7 +45,7 @@ function AdminLayout() {
     path: '/admin/inventory',
     icon: IconBox
   }, {
-    name: 'Customers',
+    name: 'Users & Sellers',
     path: '/admin/users',
     icon: IconUsers
   }, {
@@ -85,20 +85,20 @@ function AdminLayout() {
     path: '/admin/reviews',
     icon: IconStar
   }];
-  return <div className="bg-surface-variant text-on-background min-h-screen flex flex-col md:flex-row antialiased">
+  return <div className="bg-surface-variant text-on-background min-h-screen flex flex-col lg:flex-row antialiased">
       {/* SideNavBar */}
-      <aside className={`bg-surface/80 backdrop-blur-2xl border-r border-outline/30 shadow-level-1 flex flex-col h-screen w-72 fixed left-0 top-0 z-50 overflow-y-auto transition-transform duration-300 md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="mb-4 p-8 flex items-center justify-between md:justify-start gap-4 border-b border-outline/20">
+      <aside className={`bg-surface/80 backdrop-blur-2xl border-r border-outline/30 shadow-level-1 flex flex-col h-screen w-72 fixed left-0 top-0 z-50 overflow-y-auto transition-transform duration-300 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="mb-4 p-8 flex items-center justify-between lg:justify-start gap-4 border-b border-outline/20">
           <div className="flex items-center gap-3">
             <div className="bg-primary text-white p-2 rounded-xl shadow-md">
               <IconShieldLock size={24} stroke={2} />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-primary tracking-tight leading-none mb-1">Admin.</h1>
+              <h1 className="text-2xl font-black text-primary tracking-tight leading-none mb-1">UniShop.</h1>
               <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Command Center</p>
             </div>
           </div>
-          <button className="md:hidden text-on-surface-variant p-2 bg-surface-variant rounded-full active:scale-95" onClick={() => setMobileMenuOpen(false)}>
+          <button aria-label="Close navigation" className="lg:hidden text-on-surface-variant p-2 bg-surface-variant rounded-full active:scale-95" onClick={() => setMobileMenuOpen(false)}>
             <IconX size={20} stroke={2} />
           </button>
         </div>
@@ -122,20 +122,22 @@ function AdminLayout() {
         </div>
       </aside>
 
+      {mobileMenuOpen && <button aria-label="Close admin navigation" onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-40 bg-black/40 lg:hidden" />}
       {/* Main Content */}
-      <main className="flex-1 md:ml-72 p-4 md:p-10 max-w-[1600px] mx-auto w-full min-h-screen flex flex-col">
+      <main className="flex-1 min-w-0 lg:ml-72 p-4 lg:p-8 min-h-screen flex flex-col">
         {/* Header area for mobile */}
-        <header className="md:hidden flex items-center justify-between mb-8 bg-surface p-4 rounded-2xl shadow-sm border border-outline/30">
+        <header className="lg:hidden flex items-center justify-between mb-8 bg-surface p-4 rounded-2xl shadow-sm border border-outline/30">
           <div className="flex items-center gap-3">
              <IconShieldLock size={24} stroke={1.5} className="text-primary" />
              <h1 className="text-xl font-black text-primary">Admin Center</h1>
           </div>
-          <button className="text-primary p-2 active:scale-95" onClick={() => setMobileMenuOpen(true)}>
+          <button aria-label="Open navigation" className="text-primary p-2 active:scale-95" onClick={() => setMobileMenuOpen(true)}>
             <IconMenu2 size={24} stroke={1.5} />
           </button>
         </header>
 
-        <div className="flex-1 w-full">
+        <div className="flex justify-between items-center gap-4 mb-6 text-sm text-on-surface-variant"><Link to="/demo" className="text-primary font-semibold">Portfolio demo · Explore roles</Link><Link to="/" className="text-primary font-semibold">View store ↗</Link></div>
+        <div className="flex-1 w-full min-w-0">
            <Outlet />
         </div>
       </main>

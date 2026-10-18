@@ -1,0 +1,2 @@
+export const portfolioDemo=import.meta.env.VITE_PORTFOLIO_DEMO==='true';
+export const demoAccounts={buyer:{label:'Buyer',email:'kwame@example.com',password:'Password@123',description:'Browse products, save favourites, and complete a simulated order.'},seller:{label:'Seller',email:'seller1@technova.com',password:'Password@123',description:'Manage your catalog, inventory, fulfillment, and seller earnings.'},admin:{label:'Admin',email:'admin@nexstore.com',password:'Admin@123',description:'Manage the marketplace, storefront content, users, and reports.'}};

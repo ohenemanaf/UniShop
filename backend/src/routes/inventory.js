@@ -43,6 +43,8 @@ router.patch('/bulk', asyncHandler(async (req, res) => {
   if (!Array.isArray(updates)) return res.status(400).json({
     error: 'Updates must be an array'
   });
+  if (!updates.length || updates.length > 100 || updates.some(item => !item || typeof item.sku !== 'string' || !item.sku.trim() || !Number.isSafeInteger(item.stock) || item.stock < 0)) return res.status(400).json({error:'Provide 1–100 SKUs with nonnegative whole-number stock.'});
+  if (new Set(updates.map(item=>item.sku)).size !== updates.length) return res.status(400).json({error:'Duplicate SKUs are not allowed.'});
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
@@ -60,7 +62,8 @@ router.patch('/bulk', asyncHandler(async (req, res) => {
           });
         }
       }
-      await connection.query('UPDATE inventory SET stock = ? WHERE sku = ?', [item.stock, item.sku]);
+      const [result] = await connection.query('UPDATE inventory SET stock = ? WHERE sku = ? AND reserved <= ?', [item.stock, item.sku, item.stock]);
+      if(!result.affectedRows) throw Object.assign(new Error('SKU missing or stock is below reserved quantity: ' + item.sku),{status:400});
     }
     await connection.commit();
     res.json({

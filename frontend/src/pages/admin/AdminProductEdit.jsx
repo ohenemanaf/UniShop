@@ -23,8 +23,9 @@ function AdminProductEdit() {
     showToast
   } = useToast();
   const {
-    isSeller
+    isAdmin
   } = useAuth();
+  const [variants,setVariants]=useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -40,6 +41,7 @@ function AdminProductEdit() {
   useEffect(() => {
     Promise.all([api.get(`/products/${id}`), api.get('/categories')]).then(([prodRes, catRes]) => {
       const p = prodRes.data;
+      setVariants((p.variants||[]).map(v=>({...v,price:String(v.price),compare_price:v.compare_price==null?'':String(v.compare_price),stock:String(v.stock||0)})));
       setProduct({
         name: p.name || '',
         description: p.description || '',
@@ -102,10 +104,11 @@ function AdminProductEdit() {
         brand: product.brand || null,
         image_url: product.image_url || null,
         gallery_images: product.gallery_images || null,
-        tags: product.tags || null
+        tags: product.tags || null,
+        variants: variants.map(v=>({sku:v.sku,name:v.name,price:Number(v.price),compare_price:v.compare_price===''?null:Number(v.compare_price),stock:Number(v.stock)}))
       });
       showToast('Product updated successfully!', 'success');
-      navigate(isSeller ? '/seller/products' : '/admin/products');
+      navigate(isAdmin ? '/admin/products' : '/seller/products');
     } catch (err) {
       showToast(err.response?.data?.error || 'Failed to update product.', 'error');
     } finally {
@@ -120,12 +123,12 @@ function AdminProductEdit() {
   }
   return <div className="w-full max-w-4xl mx-auto pb-12">
       <div className="flex items-center gap-6 mb-8">
-        <button type="button" className="w-12 h-12 rounded-full flex items-center justify-center bg-surface border border-outline/50 hover:border-primary text-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isSeller ? '/seller/products' : '/admin/products')}>
+        <button type="button" className="w-12 h-12 rounded-full flex items-center justify-center bg-surface border border-outline/50 hover:border-primary text-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
           <IconArrowLeft size={24} stroke={1.5} />
         </button>
         <div>
           <h1 className="text-3xl font-bold text-primary mb-2">Edit Product</h1>
-          <p className="text-on-surface-variant font-medium">Update product details and metadata.</p>
+          <p className="text-on-surface-variant font-medium">Manage details, variant prices, and available stock.</p>
         </div>
       </div>
 
@@ -204,8 +207,9 @@ function AdminProductEdit() {
           </div>
         </div>
 
+        <section className="bg-surface border border-outline-variant rounded-2xl p-5 md:p-8"><h2 className="text-xl font-bold mb-2">Prices & inventory</h2><p className="text-sm text-on-surface-variant mb-6">Update existing variants. Reserved units remain protected.</p><div className="space-y-5">{variants.map((variant,index)=><div key={variant.sku} className="border border-outline-variant rounded-xl p-4"><p className="font-semibold mb-1">{variant.name||variant.sku}</p><p className="text-xs text-on-surface-variant mb-4">{variant.sku} · {variant.reserved||0} reserved</p><div className="grid grid-cols-1 sm:grid-cols-3 gap-4">{[['price','Price (GHS)','0.01'],['compare_price','Original price (optional)','0.01'],['stock','Stock','1']].map(([key,label,step])=><label key={key} className="text-sm font-semibold">{label}<input type="number" step={step} min={key==='stock'?Number(variant.reserved||0):key==='compare_price'?Number(variant.price||0):0.01} required={key!=='compare_price'} value={variant[key]} onChange={e=>setVariants(prev=>prev.map((v,i)=>i===index?{...v,[key]:e.target.value}:v))} className="block w-full mt-2 px-3 py-3 bg-background border border-outline rounded-xl"/></label>)}</div></div>)}</div></section>
         <div className="flex justify-end gap-4 mt-4">
-          <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isSeller ? '/seller/products' : '/admin/products')}>
+          <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
             Cancel
           </button>
           <button type="submit" className="px-8 py-3.5 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95" disabled={saving}>

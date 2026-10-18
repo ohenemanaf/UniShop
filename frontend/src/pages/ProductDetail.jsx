@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
+import {useToast} from '../context/ToastContext';
 import GHS from '../utils/currency';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -19,6 +20,8 @@ export default /**
  * @returns {any}
  */
 function ProductDetail() {
+  const {showToast}=useToast();
+  const [adding,setAdding]=useState(false);
   const {
     id
   } = useParams();
@@ -111,7 +114,8 @@ function ProductDetail() {
     });
   }, [id, isAuthenticated, navigate]);
   const selectedVariant = product?.variants?.find(v => v.sku === selectedSku);
-  const availableStock = selectedVariant ? selectedVariant.stock - selectedVariant.reserved : 0;
+  const availableStock = selectedVariant ? Math.max(0,Number(selectedVariant.stock || 0)-Number(selectedVariant.reserved || 0)) : 0;
+  useEffect(()=>setQuantity(1),[selectedSku]);
   /**
  * Arrow Function handleAddToCart
  * @returns {any}
@@ -122,14 +126,16 @@ function ProductDetail() {
       return;
     }
     if (!selectedSku) return;
-    setAdded(true);
+    if(adding || quantity > availableStock || quantity < 1) return;
+    setAdding(true);
     try {
       await addToCart(selectedSku, quantity);
+      setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     } catch (err) {
       setAdded(false);
-      alert(err.response?.data?.error || 'Failed to add');
-    }
+      showToast(err.response?.data?.error || 'Could not add item to cart.', 'error');
+    } finally {setAdding(false);}
   };
   /**
  * Arrow Function handleToggleWishlist
@@ -223,7 +229,7 @@ function ProductDetail() {
     <PageTransition className="w-full pb-32">
       <SEO title={`${product.name} | UniShop`} description={product.description || `Buy ${product.name} at UniShop.`} image={product.image_url} />
 
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 pt-24 flex flex-col md:flex-row gap-12 md:gap-16">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8 pt-6 flex flex-col md:flex-row gap-12 md:gap-16">
 
         {/* Left Column: Image gallery & Mobile top controls */}
         <div className="w-full md:w-1/2 relative">
@@ -238,7 +244,7 @@ function ProductDetail() {
             </button>
           </div>
 
-          <div className="w-full aspect-square overflow-hidden bg-surface-variant/30 border border-outline/30 relative cursor-zoom-in group shadow-sm rounded-[3px]" onClick={() => setLightboxOpen(true)} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
+          <div className="w-full aspect-square overflow-hidden bg-surface-variant/30 border border-outline/30 relative cursor-zoom-in group shadow-sm rounded-xl" onClick={() => setLightboxOpen(true)} onMouseEnter={() => setIsZooming(true)} onMouseLeave={() => setIsZooming(false)} onMouseMove={handleMouseMove}>
             <img src={galleryImages[currentImageIndex]} alt={product.name} className={`w-full h-full object-cover transition-opacity duration-300 mix-blend-multiply ${isZooming ? 'opacity-0' : 'opacity-100'}`} />
 
             {isZooming && <div className="absolute inset-0 z-10 pointer-events-none transition-all duration-75 ease-out hidden md:block" style={{
@@ -254,7 +260,7 @@ function ProductDetail() {
 
           {/* Thumbnails */}
           <div className="flex gap-4 mt-6 overflow-x-auto hide-scrollbar pb-2">
-            {galleryImages.map((img, idx) => <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`w-20 h-20 md:w-24 md:h-24 overflow-hidden shrink-0 border-2 transition-all rounded-[3px] ${currentImageIndex === idx ? 'border-primary shadow-md opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}>
+            {galleryImages.map((img, idx) => <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`w-20 h-20 md:w-24 md:h-24 overflow-hidden shrink-0 border-2 transition-all rounded-xl ${currentImageIndex === idx ? 'border-primary shadow-md opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}>
                 <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover mix-blend-multiply" />
               </button>)}
           </div>
@@ -285,7 +291,7 @@ function ProductDetail() {
                 {product.variants.map(v => {
               const outOfStock = v.stock - v.reserved <= 0;
               return <button key={v.sku} disabled={outOfStock} onClick={() => setSelectedSku(v.sku)} className={`
-                        px-6 py-3 rounded-[3px] font-bold uppercase tracking-widest text-xs transition-all duration-200 border-2
+                        px-6 py-3 rounded-xl font-bold uppercase tracking-widest text-xs transition-all duration-200 border-2
                         ${selectedSku === v.sku ? 'bg-primary text-white border-primary shadow-sm scale-105' : 'bg-surface text-on-surface border-outline/50 hover:border-outline'}
                         ${outOfStock ? 'opacity-40 cursor-not-allowed line-through' : 'cursor-pointer'}
                       `}>
@@ -313,17 +319,17 @@ function ProductDetail() {
 
           {/* Action Row */}
           <div className="fixed bottom-0 left-0 right-0 z-[60] bg-surface/95 backdrop-blur-xl border-t border-outline/30 p-4 md:static md:bg-transparent md:border-t-0 md:p-0 md:mt-auto flex items-center gap-4">
-            <div className="hidden md:flex items-center bg-surface border border-outline/50 rounded-[3px] h-[60px] px-2 shadow-sm">
+            <div className="hidden md:flex items-center bg-surface border border-outline/50 rounded-xl h-[60px] px-2 shadow-sm">
               <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-variant text-primary font-medium text-xl transition-colors">−</button>
               <span className="w-10 text-center font-bold text-primary">{quantity}</span>
               <button onClick={() => setQuantity(Math.min(availableStock, quantity + 1))} className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-variant text-primary font-medium text-xl transition-colors">+</button>
             </div>
             
-            <button onClick={handleAddToCart} disabled={availableStock <= 0 || added} className={`flex-1 h-[60px] rounded-2xl md:rounded-[3px] font-bold uppercase tracking-widest text-sm transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] md:shadow-sm flex items-center justify-center gap-2 active:scale-95
+            <button onClick={handleAddToCart} disabled={availableStock <= 0 || added || adding} className={`flex-1 h-[60px] rounded-2xl md:rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-[0_8px_30px_rgb(0,0,0,0.12)] md:shadow-sm flex items-center justify-center gap-2 active:scale-95
                 ${added ? 'bg-secondary text-white' : 'bg-primary text-white hover:bg-primary-fixed hover:shadow-md'}
                 ${availableStock <= 0 ? 'opacity-50 cursor-not-allowed' : ''}
               `}>
-              {added ? 'Added to Cart ✓' : availableStock <= 0 ? 'Out of Stock' : `Add to Cart — ${GHS(parseFloat(selectedVariant?.price || 0) * quantity)}`}
+              {adding ? 'Adding…' : added ? 'Added to Cart ✓' : availableStock <= 0 ? 'Out of Stock' : `Add to Cart — ${GHS(parseFloat(selectedVariant?.price || 0) * quantity)}`}
             </button>
           </div>
 
@@ -401,9 +407,9 @@ function ProductDetail() {
               <div className="md:col-span-8 flex flex-col gap-6">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="text-2xl font-bold text-primary">Customer Reviews</h3>
-                  {isAuthenticated ? <button onClick={() => setReviewModalOpen(true)} className="bg-primary text-white font-bold uppercase tracking-widest py-3 px-8 rounded-[3px] text-xs active:scale-95 shadow-sm hover:shadow-md transition-all">
+                  {isAuthenticated ? <button onClick={() => setReviewModalOpen(true)} className="bg-primary text-white font-bold uppercase tracking-widest py-3 px-8 rounded-xl text-xs active:scale-95 shadow-sm hover:shadow-md transition-all">
                       Write a Review
-                    </button> : <button onClick={() => navigate('/login')} className="bg-surface-variant/50 border border-outline/30 text-primary font-bold uppercase tracking-widest py-3 px-8 rounded-[3px] text-xs active:scale-95 transition-all hover:bg-surface-variant">
+                    </button> : <button onClick={() => navigate('/login')} className="bg-surface-variant/50 border border-outline/30 text-primary font-bold uppercase tracking-widest py-3 px-8 rounded-xl text-xs active:scale-95 transition-all hover:bg-surface-variant">
                       Login to Review
                     </button>}
                 </div>
@@ -467,12 +473,12 @@ function ProductDetail() {
       {/* Mobile Sticky Buy Bar */}
       <div className="fixed bottom-0 left-0 w-full bg-surface/90 backdrop-blur-xl border-t border-outline/30 p-4 z-40 md:hidden pb-safe shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
         <div className="flex items-center gap-3">
-          <div className="flex items-center bg-surface border border-outline/50 rounded-[3px] h-12 px-1 shadow-sm">
+          <div className="flex items-center bg-surface border border-outline/50 rounded-xl h-12 px-1 shadow-sm">
             <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 flex items-center justify-center rounded-full text-primary font-medium text-xl active:scale-95">−</button>
             <span className="w-6 text-center font-bold text-primary text-sm">{quantity}</span>
             <button onClick={() => setQuantity(Math.min(availableStock, quantity + 1))} className="w-10 h-10 flex items-center justify-center rounded-full text-primary font-medium text-xl active:scale-95">+</button>
           </div>
-          <button onClick={handleAddToCart} disabled={availableStock <= 0 || added} className={`flex-1 h-12 rounded-[3px] font-bold uppercase tracking-widest text-xs active:scale-95 flex items-center justify-center shadow-sm transition-all
+          <button onClick={handleAddToCart} disabled={availableStock <= 0 || added || adding} className={`flex-1 h-12 rounded-xl font-bold uppercase tracking-widest text-xs active:scale-95 flex items-center justify-center shadow-sm transition-all
               ${added ? 'bg-secondary text-white' : 'bg-primary text-white'}
               ${availableStock <= 0 ? 'opacity-50 cursor-not-allowed' : ''}
             `}>
@@ -535,7 +541,7 @@ function ProductDetail() {
           type: "spring",
           damping: 25,
           stiffness: 300
-        }} className="relative w-full max-w-[512px] bg-surface rounded-[3px] p-6 md:p-8 shadow-2xl z-10 border border-outline/30">
+        }} className="relative w-full max-w-[512px] bg-surface rounded-xl p-6 md:p-8 shadow-2xl z-10 border border-outline/30">
               <h2 className="text-2xl font-bold text-primary mb-6">Write a Review</h2>
               <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4">
                 <div className="flex flex-col items-center justify-center mb-4">

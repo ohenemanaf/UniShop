@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "db:init": "node src/config/dbInit.js"
+    "db:init": "node src/config/dbInit.js",
+    "test": "node --test",
+    "demo:setup": "node scripts/setupPortfolio.js"
   },
   "keywords": [
     "ecommerce",

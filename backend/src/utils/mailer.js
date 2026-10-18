@@ -27,7 +27,7 @@ async function initMailer() {
 }
 
 // Initialize asynchronously
-initMailer().catch(console.error);
+// Initialize only when an actual email is requested.
 /**
  * Function sendOrderConfirmation
  * @param {any} userEmail
@@ -35,7 +35,8 @@ initMailer().catch(console.error);
  * @returns {any}
  */
 async function sendOrderConfirmation(userEmail, orderData) {
-  if (!transporter) return;
+  if (process.env.PORTFOLIO_DEMO === 'true') return;
+  if (!transporter) await initMailer();
   const {
     order_id,
     total,
@@ -110,7 +111,8 @@ async function sendOrderConfirmation(userEmail, orderData) {
  * @returns {any}
  */
 async function sendStatusUpdateEmail(userEmail, orderId, status) {
-  if (!transporter) return;
+  if (process.env.PORTFOLIO_DEMO === 'true') return;
+  if (!transporter) await initMailer();
   let title = '';
   let message = '';
   let color = '#2563eb';

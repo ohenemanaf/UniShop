@@ -18,6 +18,20 @@ const {
 const router = express.Router();
 router.use(authenticate, requireAdmin);
 
+// Period-based analytics uses database records, including seeded demo records.
+router.get('/analytics', asyncHandler(async (req,res)=>{
+  const days=Number(req.query.days || 90);
+  if(![7,30,90].includes(days))return res.status(400).json({error:'Choose 7, 30, or 90 days.'});
+  const [[totals]]=await db.query(`SELECT COUNT(*) AS orders, COALESCE(SUM(CASE WHEN payment_status='PAID' THEN total ELSE 0 END),0) AS revenue, SUM(payment_status='PAID') AS paid_orders FROM orders WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)`,[days]);
+  const [[users]]=await db.query(`SELECT COUNT(*) AS users FROM users WHERE role='customer' AND created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)`,[days]);
+  const [recent_orders]=await db.query(`SELECT o.id,o.status,o.total,o.created_at,u.name AS customer_name FROM orders o JOIN users u ON u.id=o.user_id WHERE o.created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY) ORDER BY o.created_at DESC LIMIT 10`,[days]);
+  const [top_products]=await db.query(`SELECT p.id,p.name,p.image_url,SUM(oi.quantity) AS units_sold,SUM(oi.price_at_purchase*oi.quantity) AS revenue FROM order_items oi JOIN orders o ON o.id=oi.order_id JOIN product_variants pv ON pv.sku=oi.sku JOIN products p ON p.id=pv.product_id WHERE o.payment_status='PAID' AND o.created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY) GROUP BY p.id ORDER BY revenue DESC LIMIT 6`,[days]);
+  const [revenue_chart]=await db.query(`SELECT DATE_FORMAT(created_at,'%Y-%m-%d') AS date,SUM(total) AS revenue FROM orders WHERE payment_status='PAID' AND created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY) GROUP BY DATE_FORMAT(created_at,'%Y-%m-%d') ORDER BY date`,[days]);
+  const [status_counts]=await db.query(`SELECT status AS name,COUNT(*) AS value FROM orders WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY) GROUP BY status`,[days]);
+  res.json({days,stats:{orders:Number(totals.orders),revenue:Number(totals.revenue),paid_orders:Number(totals.paid_orders||0),users:Number(users.users)},recent_orders,top_products,revenue_chart:revenue_chart.map(row=>({...row,revenue:Number(row.revenue)})),status_counts:status_counts.map(row=>({...row,value:Number(row.value)}))});
+}));
+
+
 // ── GET /api/v1/admin/dashboard ───────────────────────────────────────────
 router.get('/dashboard', asyncHandler(async (req, res) => {
   const [[userCount]] = await db.query('SELECT COUNT(*) AS total FROM users WHERE role = ?', ['customer']);
@@ -190,10 +204,11 @@ router.patch('/inventory/:sku', asyncHandler(async (req, res) => {
   const {
     stock
   } = req.body;
-  if (stock === undefined || stock < 0) return res.status(400).json({
+  if (!Number.isSafeInteger(stock) || stock < 0) return res.status(400).json({
     error: 'Valid stock value required.'
   });
-  await db.query('INSERT INTO inventory (sku, stock, reserved) VALUES (?, ?, 0) ON DUPLICATE KEY UPDATE stock = ?', [req.params.sku, stock, stock]);
+  const [result]=await db.query('UPDATE inventory SET stock = ? WHERE sku = ? AND reserved <= ?', [stock,req.params.sku,stock]);
+  if(!result.affectedRows) return res.status(400).json({error:'SKU missing or stock is below reserved quantity.'});
   res.json({
     message: 'Inventory updated.'
   });

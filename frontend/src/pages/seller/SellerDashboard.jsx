@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api';
+import GHS from '../../utils/currency';
 import { useSocket } from '../../context/SocketContext';
 import { IconCoin, IconTrendingUp, IconBox, IconClock, IconArrowRight } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
@@ -114,11 +115,8 @@ function SellerDashboard() {
               </span>
             </div>
             <div>
-              <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Total Sales</p>
-              <p className="text-4xl font-black text-primary">${parseFloat(stats.total_revenue || 0).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              })}</p>
+              <p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Paid Sales</p>
+              <p className="text-4xl font-black text-primary">{GHS(stats.total_revenue || 0)}</p>
             </div>
           </motion.div>
           
@@ -175,8 +173,8 @@ function SellerDashboard() {
             }}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#0B57D0" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#0B57D0" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#185C43" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#185C43" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E0E2EC" />
@@ -187,16 +185,16 @@ function SellerDashboard() {
                   <YAxis axisLine={false} tickLine={false} tick={{
                 fill: '#44474F',
                 fontSize: 12
-              }} tickFormatter={value => `$${value}`} />
+              }} tickFormatter={value => GHS(value)} />
                   <Tooltip contentStyle={{
                 borderRadius: '16px',
                 border: 'none',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
               }} itemStyle={{
-                color: '#0B57D0',
+                color: '#185C43',
                 fontWeight: 'bold'
-              }} formatter={value => [`$${value}`, 'Revenue']} />
-                  <Area type="monotone" dataKey="revenue" stroke="#0B57D0" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+              }} formatter={value => [GHS(value), 'Revenue']} />
+                  <Area type="monotone" dataKey="revenue" stroke="#185C43" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div> : <div className="h-72 flex flex-col items-center justify-center text-on-surface-variant bg-surface-variant/30 rounded-2xl border border-dashed border-outline/40">
@@ -228,7 +226,7 @@ function SellerDashboard() {
                       <p className="text-xs font-medium text-on-surface-variant truncate">Order: {order.order_id.substring(0, 8).toUpperCase()}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-black text-primary">${order.price_at_purchase}</p>
+                      <p className="text-sm font-black text-primary">{GHS(Number(order.price_at_purchase)*Number(order.quantity))}</p>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-success">{order.fulfillment_status}</span>
                     </div>
                   </div>)}
@@ -257,7 +255,7 @@ function SellerDashboard() {
                       <p className="text-xs font-medium text-on-surface-variant truncate">{item.category_name || 'Uncategorized'}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-black text-primary">${item.price}</p>
+                      <p className="text-sm font-black text-primary">{GHS(item.price)}</p>
                       <span className={`text-[10px] font-bold uppercase tracking-wider ${item.is_active ? 'text-success' : 'text-error'}`}>
                         {item.is_active ? 'Active' : 'Draft'}
                       </span>

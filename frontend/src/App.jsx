@@ -11,6 +11,13 @@ import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
+import { StoreSettingsProvider, useStoreSettings } from './context/StoreSettingsContext';
+const AdminMessages = lazy(() => import('./pages/admin/AdminMessages'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+const AdminControlCenter = lazy(() => import('./pages/admin/AdminControlCenter'));
+function StoreChat() { const {settings} = useStoreSettings(); return settings.live_chat_enabled ? <LiveChat /> : null; }
+function StoreFooterBrand() { const {settings} = useStoreSettings(); return settings.store_name; }
+function StoreContact() { const {settings} = useStoreSettings(); return settings.support_email ? <a href={'mailto:' + settings.support_email} className="text-sm text-primary">{settings.support_email}</a> : null; }
 import MiniCart from './components/MiniCart';
 import LiveChat from './components/LiveChat';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -20,6 +27,7 @@ import AdminLayout from './components/AdminLayout';
 import SellerLayout from './pages/seller/SellerLayout';
 import { Suspense, lazy } from 'react';
 import GlobalLoader from './components/GlobalLoader';
+const Demo = lazy(() => import('./pages/Demo'));
 const Home = lazy(() => import('./pages/Home'));
 const Products = lazy(() => import('./pages/Products'));
 const Login = lazy(() => import('./pages/Login'));
@@ -70,7 +78,7 @@ const SellerAnalytics = lazy(() => import('./pages/seller/SellerAnalytics'));
 function App() {
   return <HelmetProvider>
       <BrowserRouter>
-        <ThemeProvider>
+        <StoreSettingsProvider><ThemeProvider>
           <AuthProvider>
             <SocketProvider>
               <CartProvider>
@@ -79,7 +87,10 @@ function App() {
                     <Routes>
                       {/* Admin Routes */}
                       <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
-                        <Route index element={<AdminDashboard />} />
+                        <Route index element={<AdminControlCenter />} />
+                        <Route path="overview" element={<AdminDashboard />} />
+                        <Route path="settings" element={<AdminSettings />} />
+                        <Route path="messages" element={<AdminMessages />} />
                         <Route path="orders" element={<AdminOrders />} />
                         <Route path="users" element={<AdminUsers />} />
                         <Route path="live-chat" element={<AdminLiveChat />} />
@@ -94,7 +105,6 @@ function App() {
                         <Route path="payouts" element={<AdminPayouts />} />
                         <Route path="banners" element={<AdminBanners />} />
                         <Route path="edits" element={<AdminEdits />} />
-                        <Route path="live-chat" element={<AdminLiveChat />} />
                         <Route path="analytics" element={<AdminAnalytics />} />
                       </Route>
 
@@ -111,10 +121,10 @@ function App() {
                       </Route>
 
                       {/* Storefront Routes */}
-                      <Route path="*" element={<div className="min-h-screen flex flex-col bg-background text-on-background selection:bg-primary-container selection:text-white-container">
+                      <Route path="*" element={<div className="min-h-screen flex flex-col bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
                           <Navbar />
                           <MiniCart />
-                          <main className="flex-1 w-full flex flex-col relative pb-xl">
+                          <main className="storefront-main flex-1 w-full flex flex-col relative pb-xl">
                             <Routes>
                               {/* Auth Routes */}
                               <Route path="/login" element={<Login />} />
@@ -124,6 +134,7 @@ function App() {
 
                               {/* Public Shopping Routes */}
                               <Route path="/" element={<Home />} />
+                              <Route path="/demo" element={<Demo />} />
                               <Route path="/products" element={<Products />} />
                               <Route path="/products/:id" element={<ProductDetail />} />
                               <Route path="/store/:id" element={<SellerStore />} />
@@ -149,25 +160,27 @@ function App() {
                           </main>
 
                           {/* Footer */}
+                          <div className="text-center py-4"><StoreContact /></div>
                           <footer className="bg-surface-container-low border-t border-outline-variant w-full">
                             <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto gap-md text-center md:text-left">
                               <div className="font-headline-md text-headline-md font-bold text-on-surface opacity-80 hover:opacity-100 transition-opacity">
-                                UniShop
+                                <StoreFooterBrand />
                               </div>
                               <div className="flex flex-wrap justify-center gap-md font-label-sm text-label-sm">
+                                <Link to="/demo" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Explore demo</Link>
                                 <Link to="/about" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">About Us</Link>
                                 <Link to="/contact" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Contact</Link>
                                 <Link to="/faq" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">FAQ</Link>
                                 <Link to="/support" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Support</Link>
                               </div>
                               <div className="font-label-sm text-label-sm text-secondary-fixed-variant">
-                                © {new Date().getFullYear()} UniShop University Marketplace
+                                © {new Date().getFullYear()} <StoreFooterBrand /> University Marketplace
                               </div>
                             </div>
                           </footer>
                           
                           {/* Floating Live Chat for Customers */}
-                          <LiveChat />
+                          <StoreChat />
                         </div>} />
                     </Routes>
                   </Suspense>
@@ -175,7 +188,7 @@ function App() {
               </CartProvider>
             </SocketProvider>
           </AuthProvider>
-        </ThemeProvider>
+        </ThemeProvider></StoreSettingsProvider>
       </BrowserRouter>
     </HelmetProvider>;
 }

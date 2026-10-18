@@ -8,15 +8,19 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'sk_test_mock'
 const db = require('../config/db');
 const emailService = require('../services/emailService');
 const router = express.Router();
+const {authenticate}=require('../middleware/auth');
 
 // Mock webhook for testing without Stripe API keys
 // We parse JSON here because this specific route is used in the mock flow
-router.post('/mock', express.json(), async (req, res) => {
+router.post('/mock', express.json(), authenticate, async (req, res) => {
+  if(process.env.PORTFOLIO_DEMO !== 'true' && (process.env.NODE_ENV === 'production' || process.env.STRIPE_SECRET_KEY)) return res.status(403).json({error:'Test payments are disabled.'});
   const {
     order_id
   } = req.body;
   if (!order_id) return res.status(400).send('Missing order_id');
   try {
+    const [owned] = await db.query('SELECT id FROM orders WHERE id = ? AND user_id = ?', [order_id, req.user.id]);
+    if(!owned.length) return res.status(404).json({error:'Order not found.'});
     await handleSuccessfulPayment(order_id, req.app.locals.io);
     res.json({
       received: true,
@@ -35,8 +39,7 @@ router.post('/', async (req, res) => {
   let event;
   try {
     if (!endpointSecret) {
-      console.warn('No STRIPE_WEBHOOK_SECRET found, trusting payload implicitly (NOT SECURE).');
-      event = JSON.parse(req.body.toString());
+      return res.status(503).json({error:'Payment webhook is not configured.'});
     } else {
       event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
     }
@@ -76,11 +79,10 @@ async function handleSuccessfulPayment(orderId, io) {
     await conn.beginTransaction();
 
     // 1. Get the order
-    const [orders] = await conn.query('SELECT * FROM orders WHERE id = ? AND payment_status = ?', [orderId, 'PENDING']);
+    const [orders] = await conn.query("SELECT * FROM orders WHERE id = ? AND payment_status = ? AND status = 'PENDING' FOR UPDATE", [orderId, 'PENDING']);
     if (orders.length === 0) {
       // Order already processed or doesn't exist
       await conn.rollback();
-      conn.release();
       return;
     }
     const order = orders[0];

@@ -20,13 +20,17 @@ router.use(requireSeller);
 // ── GET /api/v1/seller/dashboard-stats ──────────────────────────────────
 router.get('/dashboard-stats', asyncHandler(async (req, res) => {
   const sellerId = req.user.id;
+  const days=Number(req.query.days||0);
+  if(![0,7,30,90].includes(days))return res.status(400).json({error:'Invalid date range.'});
+  const periodClause=days?' AND o.created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)':'';
+  const periodParams=days?[sellerId,days]:[sellerId];
 
   // Total Revenue for this seller (only counting items they sold)
   const [revenueRes] = await db.query(`
-    SELECT SUM(price_at_purchase * quantity) as total_revenue
-    FROM order_items
-    WHERE seller_id = ?
-  `, [sellerId]);
+    SELECT SUM(oi.price_at_purchase * oi.quantity) as total_revenue
+    FROM order_items oi JOIN orders o ON o.id=oi.order_id
+    WHERE oi.seller_id = ? AND o.payment_status='PAID' ${periodClause}
+  `, periodParams);
 
   // Total Products
   const [productsRes] = await db.query(`
@@ -48,11 +52,11 @@ router.get('/dashboard-stats', asyncHandler(async (req, res) => {
     FROM order_items oi
     JOIN orders o ON o.id = oi.order_id
     WHERE oi.seller_id = ? 
-      AND o.created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+      AND o.created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
       AND o.payment_status = 'PAID'
     GROUP BY DATE(o.created_at)
     ORDER BY date ASC
-  `, [sellerId]);
+  `, [sellerId,days||7]);
   res.json({
     total_revenue: revenueRes[0].total_revenue || 0,
     total_products: productsRes[0].total_products || 0,
