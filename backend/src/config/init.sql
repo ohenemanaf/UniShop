@@ -262,17 +262,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
   INDEX idx_chat_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ============================================================
--- SEED: Default Admin User (password: Admin@123)
--- ============================================================
-INSERT IGNORE INTO users (id, name, email, password_hash, role)
-VALUES (
-  UUID(),
-  'Admin',
-  'admin@UniMarket.com',
-  '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4tbGQDAQSu', -- Admin@123
-  'admin'
-);
+-- Admin accounts are provisioned explicitly with create_admin.js or guarded demo setup.
 
 -- ============================================================
 -- SEED: Sample Categories

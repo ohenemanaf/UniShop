@@ -55,3 +55,9 @@ The system features a sleek, mobile-first design with smooth micro-interactions,
 ## Portfolio demo
 
 Start at `/demo` for the buyer, seller and admin walkthrough. See [PORTFOLIO_WALKTHROUGH.md](./PORTFOLIO_WALKTHROUGH.md) for verified sample accounts, setup, presentation steps and testing. Portfolio mode uses simulated payments and shared sample data. Current frontend: React 19, React Router 7, Tailwind CSS 4 and Vite 8; use Node 20.19+ or 22.12+.
+
+## Environment and account security
+
+Copy `backend/.env.example` to `backend/.env` and `frontend/.env.example` to `frontend/.env`. Configure your database and set JWT_SECRET to a unique random value of at least 32 characters before starting the API. Keep these files private. Restart the API after changing its signing key; existing sessions will need to sign in again.
+
+Run `npm run db:init` to initialize the schema. Shared sample accounts are created only by `npm run demo:setup` with PORTFOLIO_DEMO=true. Use an isolated database for the public portfolio demo. For a private deployment, disable portfolio mode and use `node create_admin.js` with ADMIN_EMAIL and a unique ADMIN_PASSWORD of at least 16 characters. The provisioning script preserves existing accounts. Removing a seed from source does not change accounts already stored in a database.
