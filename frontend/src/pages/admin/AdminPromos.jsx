@@ -98,7 +98,7 @@ function AdminPromos() {
         </button>
       </div>
 
-      {showNew && <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 md:p-8 mb-8 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
+      {showNew && <div className="bg-surface border border-outline/30 rounded-2xl p-6 md:p-6 mb-8 shadow-sm animate-in fade-in slide-in-from-top-4 duration-300">
           <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-6 items-end">
             <div className="flex flex-col gap-2 flex-grow w-full">
               <label className="text-sm font-bold text-primary uppercase tracking-wider">Promo Code</label>
@@ -120,9 +120,9 @@ function AdminPromos() {
           </form>
         </div>}
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -160,7 +160,7 @@ function AdminPromos() {
                     </td>
                   </tr>)}
                 {promos.length === 0 && <tr>
-                    <td colSpan="5" className="p-8 text-center text-on-surface-variant font-medium">
+                    <td colSpan="5" className="p-6 text-center text-on-surface-variant font-medium">
                       No promo codes found.
                     </td>
                   </tr>}

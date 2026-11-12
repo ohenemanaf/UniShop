@@ -140,7 +140,7 @@ function SellerProducts() {
         </div>
       </div>;
   }
-  return <div className="w-full max-w-[1400px] mx-auto">
+  return <div className="w-full max-w-[1200px] mx-auto">
       <SEO title="My Products | Seller Dashboard" />
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
@@ -214,7 +214,7 @@ function SellerProducts() {
                   </div>}
                 {/* Status Badge */}
                 <div className="absolute bottom-4 left-4">
-                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md ${p.is_active ? 'bg-success/90 text-white' : 'bg-surface-variant/90 text-on-surface-variant'}`}>
+                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm backdrop-blur-md ${p.is_active ? 'bg-success/90 text-white' : 'bg-surface-variant/90 text-on-surface-variant'}`}>
                     {p.is_active ? 'Active' : 'Draft'}
                   </span>
                 </div>
@@ -239,7 +239,7 @@ function SellerProducts() {
     }} animate={{
       opacity: 1,
       scale: 1
-    }} className="bg-surface border border-outline/20 rounded-[2rem] p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+    }} className="bg-surface border border-outline/20 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
           <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary mb-6">
             <IconPackage size={48} stroke={1.5} />
           </div>

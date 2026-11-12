@@ -240,8 +240,8 @@ function Checkout() {
     }
   };
   if (success) {
-    return <div className="w-full min-h-[70vh] flex items-center justify-center p-4 md:p-8">
-        <div className="max-w-[448px] w-full bg-surface p-10 rounded-[2rem] text-center shadow-level-1 border border-outline/30 flex flex-col items-center">
+    return <div className="w-full min-h-[70vh] flex items-center justify-center p-4 md:p-6">
+        <div className="max-w-[448px] w-full bg-surface p-6 rounded-2xl text-center shadow-level-1 border border-outline/30 flex flex-col items-center">
           <div className="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mb-6 border border-success/20">
              <IconCircleCheck size={48} stroke={1.5} />
           </div>
@@ -256,25 +256,25 @@ function Checkout() {
       </div>;
   }
   if (cartLoading && !cart?.items?.length) {
-    return <div className="w-full min-h-[60vh] flex items-center justify-center p-8" role="status"><p className="text-on-surface-variant font-medium">Loading your cart…</p></div>;
+    return <div className="w-full min-h-[60vh] flex items-center justify-center p-6" role="status"><p className="text-on-surface-variant font-medium">Loading your cart…</p></div>;
   }
   if (!cart || cart.items.length === 0) {
-    return <div className="w-full min-h-[60vh] flex items-center justify-center p-8 text-center flex-col">
+    return <div className="w-full min-h-[60vh] flex items-center justify-center p-6 text-center flex-col">
         <h2 className="text-3xl font-bold text-primary mb-6 tracking-tight">Your cart is empty</h2>
         <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold active:scale-95 shadow-sm transition-all" onClick={() => navigate('/products')}>
           Continue Shopping
         </button>
       </div>;
   }
-  return <div className="w-full pb-20 pt-24 bg-background">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+  return <div className="w-full pb-12 pt-10 bg-background">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
 
-        <div className="mb-12">
+        <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">Checkout</h1>
           <p className="text-lg text-on-surface-variant">Complete your order securely.</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Checkout Form */}
           <div className="w-full lg:w-2/3 flex flex-col gap-8">
 
@@ -303,7 +303,7 @@ function Checkout() {
             </div>
 
             {/* Step 1: Shipping Address */}
-            {step === 1 && <div className="bg-surface rounded-[2rem] p-6 md:p-8 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
+            {step === 1 && <div className="bg-surface rounded-2xl p-6 md:p-6 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
                 <h2 className="text-xl font-bold text-primary mb-6 flex items-center gap-3 border-b border-outline/30 pb-4">
                   <div className="w-10 h-10 rounded-full bg-surface-variant text-primary flex items-center justify-center border border-outline/50">
                      <IconPackage size={20} stroke={1.5} />
@@ -359,7 +359,7 @@ function Checkout() {
               </div>}
 
             {/* Step 2: Payment Method */}
-            {step === 2 && <div className="bg-surface rounded-[2rem] p-6 md:p-8 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
+            {step === 2 && <div className="bg-surface rounded-2xl p-6 md:p-6 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
                 <h2 className="text-xl font-bold text-primary mb-6 flex items-center gap-3 border-b border-outline/30 pb-4">
                   <div className="w-10 h-10 rounded-full bg-surface-variant text-primary flex items-center justify-center border border-outline/50">
                      <IconCreditCard size={20} stroke={1.5} />
@@ -401,7 +401,7 @@ function Checkout() {
               </div>}
 
             {/* Step 3: Review */}
-            {step === 3 && <div className="bg-surface rounded-[2rem] p-6 md:p-8 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
+            {step === 3 && <div className="bg-surface rounded-2xl p-6 md:p-6 border border-outline/30 shadow-sm animate-in fade-in slide-in-from-bottom-4">
                 <h2 className="text-xl font-bold text-primary mb-6 flex items-center gap-3 border-b border-outline/30 pb-4">
                   <div className="w-10 h-10 rounded-full bg-surface-variant text-primary flex items-center justify-center border border-outline/50">
                      <IconCircleCheck size={20} stroke={1.5} />
@@ -465,7 +465,7 @@ function Checkout() {
 
           {/* Order Summary Sidebar */}
           <div className="w-full lg:w-1/3">
-            <div className="bg-surface rounded-[2rem] p-6 md:p-8 sticky top-24 border border-outline/30 shadow-sm">
+            <div className="bg-surface rounded-2xl p-6 md:p-6 sticky top-24 border border-outline/30 shadow-sm">
               <h2 className="text-xl font-bold text-primary mb-6 border-b border-outline/30 pb-4">Order Summary</h2>
 
               <div className="flex flex-col gap-4 mb-6 max-h-[300px] overflow-y-auto pr-2 hide-scrollbar">

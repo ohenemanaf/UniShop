@@ -169,7 +169,7 @@ function AdminProductCreate() {
           </div>}
 
         {/* Basic Details Section */}
-        <div className="bg-surface border border-outline/30 rounded-[2rem] p-8 shadow-sm">
+        <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-4 mb-8 pb-6 border-b border-outline/30">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
               <IconPackage size={24} stroke={1.5} />
@@ -244,7 +244,7 @@ function AdminProductCreate() {
         </div>
 
         {/* Variants Section */}
-        <div className="bg-surface border border-outline/30 rounded-[2rem] p-8 shadow-sm">
+        <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-8 pb-6 border-b border-outline/30">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-success/10 text-success flex items-center justify-center shrink-0 border border-success/20">

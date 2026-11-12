@@ -155,7 +155,7 @@ function LiveChat() {
       type: "spring",
       damping: 25,
       stiffness: 200
-    }} className="fixed bottom-6 right-6 w-[380px] h-[550px] bg-surface/90 backdrop-blur-2xl rounded-[2rem] shadow-level-3 flex flex-col z-[9999] border border-white/20 overflow-hidden">
+    }} className="fixed bottom-6 right-6 w-[380px] h-[550px] bg-surface/90 backdrop-blur-2xl rounded-2xl shadow-level-3 flex flex-col z-[9999] border border-white/20 overflow-hidden">
           {/* Header */}
           <div className="p-5 bg-primary text-white flex justify-between items-center shrink-0 shadow-sm relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-50"></div>
@@ -238,7 +238,7 @@ function LiveChat() {
                         {msg.message}
                       </div>
                     </div>
-                    <span className="text-[10px] text-on-surface-variant/60 mt-1 px-1 font-semibold">
+                    <span className="text-[11px] text-on-surface-variant/60 mt-1 px-1 font-semibold">
                       {new Date(msg.created_at).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit'
@@ -253,7 +253,7 @@ function LiveChat() {
           {/* Input */}
           <div className="p-4 bg-white/80 backdrop-blur-xl border-t border-outline/20 shrink-0">
             <form onSubmit={handleSend} className="flex gap-2">
-              <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} placeholder="Type your message..." className="flex-1 px-4 py-3 rounded-[1.25rem] border border-outline/30 bg-surface focus:bg-white focus:border-primary/50 focus:shadow-sm outline-none transition-all font-medium text-primary text-sm" />
+              <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} placeholder="Type your message..." className="flex-1 px-4 py-3 rounded-xl border border-outline/30 bg-surface focus:bg-white focus:border-primary/50 focus:shadow-sm outline-none transition-all font-medium text-primary text-sm" />
               <motion.button whileHover={{
             scale: 1.05
           }} whileTap={{

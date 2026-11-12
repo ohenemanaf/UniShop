@@ -62,9 +62,9 @@ function ResetPassword() {
     }
   };
   if (!token) {
-    return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-8 py-20 bg-background relative overflow-hidden">
+    return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-6 py-10 bg-background relative overflow-hidden">
         <SEO title="Reset Password | UniShop" />
-        <div className="w-full max-w-[448px] bg-surface p-8 md:p-12 rounded-[2rem] shadow-sm border border-outline/30 text-center relative z-10">
+        <div className="w-full max-w-[448px] bg-surface p-6 md:p-8 rounded-2xl shadow-sm border border-outline/30 text-center relative z-10">
           <div className="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6 border border-error/20">
             <IconAlertTriangle size={32} stroke={1.5} />
           </div>
@@ -74,12 +74,12 @@ function ResetPassword() {
         </div>
       </div>;
   }
-  return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-8 py-20 bg-background relative overflow-hidden">
+  return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-6 py-10 bg-background relative overflow-hidden">
       <SEO title="Reset Password | UniShop" />
       {/* Subtle Background Elements */}
 
       
-      <div className="w-full max-w-[448px] bg-surface p-8 md:p-12 rounded-[2rem] shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
+      <div className="w-full max-w-[448px] bg-surface p-6 md:p-8 rounded-2xl shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
         
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-16 h-16 bg-surface-variant text-primary rounded-full flex items-center justify-center mb-4 border border-outline/50 shadow-sm">

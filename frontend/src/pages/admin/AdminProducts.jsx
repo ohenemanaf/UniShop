@@ -96,7 +96,7 @@ function AdminProducts() {
         </button>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -148,7 +148,7 @@ function AdminProducts() {
                   </tr>;
             })}
               {products.length === 0 && <tr>
-                  <td colSpan="5" className="p-8 text-center">
+                  <td colSpan="5" className="p-6 text-center">
                     <div className="flex flex-col items-center justify-center text-on-surface-variant py-8">
                       <IconBox size={48} stroke={1.5} className="mb-4 opacity-50" />
                       <p className="text-lg font-bold text-primary">No products found</p>

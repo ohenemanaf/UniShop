@@ -116,9 +116,9 @@ function AdminProductEdit() {
     }
   };
   if (loading) {
-    return <div className="w-full max-w-4xl mx-auto p-8 animate-pulse">
+    return <div className="w-full max-w-4xl mx-auto p-6 animate-pulse">
         <div className="h-10 w-48 bg-surface-variant/30 rounded-lg mb-8" />
-        <div className="h-96 w-full bg-surface-variant/30 rounded-[2rem]" />
+        <div className="h-96 w-full bg-surface-variant/30 rounded-2xl" />
       </div>;
   }
   return <div className="w-full max-w-4xl mx-auto pb-12">
@@ -133,7 +133,7 @@ function AdminProductEdit() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-        <div className="bg-surface border border-outline/30 rounded-[2rem] p-8 shadow-sm">
+        <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center gap-4 mb-8 pb-6 border-b border-outline/30">
             <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20">
               <IconPackage size={24} stroke={1.5} />
@@ -207,7 +207,7 @@ function AdminProductEdit() {
           </div>
         </div>
 
-        <section className="bg-surface border border-outline-variant rounded-2xl p-5 md:p-8"><h2 className="text-xl font-bold mb-2">Prices & inventory</h2><p className="text-sm text-on-surface-variant mb-6">Update existing variants. Reserved units remain protected.</p><div className="space-y-5">{variants.map((variant,index)=><div key={variant.sku} className="border border-outline-variant rounded-xl p-4"><p className="font-semibold mb-1">{variant.name||variant.sku}</p><p className="text-xs text-on-surface-variant mb-4">{variant.sku} · {variant.reserved||0} reserved</p><div className="grid grid-cols-1 sm:grid-cols-3 gap-4">{[['price','Price (GHS)','0.01'],['compare_price','Original price (optional)','0.01'],['stock','Stock','1']].map(([key,label,step])=><label key={key} className="text-sm font-semibold">{label}<input type="number" step={step} min={key==='stock'?Number(variant.reserved||0):key==='compare_price'?Number(variant.price||0):0.01} required={key!=='compare_price'} value={variant[key]} onChange={e=>setVariants(prev=>prev.map((v,i)=>i===index?{...v,[key]:e.target.value}:v))} className="block w-full mt-2 px-3 py-3 bg-background border border-outline rounded-xl"/></label>)}</div></div>)}</div></section>
+        <section className="bg-surface border border-outline-variant rounded-2xl p-5 md:p-6"><h2 className="text-xl font-bold mb-2">Prices & inventory</h2><p className="text-sm text-on-surface-variant mb-6">Update existing variants. Reserved units remain protected.</p><div className="space-y-5">{variants.map((variant,index)=><div key={variant.sku} className="border border-outline-variant rounded-xl p-4"><p className="font-semibold mb-1">{variant.name||variant.sku}</p><p className="text-xs text-on-surface-variant mb-4">{variant.sku} · {variant.reserved||0} reserved</p><div className="grid grid-cols-1 sm:grid-cols-3 gap-4">{[['price','Price (GHS)','0.01'],['compare_price','Original price (optional)','0.01'],['stock','Stock','1']].map(([key,label,step])=><label key={key} className="text-sm font-semibold">{label}<input type="number" step={step} min={key==='stock'?Number(variant.reserved||0):key==='compare_price'?Number(variant.price||0):0.01} required={key!=='compare_price'} value={variant[key]} onChange={e=>setVariants(prev=>prev.map((v,i)=>i===index?{...v,[key]:e.target.value}:v))} className="block w-full mt-2 px-3 py-3 bg-background border border-outline rounded-xl"/></label>)}</div></div>)}</div></section>
         <div className="flex justify-end gap-4 mt-4">
           <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
             Cancel

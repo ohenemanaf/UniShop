@@ -81,7 +81,7 @@ function AdminPayouts() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -96,7 +96,7 @@ function AdminPayouts() {
             </thead>
             <tbody className="divide-y divide-outline/30">
               {filteredPayouts.length === 0 ? <tr>
-                  <td colSpan="6" className="p-12 text-center text-on-surface-variant">
+                  <td colSpan="6" className="p-8 text-center text-on-surface-variant">
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                         <IconWallet size={32} stroke={1.5} />

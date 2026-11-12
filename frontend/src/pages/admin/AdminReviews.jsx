@@ -57,9 +57,9 @@ function AdminReviews() {
         </div>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -74,7 +74,7 @@ function AdminReviews() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {reviews.length === 0 ? <tr>
-                    <td colSpan="6" className="p-12 text-center">
+                    <td colSpan="6" className="p-8 text-center">
                       <div className="flex flex-col items-center gap-3 text-on-surface-variant">
                         <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                           <IconMessageCircle size={32} stroke={1.5} />

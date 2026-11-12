@@ -57,7 +57,7 @@ function Orders() {
     }).catch(() => setLoading(false));
   }, []);
   if (loading) {
-    return <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-24">
+    return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10">
         <SEO title="My Orders | UniShop" />
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8 tracking-tight">My Orders</h1>
         <div className="flex flex-col gap-6 animate-pulse">
@@ -65,28 +65,28 @@ function Orders() {
         </div>
       </div>;
   }
-  return <div className="w-full pb-20 pt-6 bg-background min-h-[80vh]">
+  return <div className="w-full pb-12 pt-6 bg-background min-h-[80vh]">
       <SEO title="My Orders | UniShop" />
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
         
-        <div className="mb-12 flex items-center justify-between">
+        <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">My Orders</h1>
             <p className="text-lg text-on-surface-variant">Track and manage your purchases.</p>
           </div>
         </div>
 
-        {orders.length === 0 ? <div className="w-full min-h-[50vh] flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-xl p-8 shadow-sm">
+        {orders.length === 0 ? <div className="w-full min-h-[50vh] flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-xl p-6 shadow-sm">
             <div className="w-24 h-24 bg-surface-variant/50 border border-outline/30 rounded-xl flex items-center justify-center text-primary mb-6">
               <IconPackage size={48} stroke={1.5} />
             </div>
             <h2 className="text-3xl font-bold text-primary mb-3 tracking-tight">No orders yet</h2>
-            <p className="text-lg text-on-surface-variant mb-10 w-full min-w-[300px] max-w-[28rem]">Once you place an order, it will appear here so you can easily track its status.</p>
-            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-xl font-bold uppercase tracking-widest text-sm active:scale-95 shadow-sm hover:shadow-md transition-all">
+            <p className="text-lg text-on-surface-variant mb-6 w-full min-w-[300px] max-w-[28rem]">Once you place an order, it will appear here so you can easily track its status.</p>
+            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm active:scale-95 shadow-sm hover:shadow-md transition-all">
               Start Shopping
             </Link>
           </div> : <div className="flex flex-col gap-6">
-            {orders.map(order => <Link key={order.id} to={`/orders/${order.id}`} className="group block bg-surface border border-outline/30 rounded-xl p-6 md:p-8 hover:shadow-sm hover:border-outline/50 transition-all duration-300">
+            {orders.map(order => <Link key={order.id} to={`/orders/${order.id}`} className="group block bg-surface border border-outline/30 rounded-xl p-6 md:p-6 hover:shadow-sm hover:border-outline/50 transition-all duration-300">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   
                   {/* Left Side: Order Meta */}
@@ -115,7 +115,7 @@ function Orders() {
                       <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mt-1">Total Amount</p>
                     </div>
 
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest border ${STATUS_COLORS[order.status] || STATUS_COLORS.PENDING}`}>
+                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border ${STATUS_COLORS[order.status] || STATUS_COLORS.PENDING}`}>
                       {getStatusIcon(order.status)} {order.status}
                     </div>
 

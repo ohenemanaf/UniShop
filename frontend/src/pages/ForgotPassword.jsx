@@ -53,7 +53,7 @@ function ForgotPassword() {
       {/* Subtle Background Elements */}
 
       
-      <div className="w-full max-w-[448px] bg-surface p-8 md:p-12 rounded-[2rem] shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
+      <div className="w-full max-w-[448px] bg-surface p-6 md:p-8 rounded-2xl shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
         
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-16 h-16 bg-surface-variant text-primary rounded-full flex items-center justify-center mb-4 border border-outline/50 shadow-sm">

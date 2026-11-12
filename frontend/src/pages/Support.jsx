@@ -66,11 +66,11 @@ function Support() {
       setSubmitting(false);
     }
   };
-  return <div className="w-full pb-20 pt-24 bg-background min-h-[80vh]">
+  return <div className="w-full pb-12 pt-10 bg-background min-h-[80vh]">
       <SEO title="Customer Support | UniShop" />
-      <div className="max-w-[800px] mx-auto px-4 md:px-8">
+      <div className="max-w-[800px] mx-auto px-4 md:px-6">
         
-        <div className="flex justify-between items-end mb-10">
+        <div className="flex justify-between items-end mb-6">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-primary mb-2 tracking-tight flex items-center gap-3">
               <IconLifebuoy size={40} className="text-primary" stroke={1.5} /> Customer Support
@@ -82,7 +82,7 @@ function Support() {
           </button>
         </div>
 
-        {showNew && <div className="bg-surface border border-outline/30 rounded-[2rem] p-8 mb-10 shadow-sm animate-in fade-in duration-300">
+        {showNew && <div className="bg-surface border border-outline/30 rounded-2xl p-6 mb-6 shadow-sm animate-in fade-in duration-300">
             <h2 className="text-2xl font-bold text-primary mb-6 border-b border-outline/30 pb-4">Create New Support Ticket</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
@@ -111,15 +111,15 @@ function Support() {
           </div>}
 
         {loading ? <div className="flex flex-col gap-6 animate-pulse">
-            {[1, 2, 3].map(i => <div key={i} className="h-48 w-full bg-surface-variant/50 rounded-[2rem]" />)}
+            {[1, 2, 3].map(i => <div key={i} className="h-48 w-full bg-surface-variant/50 rounded-2xl" />)}
           </div> : <div className="flex flex-col gap-6">
-            {tickets.length === 0 ? <div className="w-full flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-[2rem] p-12 shadow-sm">
+            {tickets.length === 0 ? <div className="w-full flex flex-col items-center justify-center text-center bg-surface border border-outline/30 rounded-2xl p-8 shadow-sm">
                 <div className="w-24 h-24 bg-surface-variant rounded-full flex items-center justify-center text-primary mb-6 border border-outline/50">
                   <IconMessageCircle size={48} stroke={1.5} />
                 </div>
                 <h2 className="text-3xl font-bold text-primary mb-2">No active tickets</h2>
                 <p className="text-lg text-on-surface-variant font-medium max-w-[448px]">You haven't opened any support tickets yet. If you need help, feel free to create one.</p>
-              </div> : tickets.map(ticket => <div key={ticket.id} className="bg-surface border border-outline/30 rounded-[2rem] p-6 md:p-8 shadow-sm hover:shadow-level-1 transition-all">
+              </div> : tickets.map(ticket => <div key={ticket.id} className="bg-surface border border-outline/30 rounded-2xl p-6 md:p-6 shadow-sm hover:shadow-level-1 transition-all">
                   <div className="flex justify-between items-start mb-6">
                     <div>
                       <h3 className="text-xl font-bold text-primary mb-1">{ticket.subject}</h3>

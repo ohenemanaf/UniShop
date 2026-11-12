@@ -54,9 +54,9 @@ function Cart() {
     if (qty < 1) return handleRemove(sku);
     try { await updateQuantity(sku, qty); } catch(err) { showToast(err.response?.data?.error || 'Could not update quantity.', 'error'); }
   };
-  if (error) return <div role="alert" className="max-w-3xl mx-auto p-8 bg-surface border border-outline rounded-2xl"><h1 className="text-xl font-bold mb-3">Your cart needs another look</h1><p className="text-error">{error}</p><button onClick={fetchCart} className="btn-primary mt-5">Reload cart</button></div>;
+  if (error) return <div role="alert" className="max-w-3xl mx-auto p-6 bg-surface border border-outline rounded-2xl"><h1 className="text-xl font-bold mb-3">Your cart needs another look</h1><p className="text-error">{error}</p><button onClick={fetchCart} className="btn-primary mt-5">Reload cart</button></div>;
   if (loading && !cart.items.length) {
-    return <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-24">
+    return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10">
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8 tracking-tight">Your Cart</h1>
         <div className="flex flex-col gap-6 animate-pulse">
           {[1, 2, 3].map(i => <div key={i} className="w-full h-32 bg-surface-variant/50 rounded-2xl"></div>)}
@@ -64,13 +64,13 @@ function Cart() {
       </div>;
   }
   if (!cart || cart.items.length === 0) return (
-    <PageTransition className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pt-6 pb-20 flex-grow">
-      <div className="flex flex-col items-center justify-center py-24 text-center bg-surface border border-outline/30 rounded-3xl mt-8">
+    <PageTransition className="w-full max-w-[1200px] mx-auto px-4 md:px-6 pt-6 pb-12 flex-grow">
+      <div className="flex flex-col items-center justify-center py-10 text-center bg-surface border border-outline/30 rounded-3xl mt-8">
         <div className="w-24 h-24 bg-surface-variant/50 rounded-full flex items-center justify-center text-primary mb-8 border border-outline/30">
           <IconShoppingCart size={40} stroke={1.5} />
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 tracking-tight">Your cart is empty</h2>
-        <p className="text-lg text-on-surface-variant mb-10 max-w-[28rem]">Looks like you haven't added anything yet. Discover our curated essentials.</p>
+        <p className="text-lg text-on-surface-variant mb-6 max-w-[28rem]">Looks like you haven't added anything yet. Discover our curated essentials.</p>
         <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-full font-semibold shadow-sm hover:shadow-level-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
           Start Shopping
         </Link>
@@ -79,17 +79,17 @@ function Cart() {
   );
   const grandTotal = cart.total; // plus shipping/tax later
   return (
-    <PageTransition className="w-full pb-32">
-      <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 pt-24">
-        <div className="mb-12">
+    <PageTransition className="w-full pb-16">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 pt-10">
+        <div className="mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">Your Cart</h1>
           <p className="text-lg text-on-surface-variant">{cart.items.reduce((sum,item)=>sum+Number(item.quantity),0)} items in your cart.</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Cart Items List */}
           <div className="w-full lg:w-2/3 flex flex-col gap-6">
-            {cart.items.map(item => <div key={item.sku} className={`flex gap-6 md:gap-8 bg-surface p-4 md:p-6 rounded-[2rem] border border-outline/30 shadow-sm transition-all duration-300
+            {cart.items.map(item => <div key={item.sku} className={`flex gap-6 md:gap-8 bg-surface p-4 md:p-6 rounded-2xl border border-outline/30 shadow-sm transition-all duration-300
                   ${removing[item.sku] ? 'opacity-50 scale-95' : 'hover:shadow-level-1'}
                 `}>
                 <Link to={`/products/${item.product_id}`} className="w-24 h-24 md:w-36 md:h-36 shrink-0 bg-surface-variant/30 rounded-2xl overflow-hidden">
@@ -99,7 +99,7 @@ function Cart() {
                 <div className="flex-1 min-w-0 flex flex-col">
                   <div className="flex justify-between items-start gap-4">
                     <div>
-                      <span className="text-xs font-semibold text-on-surface-variant tracking-widest uppercase">{item.category_name || 'Category'}</span>
+                      <span className="text-xs font-semibold text-on-surface-variant tracking-wider uppercase">{item.category_name || 'Category'}</span>
                       <Link to={`/products/${item.product_id}`} className="block text-base md:text-xl font-bold text-primary break-words hover:text-secondary transition-colors leading-tight mt-1.5 mb-1.5">
                         {item.product_name}
                       </Link>
@@ -148,7 +148,7 @@ function Cart() {
 
           {/* Order Summary */}
           <div className="w-full lg:w-1/3">
-            <div className="bg-surface border border-outline/30 rounded-[2rem] p-8 sticky top-24 shadow-sm">
+            <div className="bg-surface border border-outline/30 rounded-2xl p-6 sticky top-24 shadow-sm">
               <h2 className="text-2xl font-bold text-primary mb-6 pb-4 border-b border-outline/30">Order Summary</h2>
               
               <div className="flex flex-col gap-4 mb-8">
@@ -168,7 +168,7 @@ function Cart() {
               
               <div className="h-px bg-outline/30 w-full mb-8" />
               
-              <div className="flex justify-between items-end mb-10">
+              <div className="flex justify-between items-end mb-6">
                 <span className="text-xl font-medium text-on-surface-variant">Total</span>
                 <span className="font-headline-xl text-5xl font-bold tracking-tight text-primary leading-none">{GHS(grandTotal)}</span>
               </div>

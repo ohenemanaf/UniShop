@@ -48,11 +48,11 @@ function AdminDashboard() {
   })) || [];
   return <div>
       {/* Top Metrics Row */}
-      <section className="mb-12">
+      <section className="mb-8">
         <h2 className="text-3xl font-bold text-primary mb-6 tracking-tight">Overview</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Revenue */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
+          <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-6">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 <IconWallet size={24} stroke={1.5} />
@@ -63,7 +63,7 @@ function AdminDashboard() {
           </div>
 
           {/* Users */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
+          <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-6">
               <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
                 <IconUsers size={24} stroke={1.5} />
@@ -74,7 +74,7 @@ function AdminDashboard() {
           </div>
 
           {/* Orders */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
+          <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
             <div className="flex justify-between items-start mb-6">
               <div className="w-12 h-12 rounded-full bg-surface-variant/50 flex items-center justify-center text-primary border border-outline/30 group-hover:scale-110 transition-transform">
                 <IconShoppingBag size={24} stroke={1.5} />
@@ -85,7 +85,7 @@ function AdminDashboard() {
           </div>
 
           {/* Active products */}
-          <Link to="/admin/products" className="bg-surface border border-outline-variant rounded-[2rem] p-6 shadow-sm"><IconShoppingBag size={24} className="text-primary mb-6"/><p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Active Products</p><p className="text-4xl font-black text-primary">{stats.products.toLocaleString()}</p></Link>
+          <Link to="/admin/products" className="bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm"><IconShoppingBag size={24} className="text-primary mb-6"/><p className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Active Products</p><p className="text-4xl font-black text-primary">{stats.products.toLocaleString()}</p></Link>
         </div>
       </section>
 
@@ -94,7 +94,7 @@ function AdminDashboard() {
         <section className="xl:col-span-2 flex flex-col gap-8">
           
           {/* Revenue Chart */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+          <div className="bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
             <h2 className="text-xl font-bold text-primary mb-6">Revenue Trend (Last 7 Days)</h2>
             <div className="h-[350px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -140,7 +140,7 @@ function AdminDashboard() {
           </div>
 
           {/* Recent Activity Table */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+          <div className="bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-primary">Recent Orders</h2>
               <Link to="/admin/orders" className="text-sm font-semibold text-primary hover:text-secondary transition-colors flex items-center gap-1">
@@ -189,7 +189,7 @@ function AdminDashboard() {
           {/* Store management */}
           <div className="bg-surface border border-outline-variant rounded-2xl p-6"><h2 className="text-xl font-bold mb-4">Manage your store</h2><p className="text-sm text-on-surface-variant mb-5">Review inventory, seller applications, and support requests in their dedicated sections.</p><Link to="/admin" className="text-primary font-semibold">Open control center →</Link></div>
           {/* Quick Actions */}
-          <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+          <div className="bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
             <h2 className="text-xl font-bold text-primary mb-6">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-4">
               <Link to="/admin/promos" className="bg-surface border border-outline/30 p-5 rounded-2xl shadow-sm hover:shadow-md hover:border-primary active:scale-95 transition-all flex flex-col items-center justify-center gap-3 text-center group">

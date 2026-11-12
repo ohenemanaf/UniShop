@@ -27,13 +27,13 @@ function Invoice() {
     api.get(`/orders/${id}`).then(res => setOrder(res.data)).catch(err => console.error(err)).finally(() => setLoading(false));
   }, [id]);
   if (loading) {
-    return <div className="w-full max-w-[800px] mx-auto px-4 md:px-8 py-12 animate-pulse">
+    return <div className="w-full max-w-[800px] mx-auto px-4 md:px-6 py-12 animate-pulse">
         <div className="h-10 w-48 bg-surface-variant/50 rounded-xl mb-8" />
-        <div className="h-96 w-full bg-surface-variant/50 rounded-[2rem]" />
+        <div className="h-96 w-full bg-surface-variant/50 rounded-2xl" />
       </div>;
   }
   if (!order) {
-    return <div className="w-full flex items-center justify-center p-12 text-on-surface-variant text-2xl font-bold">
+    return <div className="w-full flex items-center justify-center p-8 text-on-surface-variant text-2xl font-bold">
         Order not found
       </div>;
   }
@@ -72,7 +72,7 @@ function Invoice() {
   return <div className="w-full bg-background min-h-screen py-8">
       <SEO title={`Invoice #${order.id.slice(0, 8)} | UniShop`} />
       
-      <div className="max-w-[800px] mx-auto px-4 md:px-8 print:hidden flex justify-between items-center mb-8 gap-4">
+      <div className="max-w-[800px] mx-auto px-4 md:px-6 print:hidden flex justify-between items-center mb-8 gap-4">
         <Link to={`/orders/${id}`} className="inline-flex items-center gap-2 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors active:scale-95">
           <IconArrowLeft size={18} stroke={1.5} /> Back to Order
         </Link>
@@ -86,11 +86,11 @@ function Invoice() {
         </div>
       </div>
 
-      <div id="invoice-document" className="max-w-[800px] mx-auto bg-white text-black p-10 md:p-14 min-h-[1000px] rounded-[2rem] shadow-sm border border-outline/30 print:shadow-none print:p-0 print:min-h-0 print:rounded-none print:border-none">
+      <div id="invoice-document" className="max-w-[800px] mx-auto bg-white text-black p-6 md:p-14 min-h-[1000px] rounded-2xl shadow-sm border border-outline/30 print:shadow-none print:p-0 print:min-h-0 print:rounded-none print:border-none">
         <div className="flex justify-between border-b-2 border-gray-200 pb-8 mb-8">
           <div>
             <h1 className="text-4xl font-black tracking-tight text-gray-900 m-0">INVOICE</h1>
-            <p className="text-gray-500 font-medium mt-2 m-0 uppercase tracking-widest">Order #{order.id.slice(0, 8)}</p>
+            <p className="text-gray-500 font-medium mt-2 m-0 uppercase tracking-wider">Order #{order.id.slice(0, 8)}</p>
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-black text-gray-900 m-0 tracking-tight">UniShop</h2>
@@ -98,7 +98,7 @@ function Invoice() {
           </div>
         </div>
 
-        <div className="flex justify-between mb-12">
+        <div className="flex justify-between mb-8">
           <div>
             <h3 className="text-gray-500 font-bold uppercase tracking-wider text-sm mb-3 m-0">Billed To</h3>
             <div className="text-gray-800 leading-relaxed font-medium">
@@ -117,7 +117,7 @@ function Invoice() {
           </div>
         </div>
 
-        <table className="w-full border-collapse mb-12">
+        <table className="w-full border-collapse mb-8">
           <thead>
             <tr className="bg-gray-50 border-b-2 border-gray-200">
               <th className="py-4 px-4 text-left text-gray-600 font-bold uppercase tracking-wider text-sm">Item</th>
@@ -161,7 +161,7 @@ function Invoice() {
           </div>
         </div>
 
-        <div className="mt-20 text-center text-gray-500 text-sm border-t border-gray-200 pt-8 font-medium">
+        <div className="mt-12 text-center text-gray-500 text-sm border-t border-gray-200 pt-8 font-medium">
           Thank you for shopping at UniShop! If you have any questions, please contact our support team.
         </div>
       </div>

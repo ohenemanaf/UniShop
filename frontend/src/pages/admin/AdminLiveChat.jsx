@@ -104,7 +104,7 @@ function AdminLiveChat() {
         <h1 className="text-3xl font-bold text-primary">Live Support Chat</h1>
       </div>
 
-      <div className="flex-1 bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm flex h-full min-h-0">
+      <div className="flex-1 bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm flex h-full min-h-0">
         
         {/* Left Sidebar: Active Users */}
         <div className="w-80 border-r border-outline/30 flex flex-col bg-surface shrink-0 h-full">
@@ -113,7 +113,7 @@ function AdminLiveChat() {
           </div>
           
           <div className="flex-1 overflow-y-auto overflow-x-hidden p-2">
-            {activeUsers.length === 0 && <div className="p-8 text-center text-on-surface-variant flex flex-col items-center mt-10">
+            {activeUsers.length === 0 && <div className="p-6 text-center text-on-surface-variant flex flex-col items-center mt-10">
                 <div className="w-16 h-16 rounded-full bg-surface-variant/50 flex items-center justify-center mb-4 border border-outline/30">
                   <IconMessagesOff size={24} stroke={1.5} className="opacity-50" />
                 </div>
@@ -138,7 +138,7 @@ function AdminLiveChat() {
 
         {/* Right Sidebar: Chat Area */}
         <div className="flex-1 flex flex-col bg-surface min-w-0 h-full relative">
-          {!selectedUser ? <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant p-8 text-center bg-surface-variant/10">
+          {!selectedUser ? <div className="flex-1 flex flex-col items-center justify-center text-on-surface-variant p-6 text-center bg-surface-variant/10">
               <motion.div initial={{
             scale: 0.9,
             opacity: 0
@@ -166,7 +166,7 @@ function AdminLiveChat() {
               </div>
 
               {/* Messages */}
-              <div className="flex-1 p-8 overflow-y-auto flex flex-col gap-5 bg-[#f8fafc] min-h-0 relative">
+              <div className="flex-1 p-6 overflow-y-auto flex flex-col gap-5 bg-[#f8fafc] min-h-0 relative">
                 <AnimatePresence initial={false}>
                   {messages.map((msg, index) => {
                 const isAdmin = msg.sender_type === 'admin';
@@ -185,7 +185,7 @@ function AdminLiveChat() {
                               {showAvatar ? <IconUser size={16} className="text-primary" /> : <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />}
                             </div>}
                           
-                          <div className={`px-5 py-3.5 text-[15px] font-medium leading-relaxed shadow-sm ${isAdmin ? 'bg-primary text-white rounded-[1.5rem] rounded-br-sm' : 'bg-white border border-outline/10 text-primary rounded-[1.5rem] rounded-bl-sm'}`}>
+                          <div className={`px-5 py-3.5 text-[15px] font-medium leading-relaxed shadow-sm ${isAdmin ? 'bg-primary text-white rounded-2xl rounded-br-sm' : 'bg-white border border-outline/10 text-primary rounded-2xl rounded-bl-sm'}`}>
                             {msg.message}
                           </div>
                         </div>

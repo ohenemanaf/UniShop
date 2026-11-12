@@ -104,12 +104,12 @@ function SellerSection({
     }
   };
   if (loading) {
-    return <div className="h-32 bg-surface-variant/30 rounded-[2rem] animate-pulse" />;
+    return <div className="h-32 bg-surface-variant/30 rounded-2xl animate-pulse" />;
   }
 
   // Admin — already has everything
   if (user?.role === 'admin') {
-    return <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 flex items-center gap-4 shadow-sm">
+    return <div className="bg-surface border border-outline/30 rounded-2xl p-6 flex items-center gap-4 shadow-sm">
         <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
           <IconShieldLock size={24} stroke={1.5} />
         </div>
@@ -122,7 +122,7 @@ function SellerSection({
 
   // Already a seller
   if (user?.role === 'seller') {
-    return <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm">
+    return <div className="bg-surface border border-outline/30 rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-success/10 text-success flex items-center justify-center shrink-0">
             <IconBuildingStore size={24} stroke={1.5} />
@@ -142,7 +142,7 @@ function SellerSection({
   if (application && application.status !== 'REJECTED') {
     const config = STATUS_CONFIG[application.status];
     const Icon = config.icon;
-    return <div className={`border rounded-[2rem] p-6 ${config.color}`}>
+    return <div className={`border rounded-2xl p-6 ${config.color}`}>
         <div className="flex items-start gap-4 mb-4">
           <div className={`w-12 h-12 rounded-full bg-white/50 flex items-center justify-center shrink-0 ${config.iconColor}`}>
             <Icon size={24} stroke={1.5} />
@@ -168,7 +168,7 @@ function SellerSection({
   }
 
   // No application or rejected — show form / apply button
-  return <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm">
+  return <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
       {!showForm ? <div className="flex flex-col items-start gap-4">
           {application?.status === 'REJECTED' && <div className="w-full bg-error/5 border border-error/20 rounded-2xl p-4 text-sm">
               <p className="font-bold text-error mb-1">Previous application was not approved</p>
@@ -372,10 +372,10 @@ function AccountSettings() {
       setLoadingPassword(false);
     }
   };
-  return <div className="w-full pb-20 pt-24 bg-background min-h-[80vh]">
+  return <div className="w-full pb-12 pt-10 bg-background min-h-[80vh]">
       <SEO title="Account Settings | UniShop" />
-      <div className="max-w-[1000px] mx-auto px-4 md:px-8">
-        <div className="flex items-center gap-4 mb-12">
+      <div className="max-w-[1000px] mx-auto px-4 md:px-6">
+        <div className="flex items-center gap-4 mb-8">
           <div className="w-16 h-16 rounded-2xl bg-surface-variant text-primary flex items-center justify-center border border-outline/30 shrink-0">
             {profileForm.avatar_url ? <img src={profileForm.avatar_url} alt="Avatar" className="w-full h-full object-cover rounded-2xl mix-blend-multiply" /> : <IconUser size={32} stroke={1.5} />}
           </div>
@@ -390,7 +390,7 @@ function AccountSettings() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-8">
 
           {/* Profile Info */}
           <section className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-8 pb-12 border-b border-outline/30">

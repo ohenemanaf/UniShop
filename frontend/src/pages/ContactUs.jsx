@@ -46,17 +46,17 @@ function ContactUs() {
       setLoading(false);
     }
   };
-  return <div className="min-h-[75vh] bg-background pt-6 pb-20 px-4 md:px-8">
+  return <div className="min-h-[75vh] bg-background pt-6 pb-12 px-4 md:px-6">
       <SEO title="Contact Us | UniShop" />
       <div className="max-w-[1280px] mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
+        <div className="text-center mb-10 animate-fade-in-up">
           <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 tracking-tight">Get in Touch</h1>
           <p className="text-xl text-on-surface-variant max-w-2xl mx-auto">
             Have a question, feedback, or need support? We'd love to hear from you.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 bg-surface rounded-[3rem] p-8 md:p-12 shadow-level-2 border border-outline/30">
+        <div className="grid md:grid-cols-2 gap-8 bg-surface rounded-2xl p-6 md:p-8 shadow-level-2 border border-outline/30">
           <div>
             <h2 className="text-3xl font-bold text-primary mb-8">Contact Information</h2>
             <div className="space-y-8">
@@ -90,7 +90,7 @@ function ContactUs() {
             </div>
           </div>
 
-          <div className="bg-surface-variant/30 p-8 rounded-[2rem] border border-outline/50">
+          <div className="bg-surface-variant/30 p-6 rounded-2xl border border-outline/50">
             <h3 className="text-2xl font-bold text-primary mb-6">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

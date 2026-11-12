@@ -59,7 +59,7 @@ function Login() {
         
         <div className="max-w-[440px] w-full mx-auto">
           {/* Brand/Header */}
-          <div className="mb-12">
+          <div className="mb-8">
             <Link to="/" className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-xl mb-8">
               <IconSparkles size={24} stroke={1.5} />
             </Link>
@@ -108,7 +108,7 @@ function Login() {
       </div>
 
       {/* Right Side: Image / Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-surface-variant relative overflow-hidden flex-col items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-surface-variant relative overflow-hidden flex-col items-center justify-center p-8">
         <div className="absolute inset-0 bg-primary"></div>
         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80" alt="Login Banner" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30" />
         

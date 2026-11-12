@@ -33,7 +33,7 @@ function StatCard({
   color = 'primary',
   trend
 }) {
-  return <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
+  return <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm hover:shadow-level-2 transition-all duration-300 group">
       <div className="flex justify-between items-start mb-6">
         <div className={'w-12 h-12 rounded-full flex items-center justify-center transition-transform ' + (color==='secondary'?'bg-secondary/10 text-secondary':'bg-primary/10 text-primary')}>
           <Icon size={24} stroke={1.5} />
@@ -99,16 +99,16 @@ function AdminAnalytics() {
     return <div className="w-full animate-pulse space-y-6">
         <div className="h-8 w-48 bg-surface-variant/50 rounded-xl" />
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-36 bg-surface-variant/30 rounded-[2rem]" />)}
+          {[...Array(4)].map((_, i) => <div key={i} className="h-36 bg-surface-variant/30 rounded-2xl" />)}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 h-80 bg-surface-variant/30 rounded-[2rem]" />
-          <div className="h-80 bg-surface-variant/30 rounded-[2rem]" />
+          <div className="lg:col-span-2 h-80 bg-surface-variant/30 rounded-2xl" />
+          <div className="h-80 bg-surface-variant/30 rounded-2xl" />
         </div>
       </div>;
   }
   if (!data) {
-    return <div className="flex flex-col items-center justify-center py-24 text-on-surface-variant">
+    return <div className="flex flex-col items-center justify-center py-10 text-on-surface-variant">
         <p className="text-lg font-bold text-primary mb-4">Failed to load analytics data.</p>
         <button onClick={fetchData} className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95">
           <IconRefresh size={18} /> Retry
@@ -171,7 +171,7 @@ function AdminAnalytics() {
 
       {/* Revenue Chart + Status Pie */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-        <div className="xl:col-span-2 bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+        <div className="xl:col-span-2 bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-primary">Revenue Trend</h2>
             <span className="text-xs font-semibold text-on-surface-variant bg-surface-variant px-3 py-1.5 rounded-full border border-outline/30">
@@ -220,7 +220,7 @@ function AdminAnalytics() {
           </div>
         </div>
 
-        <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+        <div className="bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
           <h2 className="text-xl font-bold text-primary mb-6">Order Status</h2>
           {statusData.length > 0 ? <>
               <div className="h-[200px]">
@@ -250,7 +250,7 @@ function AdminAnalytics() {
 
       {/* Top Products Bar Chart + Best Sellers */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-        <div className="xl:col-span-2 bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+        <div className="xl:col-span-2 bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
           <h2 className="text-xl font-bold text-primary mb-6">Top Products by Revenue</h2>
           {topProductsChart.length > 0 ? <div className="h-[280px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -285,7 +285,7 @@ function AdminAnalytics() {
             </div> : <div className="flex items-center justify-center h-[280px] text-on-surface-variant">No product sales data yet.</div>}
         </div>
 
-        <div className="bg-surface border border-outline/30 rounded-[2rem] shadow-sm p-6 md:p-8">
+        <div className="bg-surface border border-outline/30 rounded-2xl shadow-sm p-6 md:p-6">
           <h2 className="text-xl font-bold text-primary mb-6">Best Sellers</h2>
           <div className="flex flex-col gap-4">
             {(top_products || []).slice(0, 5).map((product, i) => <div key={i} className="flex items-center gap-3 group">
@@ -309,8 +309,8 @@ function AdminAnalytics() {
       </div>
 
       {/* Recent Orders Table */}
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
-        <div className="flex items-center justify-between p-6 md:p-8 border-b border-outline/30">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
+        <div className="flex items-center justify-between p-6 md:p-6 border-b border-outline/30">
           <h2 className="text-xl font-bold text-primary">Recent Orders</h2>
           <button onClick={()=>{
  const rows=[['Order ID','Customer','Date','Status','Amount (GHS)'],...(recent_orders||[]).map(o=>[o.id,o.customer_name,new Date(o.created_at).toISOString(),o.status,o.total])];
@@ -366,7 +366,7 @@ function AdminAnalytics() {
                   </tr>;
             })}
               {(!recent_orders || recent_orders.length === 0) && <tr>
-                  <td colSpan="5" className="p-12 text-center text-on-surface-variant font-medium">No orders yet.</td>
+                  <td colSpan="5" className="p-8 text-center text-on-surface-variant font-medium">No orders yet.</td>
                 </tr>}
             </tbody>
           </table>

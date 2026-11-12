@@ -87,7 +87,7 @@ function UserDetailModal({
   };
   if (loading) {
     return <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4">
-        <div className="bg-surface w-full max-w-2xl rounded-[2rem] p-12 flex items-center justify-center">
+        <div className="bg-surface w-full max-w-2xl rounded-2xl p-8 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
         </div>
       </div>;
@@ -101,7 +101,7 @@ function UserDetailModal({
   } = data;
   const isSelf = user.id === currentUser?.id;
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-surface w-full max-w-3xl rounded-[2rem] shadow-level-3 border border-outline/30 overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-surface w-full max-w-3xl rounded-2xl shadow-level-3 border border-outline/30 overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-outline/30 bg-surface-variant/30 shrink-0">
           <div className="flex items-center gap-4">
@@ -463,8 +463,8 @@ function AdminUsers() {
         </div>}
 
       {/* Content */}
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
-        {loading ? <div className="p-12 flex items-center justify-center">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
+        {loading ? <div className="p-8 flex items-center justify-center">
             <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
           </div> : activeTab === 'users' ? <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -504,7 +504,7 @@ function AdminUsers() {
                     </td>
                   </tr>)}
                 {filteredUsers.length === 0 && <tr>
-                    <td colSpan="5" className="p-12 text-center">
+                    <td colSpan="5" className="p-8 text-center">
                       <div className="flex flex-col items-center text-on-surface-variant">
                         <IconUsers size={48} stroke={1.5} className="mb-4 opacity-40" />
                         <p className="font-bold text-primary">{search ? 'No users match your search.' : 'No users found.'}</p>
@@ -514,7 +514,7 @@ function AdminUsers() {
               </tbody>
             </table>
           </div> : activeTab === 'applications' ? <div className="p-6 space-y-4">
-            {applications.length === 0 ? <div className="flex flex-col items-center text-on-surface-variant py-16">
+            {applications.length === 0 ? <div className="flex flex-col items-center text-on-surface-variant py-10">
                 <IconBuildingStore size={64} stroke={1.5} className="mb-4 opacity-40" />
                 <p className="text-xl font-bold text-primary mb-2">No {appFilter || ''} Applications</p>
                 <p className="text-sm font-medium">Seller applications will appear here once customers submit them.</p>
@@ -562,7 +562,7 @@ function AdminUsers() {
                     </button>
                   </div>}
               </div>)}
-            {tickets.length === 0 && <div className="flex flex-col items-center justify-center text-on-surface-variant py-16">
+            {tickets.length === 0 && <div className="flex flex-col items-center justify-center text-on-surface-variant py-10">
                 <IconInbox size={64} stroke={1.5} className="mb-4 opacity-40" />
                 <p className="text-xl font-bold text-primary mb-2">No Support Tickets</p>
                 <p className="text-sm font-medium">When customers submit support requests, they'll appear here.</p>

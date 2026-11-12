@@ -97,7 +97,7 @@ function AdminOrders() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -113,7 +113,7 @@ function AdminOrders() {
             </thead>
             <tbody className="divide-y divide-outline/30">
               {orders.map(order => <tr key={order.id} className="hover:bg-surface-variant/30 transition-colors group">
-                  <td className="p-4 text-sm font-bold text-primary uppercase tracking-widest">
+                  <td className="p-4 text-sm font-bold text-primary uppercase tracking-wider">
                     #{order.id.slice(0, 8)}
                   </td>
                   <td className="p-4 text-base font-bold text-primary">{order.customer_name}</td>
@@ -134,7 +134,7 @@ function AdminOrders() {
                   </td>
                 </tr>)}
               {orders.length === 0 && <tr>
-                  <td colSpan="7" className="p-8 text-center">
+                  <td colSpan="7" className="p-6 text-center">
                     <div className="flex flex-col items-center justify-center text-on-surface-variant py-8">
                       <IconPackage size={48} stroke={1.5} className="mb-4 opacity-50" />
                       <p className="text-lg font-bold text-primary">No orders found</p>

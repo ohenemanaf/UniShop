@@ -106,9 +106,9 @@ function AdminSupport() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -122,7 +122,7 @@ function AdminSupport() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {filteredTickets.length === 0 ? <tr>
-                    <td colSpan="5" className="p-12 text-center">
+                    <td colSpan="5" className="p-8 text-center">
                       <div className="flex flex-col items-center gap-3 text-on-surface-variant">
                         <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                           <IconLifebuoy size={32} stroke={1.5} />
@@ -160,7 +160,7 @@ function AdminSupport() {
 
       {/* Ticket Modal */}
       {selectedTicket && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-2xl rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-2xl rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30 shrink-0">
               <h3 className="text-xl font-bold text-primary flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
@@ -173,7 +173,7 @@ function AdminSupport() {
               </button>
             </div>
             
-            <div className="p-8 overflow-y-auto flex-grow flex flex-col gap-8">
+            <div className="p-6 overflow-y-auto flex-grow flex flex-col gap-8">
               <div className="bg-surface-variant/30 p-6 rounded-2xl border border-outline/30">
                 <div className="flex justify-between items-start mb-4">
                   <div>

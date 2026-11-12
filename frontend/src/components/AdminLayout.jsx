@@ -88,14 +88,14 @@ function AdminLayout() {
   return <div className="bg-surface-variant text-on-background min-h-screen flex flex-col lg:flex-row antialiased">
       {/* SideNavBar */}
       <aside className={`bg-surface/80 backdrop-blur-2xl border-r border-outline/30 shadow-level-1 flex flex-col h-screen w-72 fixed left-0 top-0 z-50 overflow-y-auto transition-transform duration-300 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="mb-4 p-8 flex items-center justify-between lg:justify-start gap-4 border-b border-outline/20">
+        <div className="mb-4 p-6 flex items-center justify-between lg:justify-start gap-4 border-b border-outline/20">
           <div className="flex items-center gap-3">
             <div className="bg-primary text-white p-2 rounded-xl shadow-md">
               <IconShieldLock size={24} stroke={2} />
             </div>
             <div>
               <h1 className="text-2xl font-black text-primary tracking-tight leading-none mb-1">UniShop.</h1>
-              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Command Center</p>
+              <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Command Center</p>
             </div>
           </div>
           <button aria-label="Close navigation" className="lg:hidden text-on-surface-variant p-2 bg-surface-variant rounded-full active:scale-95" onClick={() => setMobileMenuOpen(false)}>
@@ -124,7 +124,7 @@ function AdminLayout() {
 
       {mobileMenuOpen && <button aria-label="Close admin navigation" onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-40 bg-black/40 lg:hidden" />}
       {/* Main Content */}
-      <main className="flex-1 min-w-0 lg:ml-72 p-4 lg:p-8 min-h-screen flex flex-col">
+      <main className="flex-1 min-w-0 lg:ml-72 p-4 lg:p-6 min-h-screen flex flex-col">
         {/* Header area for mobile */}
         <header className="lg:hidden flex items-center justify-between mb-8 bg-surface p-4 rounded-2xl shadow-sm border border-outline/30">
           <div className="flex items-center gap-3">

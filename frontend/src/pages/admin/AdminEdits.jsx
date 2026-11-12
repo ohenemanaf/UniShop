@@ -149,9 +149,9 @@ function AdminEdits() {
         </button>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -165,7 +165,7 @@ function AdminEdits() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {edits.length === 0 ? <tr>
-                    <td colSpan="5" className="p-12 text-center text-on-surface-variant">
+                    <td colSpan="5" className="p-8 text-center text-on-surface-variant">
                       <div className="flex flex-col items-center gap-3">
                         <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                           <IconDeviceDesktopAnalytics size={32} stroke={1.5} />
@@ -217,14 +217,14 @@ function AdminEdits() {
       </div>
 
       {showModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-[600px] rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh]">
+          <div className="bg-surface w-full max-w-[600px] rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh]">
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30 shrink-0">
               <h3 className="text-xl font-bold text-primary">
                 {isEditing ? 'Edit Curated Bundle' : 'New Curated Bundle'}
               </h3>
             </div>
             
-            <form onSubmit={handleSave} className="p-8 flex flex-col gap-5 overflow-y-auto flex-grow hide-scrollbar">
+            <form onSubmit={handleSave} className="p-6 flex flex-col gap-5 overflow-y-auto flex-grow hide-scrollbar">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL *</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({

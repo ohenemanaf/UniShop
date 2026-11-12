@@ -267,7 +267,7 @@ function SearchOverlay({
                     </div> : <>
                       {/* Header */}
                       <div className="flex items-center justify-between px-6 pt-5 pb-3">
-                        <span className="text-xs font-bold uppercase tracking-widest" style={{
+                        <span className="text-xs font-bold uppercase tracking-wider" style={{
                   color: "#64748b"
                 }}>
                           Products
@@ -307,7 +307,7 @@ function SearchOverlay({
                               </p>
                               {p.avg_rating > 0 && <div className="flex items-center gap-0.5 mt-1.5">
                                   {[...Array(5)].map((_, si) => <IconStar key={si} size={12} className={si < Math.round(p.avg_rating) ? "text-amber-400 fill-amber-400" : "text-gray-200 fill-gray-200"} />)}
-                                  <span className="text-[10px] font-bold ml-1" style={{
+                                  <span className="text-[11px] font-bold ml-1" style={{
                         color: "#64748b"
                       }}>
                                     {parseFloat(p.avg_rating).toFixed(1)}
@@ -321,7 +321,7 @@ function SearchOverlay({
                                 {GHS(p.min_price ?? p.price)}
                               </p>
                               <div className="flex items-center justify-end gap-1 mt-1">
-                                <span className="text-[10px] font-bold" style={{
+                                <span className="text-[11px] font-bold" style={{
                         color: "#059669"
                       }}>In Stock</span>
                               </div>
@@ -349,7 +349,7 @@ function SearchOverlay({
                             <IconHistory size={14} stroke={2} style={{
                       color: "#64748b"
                     }} />
-                            <span className="text-xs font-bold uppercase tracking-widest" style={{
+                            <span className="text-xs font-bold uppercase tracking-wider" style={{
                       color: "#64748b"
                     }}>
                               Recent
@@ -384,7 +384,7 @@ function SearchOverlay({
                         <IconFlame size={14} stroke={2} style={{
                     color: "#ea580c"
                   }} />
-                        <span className="text-xs font-bold uppercase tracking-widest" style={{
+                        <span className="text-xs font-bold uppercase tracking-wider" style={{
                     color: "#64748b"
                   }}>
                           Trending Now
@@ -409,7 +409,7 @@ function SearchOverlay({
                   }}>
                             <span className="text-base">{t.icon}</span>
                             {t.label}
-                            <span className="text-[10px] font-black opacity-40">#{i + 1}</span>
+                            <span className="text-[11px] font-black opacity-40">#{i + 1}</span>
                           </motion.button>)}
                       </div>
                     </div>
@@ -420,7 +420,7 @@ function SearchOverlay({
                         <IconCategory size={14} stroke={2} style={{
                     color: "#64748b"
                   }} />
-                        <span className="text-xs font-bold uppercase tracking-widest" style={{
+                        <span className="text-xs font-bold uppercase tracking-wider" style={{
                     color: "#64748b"
                   }}>
                           Shop by Category
@@ -457,12 +457,12 @@ function SearchOverlay({
               <div className="flex items-center justify-between px-6 py-3 bg-gray-50 border-t border-gray-100">
                 <div className="flex items-center gap-4">
                   {[["↑↓", "navigate"], ["↵", "select"], ["esc", "close"]].map(([key, action]) => <div key={key} className="flex items-center gap-1.5">
-                      <kbd className="px-2 py-0.5 rounded text-[10px] font-bold bg-white border border-gray-200 shadow-sm" style={{
+                      <kbd className="px-2 py-0.5 rounded text-[11px] font-bold bg-white border border-gray-200 shadow-sm" style={{
                   color: "#64748b"
                 }}>
                         {key}
                       </kbd>
-                      <span className="text-[10px] font-semibold" style={{
+                      <span className="text-[11px] font-semibold" style={{
                   color: "#94a3b8"
                 }}>{action}</span>
                     </div>)}
@@ -471,7 +471,7 @@ function SearchOverlay({
                   <div className="w-4 h-4 rounded" style={{
                 background: "linear-gradient(135deg,#6366f1,#8b5cf6)"
               }} />
-                  <span className="text-[10px] font-bold" style={{
+                  <span className="text-[11px] font-bold" style={{
                 color: "#94a3b8"
               }}>UniShop Search</span>
                 </div>

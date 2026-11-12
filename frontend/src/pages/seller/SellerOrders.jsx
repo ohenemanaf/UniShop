@@ -188,7 +188,7 @@ function SellerOrders() {
         </div>
       </div>;
   }
-  return <div className="w-full max-w-[1400px] mx-auto pb-12">
+  return <div className="w-full max-w-[1200px] mx-auto pb-12">
       <SEO title="Orders | Seller Dashboard" />
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
@@ -219,7 +219,7 @@ function SellerOrders() {
                     
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-black uppercase tracking-widest text-primary/60 bg-primary/5 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-black uppercase tracking-wider text-primary/60 bg-primary/5 px-2 py-0.5 rounded-md">
                           ORDER #{item.order_id.substring(0, 8)}
                         </span>
                         <span className="text-xs font-semibold text-on-surface-variant">
@@ -254,13 +254,13 @@ function SellerOrders() {
                     
                     <div className="w-full flex justify-between items-center xl:flex-col xl:items-end gap-2">
                       {/* Status Badge */}
-                      <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest border ${statusConfig.color} ${statusConfig.border}`}>
+                      <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border ${statusConfig.color} ${statusConfig.border}`}>
                         {statusConfig.label}
                       </span>
                       
                       {/* Tracking Info (if shipped) */}
                       {item.tracking_number && <div className="text-right">
-                          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{item.carrier}</p>
+                          <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">{item.carrier}</p>
                           <p className="text-xs font-semibold text-primary font-mono">{item.tracking_number}</p>
                         </div>}
                     </div>
@@ -289,7 +289,7 @@ function SellerOrders() {
       }} animate={{
         opacity: 1,
         scale: 1
-      }} className="bg-surface border border-outline/20 rounded-[2rem] p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+      }} className="bg-surface border border-outline/20 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
             <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary mb-6">
               <IconBox size={48} stroke={1.5} />
             </div>
@@ -331,7 +331,7 @@ function SellerOrders() {
           type: "spring",
           stiffness: 300,
           damping: 25
-        }} className="bg-surface w-full max-w-[28rem] p-8 rounded-[2rem] shadow-level-3 border border-outline/20 relative overflow-hidden">
+        }} className="bg-surface w-full max-w-[28rem] p-6 rounded-2xl shadow-level-3 border border-outline/20 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10"></div>
               
               <h2 className="text-2xl font-black text-primary mb-6 flex items-center gap-3">

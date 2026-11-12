@@ -181,9 +181,9 @@ function AdminCategories() {
         </button>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -196,7 +196,7 @@ function AdminCategories() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {categories.length === 0 ? <tr>
-                    <td colSpan="4" className="p-8 text-center text-on-surface-variant font-medium">
+                    <td colSpan="4" className="p-6 text-center text-on-surface-variant font-medium">
                       No categories found. Start by creating one.
                     </td>
                   </tr> : renderCategoryRows(categories)}
@@ -207,14 +207,14 @@ function AdminCategories() {
 
       {/* Modal */}
       {showModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-[512px] rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-[512px] rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30">
               <h3 className="text-xl font-bold text-primary">
                 {isEditing ? 'Edit Category' : 'New Category'}
               </h3>
             </div>
             
-            <form onSubmit={handleSave} className="p-8 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+            <form onSubmit={handleSave} className="p-6 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-wider">Name *</label>
                 <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.name} onChange={e => setFormData({

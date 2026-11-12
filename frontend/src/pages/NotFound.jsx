@@ -11,7 +11,7 @@ export default /**
  * @returns {any}
  */
 function NotFound() {
-  return <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden p-4 md:p-8">
+  return <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden p-4 md:p-6">
       <SEO title="Page Not Found | UniShop" />
       
       {/* Background decoration */}
@@ -22,7 +22,7 @@ function NotFound() {
           404
         </h1>
         <h2 className="text-3xl font-bold text-primary mb-4">Page Not Found</h2>
-        <p className="text-lg text-on-surface-variant font-medium mb-10">
+        <p className="text-lg text-on-surface-variant font-medium mb-6">
           The page you're looking for doesn't exist or has been moved.
           Let's get you back on track.
         </p>

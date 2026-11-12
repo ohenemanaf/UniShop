@@ -108,57 +108,49 @@ function ProductCard({
 
   // The title link stretches over the whole card (after:inset-0) so the card stays clickable,
   // while the wishlist and add buttons sit beside the link instead of inside it.
-  return <motion.article variants={itemVariants} whileHover={{
-    y: -6
-  }} className="group relative bg-transparent flex flex-col product-card min-w-0">
-      <div className="relative aspect-[3/4] w-full bg-surface-variant overflow-hidden shrink-0 rounded-[3px] shadow-sm group-hover:shadow-level-1 transition-shadow duration-500">
-        <img src={product.image_url || 'https://placehold.co/800x1000/F1F5F9/333333.png?text=Product'} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out mix-blend-multiply" loading="lazy" />
+  const percentOff = discount ? Math.round((1 - Number(price) / Number(comparePrice)) * 100) : 0;
+  const rating = Number(product.avg_rating || 0);
+  return <motion.article variants={itemVariants} className="group relative flex flex-col product-card lift min-w-0">
+      <div className="relative aspect-square w-full bg-surface-dim overflow-hidden shrink-0">
+        <img src={product.image_url || 'https://placehold.co/800x800/F1F5F9/333333.png?text=Product'} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
 
-        {/* Wishlist Button */}
-        <div className="absolute top-3 right-3 z-10">
-          <button type="button" aria-label={`${wishlisted ? 'Remove' : 'Save'} ${product.name} ${wishlisted ? 'from' : 'to'} wishlist`} aria-pressed={wishlisted} onClick={toggleWishlist} className={`bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-90 border border-white/40 ${wishlisted ? 'text-secondary' : 'text-on-surface-variant hover:text-primary'}`}>
-            {wishlisted ? <IconHeartFilled size={18} className="text-secondary w-4 h-4 md:w-5 md:h-5" /> : <IconHeart size={18} className="w-4 h-4 md:w-5 md:h-5" stroke={1.5} />}
-          </button>
+        {/* Status */}
+        <div className="absolute top-2 left-2 z-10 flex gap-1 pointer-events-none">
+          {isOutOfStock ? <span className="pill-neutral bg-surface/95">Sold out</span> : discount && <span className="pill-accent">−{percentOff}%</span>}
         </div>
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 z-10 flex flex-col gap-2 pointer-events-none">
-          {discount && <span className="bg-primary text-white font-bold text-xs uppercase px-2.5 py-1 rounded-md tracking-wider shadow-sm">Sale</span>}
-          {isOutOfStock && <span className="bg-error text-white font-bold text-xs uppercase px-2.5 py-1 rounded-md tracking-wider shadow-sm">Sold Out</span>}
-        </div>
-
-        {/* Quick Add: shown on hover and whenever a control in the card has keyboard focus */}
-        {!isOutOfStock && <div className="absolute bottom-0 left-0 w-full p-3 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 transition-all duration-300 z-10 hidden md:block">
-            <button type="button" onClick={handleAddToCart} disabled={adding} aria-label={`Quick add ${product.name} to cart`} className="w-full bg-white/90 backdrop-blur-md hover:bg-primary text-primary hover:text-white font-bold text-sm py-3 rounded-[3px] transition-colors shadow-sm flex items-center justify-center gap-2 disabled:opacity-70">
-              {adding ? <IconLoader2 size={18} className="animate-spin" /> : <IconPlus size={18} stroke={2} />}
-              {adding ? 'Adding...' : 'Quick Add'}
-            </button>
-          </div>}
+        {/* Wishlist */}
+        <button type="button" aria-label={`${wishlisted ? 'Remove' : 'Save'} ${product.name} ${wishlisted ? 'from' : 'to'} wishlist`} aria-pressed={wishlisted} onClick={toggleWishlist} className={`absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface/95 flex items-center justify-center shadow-sm transition-transform active:scale-90 ${wishlisted ? 'text-secondary' : 'text-on-surface-variant hover:text-on-surface'}`}>
+          {wishlisted ? <IconHeartFilled size={16} /> : <IconHeart size={16} stroke={1.8} />}
+        </button>
       </div>
 
-      <div className="pt-4 flex flex-col flex-grow min-w-0">
-        <div className="flex justify-between items-start mb-1 min-w-0 w-full gap-2">
-          <span className="text-xs text-on-surface-variant font-bold uppercase tracking-widest truncate w-auto min-w-0">{product.category_name || 'Category'}</span>
-        </div>
-
-        <h3 className="text-sm md:text-base text-on-surface font-semibold mb-2 leading-snug line-clamp-2 min-w-0 break-words group-hover:text-secondary transition-colors">
-          <Link to={`/products/${product.id}`} className="after:absolute after:inset-0 after:z-[5] after:content-[''] focus:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-primary focus-visible:after:rounded-[3px]">
+      <div className="p-3 flex flex-col flex-grow min-w-0">
+        <span className="text-[11px] font-semibold text-on-surface-variant truncate">{product.category_name || 'Category'}</span>
+        <h3 className="mt-0.5 text-[13.5px] leading-snug font-semibold text-on-surface line-clamp-2 min-h-[2.5em] break-words">
+          <Link to={`/products/${product.id}`} className="after:absolute after:inset-0 after:z-[5] after:content-[''] focus:outline-none focus-visible:after:outline focus-visible:after:outline-2 focus-visible:after:outline-primary focus-visible:after:rounded-xl hover:text-primary transition-colors">
             {product.name}
           </Link>
         </h3>
 
-        <div className="mt-auto flex justify-between items-end min-w-0 w-full pt-1">
-           <div className="flex flex-col gap-1.5 shrink min-w-0">
-             <div className="flex items-baseline gap-2 flex-wrap">
-               <span className="font-headline-md text-lg md:text-xl font-bold text-on-surface tracking-tight">{GHS0(price || 0)}</span>
-               {discount && <span className="line-through text-on-surface-variant text-xs font-medium"><span className="sr-only">Was </span>{GHS0(comparePrice)}</span>}
-             </div>
-             <StarRating rating={product.avg_rating || 0} count={product.review_count || 0} />
-           </div>
+        <div className="mt-auto pt-2 flex items-end justify-between gap-2 min-w-0">
+          <div className="min-w-0">
+            <div className="flex items-baseline gap-1.5 flex-wrap tabular">
+              <span className="text-[15px] font-bold text-on-surface">{GHS0(price || 0)}</span>
+              {discount && <span className="line-through text-on-surface-variant text-xs"><span className="sr-only">Was </span>{GHS0(comparePrice)}</span>}
+            </div>
+            <div className="mt-0.5 flex items-center gap-1 text-xs text-on-surface-variant">
+              {rating > 0 ? <>
+                  <IconStarFilled size={12} className="text-secondary" aria-hidden="true" />
+                  <span className="font-semibold text-on-surface">{rating.toFixed(1)}</span>
+                  <span>({product.review_count || 0}<span className="sr-only"> reviews</span>)</span>
+                </> : <span>No reviews yet</span>}
+            </div>
+          </div>
 
-           {!isOutOfStock && <button type="button" onClick={handleAddToCart} disabled={adding} className="relative z-10 md:hidden bg-surface-variant hover:bg-primary text-primary hover:text-white w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 active:scale-95 shrink-0 ml-2 disabled:opacity-70" aria-label={`Add ${product.name} to cart`}>
-               {adding ? <IconLoader2 size={16} className="animate-spin" /> : <IconPlus size={18} stroke={2.5} />}
-             </button>}
+          {!isOutOfStock && <button type="button" onClick={handleAddToCart} disabled={adding} aria-label={`Add ${product.name} to cart`} className="relative z-10 shrink-0 w-8 h-8 rounded-full bg-primary-container text-on-primary-container hover:bg-primary hover:text-white flex items-center justify-center transition-colors active:scale-90 disabled:opacity-60">
+              {adding ? <IconLoader2 size={15} className="animate-spin" /> : <IconPlus size={16} stroke={2.2} />}
+            </button>}
         </div>
       </div>
     </motion.article>;

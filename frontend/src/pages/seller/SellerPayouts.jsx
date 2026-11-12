@@ -101,11 +101,11 @@ function SellerPayouts() {
   const getStatusBadge = status => {
     switch (status) {
       case 'PENDING':
-        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-secondary/10 text-secondary border border-secondary/20"><IconClock size={14} /> Pending</span>;
+        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider bg-secondary/10 text-secondary border border-secondary/20"><IconClock size={14} /> Pending</span>;
       case 'PROCESSED':
-        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-success/10 text-success border border-success/20"><IconCircleCheck size={14} /> Processed</span>;
+        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider bg-success/10 text-success border border-success/20"><IconCircleCheck size={14} /> Processed</span>;
       case 'REJECTED':
-        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-error/10 text-error border border-error/20"><IconX size={14} /> Rejected</span>;
+        return <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-wider bg-error/10 text-error border border-error/20"><IconX size={14} /> Rejected</span>;
       default:
         return null;
     }
@@ -147,7 +147,7 @@ function SellerPayouts() {
         <div className="h-96 bg-surface-container rounded-3xl" />
       </div>;
   }
-  return <motion.div variants={containerVariants} initial="hidden" animate="show" className="w-full max-w-[1400px] mx-auto pb-12">
+  return <motion.div variants={containerVariants} initial="hidden" animate="show" className="w-full max-w-[1200px] mx-auto pb-12">
       <SEO title="Payouts | Seller Dashboard" />
       
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
@@ -160,9 +160,9 @@ function SellerPayouts() {
         </button>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Main Balance Card */}
-        <motion.div variants={itemVariants} className="md:col-span-1 bg-gradient-to-br from-primary to-primary-fixed rounded-[2rem] p-8 shadow-md relative overflow-hidden group">
+        <motion.div variants={itemVariants} className="md:col-span-1 bg-gradient-to-br from-primary to-primary-fixed rounded-2xl p-6 shadow-md relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-bl-full -z-0 group-hover:scale-110 transition-transform duration-700"></div>
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/10 rounded-tr-full -z-0 group-hover:scale-110 transition-transform duration-700"></div>
           
@@ -171,7 +171,7 @@ function SellerPayouts() {
               <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
                 <IconWallet size={28} stroke={1.5} />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-primary bg-white px-3 py-1.5 rounded-full shadow-sm">
+              <span className="text-[11px] font-black uppercase tracking-wider text-primary bg-white px-3 py-1.5 rounded-full shadow-sm">
                 Available
               </span>
             </div>
@@ -187,7 +187,7 @@ function SellerPayouts() {
 
         {/* Secondary Stats */}
         <motion.div variants={itemVariants} className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-surface border border-outline/20 rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-surface border border-outline/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative overflow-hidden">
             <div className="absolute top-4 right-4 text-success/20">
               <IconTrendingUp size={80} stroke={1} />
             </div>
@@ -203,7 +203,7 @@ function SellerPayouts() {
             </div>
           </div>
 
-          <div className="bg-surface border border-outline/20 rounded-[2rem] p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-surface border border-outline/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative overflow-hidden">
              <div className="absolute top-4 right-4 text-secondary/10">
               <IconBuildingBank size={80} stroke={1} />
             </div>
@@ -221,8 +221,8 @@ function SellerPayouts() {
         </motion.div>
       </div>
 
-      <motion.div variants={itemVariants} className="bg-surface border border-outline/20 rounded-[2.5rem] overflow-hidden shadow-sm">
-        <div className="p-8 border-b border-outline/10 bg-surface flex items-center justify-between">
+      <motion.div variants={itemVariants} className="bg-surface border border-outline/20 rounded-2xl overflow-hidden shadow-sm">
+        <div className="p-6 border-b border-outline/10 bg-surface flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
               <IconHistory size={20} stroke={2} />
@@ -260,7 +260,7 @@ function SellerPayouts() {
               })}
                   </p>
                   {getStatusBadge(p.status)}
-                  {p.processed_at && <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">
+                  {p.processed_at && <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">
                       Processed: {new Date(p.processed_at).toLocaleDateString()}
                     </p>}
                 </div>
@@ -289,7 +289,7 @@ function SellerPayouts() {
           type: "spring",
           stiffness: 300,
           damping: 25
-        }} className="bg-surface w-full max-w-[28rem] rounded-[2.5rem] p-10 shadow-level-3 border border-outline/20 relative overflow-hidden">
+        }} className="bg-surface w-full max-w-[28rem] rounded-2xl p-6 shadow-level-3 border border-outline/20 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10"></div>
               
               <div className="flex items-center gap-4 mb-8">
