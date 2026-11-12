@@ -4,7 +4,7 @@
  * Date: 2026-07-21
  */
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../.env'), quiet: true });
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) throw new Error('Configure JWT_SECRET with at least 32 characters');
 const express = require('express');
 const http = require('http');
@@ -176,6 +176,9 @@ app.use('/api/v1/stripe/webhook', (req,res,next) => {
   return express.raw({type:'application/json'})(req,res,next);
 }, require('./routes/webhook'));
 app.use(express.json());
+// Express 5 leaves req.body undefined when a request has no body; keep the Express 4
+// behaviour (an empty object) so handlers that destructure req.body keep working.
+app.use((req, res, next) => { if (req.body === undefined) req.body = {}; next(); });
 app.use('/api', apiLimiter);
 
 // ── Routes ────────────────────────────────────────────────────────────────
