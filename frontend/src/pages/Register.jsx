@@ -73,35 +73,35 @@ function Register() {
             <Link to="/" className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-xl mb-8">
               <IconSparkles size={24} stroke={1.5} />
             </Link>
-            <h1 className="text-4xl font-bold text-primary tracking-tight mb-2">Create account</h1>
+            <h1 className="page-title mb-2">Create account</h1>
             <p className="text-lg text-on-surface-variant">Join 100,000+ happy shoppers today.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label htmlFor="reg-name" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Full Name</label>
-              <input id="reg-name" type="text" name="name" placeholder="John Doe" value={form.name} onChange={handleChange} required className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" autoComplete="name" />
+              <label htmlFor="reg-name" className="field-label">Full Name</label>
+              <input id="reg-name" type="text" name="name" placeholder="John Doe" value={form.name} onChange={handleChange} required className="field w-full" autoComplete="name" />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="reg-email" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Email Address</label>
-              <input id="reg-email" type="email" name="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" autoComplete="email" />
+              <label htmlFor="reg-email" className="field-label">Email Address</label>
+              <input id="reg-email" type="email" name="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required className="field w-full" autoComplete="email" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="reg-password" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Password</label>
+                <label htmlFor="reg-password" className="field-label">Password</label>
                 <div className="relative">
-                  <input id="reg-password" type={showPassword ? "text" : "password"} name="password" placeholder="Min. 6 chars" value={form.password} onChange={handleChange} required className="w-full bg-surface-variant p-4 pr-12 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" autoComplete="new-password" />
+                  <input id="reg-password" type={showPassword ? "text" : "password"} name="password" placeholder="Min. 6 chars" value={form.password} onChange={handleChange} required className="field w-full pr-12" autoComplete="new-password" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/50 hover:text-primary transition-colors">
                     {showPassword ? <IconEyeOff size={20} stroke={1.5} /> : <IconEye size={20} stroke={1.5} />}
                   </button>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="reg-confirm" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Confirm Password</label>
+                <label htmlFor="reg-confirm" className="field-label">Confirm Password</label>
                 <div className="relative">
-                  <input id="reg-confirm" type={showConfirm ? "text" : "password"} name="confirm" placeholder="Repeat password" value={form.confirm} onChange={handleChange} required className="w-full bg-surface-variant p-4 pr-12 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" autoComplete="new-password" />
+                  <input id="reg-confirm" type={showConfirm ? "text" : "password"} name="confirm" placeholder="Repeat password" value={form.confirm} onChange={handleChange} required className="field w-full pr-12" autoComplete="new-password" />
                   <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/50 hover:text-primary transition-colors">
                     {showConfirm ? <IconEyeOff size={20} stroke={1.5} /> : <IconEye size={20} stroke={1.5} />}
                   </button>
@@ -111,7 +111,7 @@ function Register() {
 
             {error && <div className="bg-error/10 border border-error/20 text-error p-4 rounded-xl text-sm font-semibold">{error}</div>}
 
-            <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 mt-2 rounded-xl font-bold text-lg active:scale-95 shadow-md hover:bg-primary-fixed transition-all disabled:opacity-50">
+            <button type="submit" disabled={loading} className="btn-primary w-full mt-2 disabled:opacity-50 btn-lg">
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>

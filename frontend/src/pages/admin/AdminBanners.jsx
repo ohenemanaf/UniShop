@@ -134,10 +134,10 @@ function AdminBanners() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Banners & Promotions</h1>
+          <h1 className="page-title mb-2">Banners & Promotions</h1>
           <p className="text-on-surface-variant font-medium">Manage the dynamic hero banners on the storefront homepage.</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+        <button onClick={() => handleOpenModal()} className="btn-primary inline-flex">
           <IconPlus size={20} stroke={1.5} /> Add Banner
         </button>
       </div>
@@ -210,7 +210,7 @@ function AdminBanners() {
             
             <form onSubmit={handleSave} className="p-6 flex flex-col gap-5 overflow-y-auto flex-grow">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL *</label>
+                <label className="field-label">Image URL *</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({
               ...formData,
               image_url: url
@@ -218,24 +218,24 @@ function AdminBanners() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Title</label>
-                <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.title} onChange={e => setFormData({
+                <label className="field-label">Title</label>
+                <input type="text" className="field" value={formData.title} onChange={e => setFormData({
               ...formData,
               title: e.target.value
             })} placeholder="e.g. Summer Sale" />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Subtitle</label>
-                <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.subtitle} onChange={e => setFormData({
+                <label className="field-label">Subtitle</label>
+                <input type="text" className="field" value={formData.subtitle} onChange={e => setFormData({
               ...formData,
               subtitle: e.target.value
             })} placeholder="e.g. Up to 50% off" />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Link URL</label>
-                <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.link_url} onChange={e => setFormData({
+                <label className="field-label">Link URL</label>
+                <input type="text" className="field" value={formData.link_url} onChange={e => setFormData({
               ...formData,
               link_url: e.target.value
             })} placeholder="e.g. /products?category=electronics" />
@@ -253,7 +253,7 @@ function AdminBanners() {
                 <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+                <button type="submit" className="btn-primary">
                   {isEditing ? 'Save Changes' : 'Create Banner'}
                 </button>
               </div>

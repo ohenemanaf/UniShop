@@ -70,10 +70,10 @@ function AdminPayouts() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Payouts</h1>
+          <h1 className="page-title mb-2">Payouts</h1>
           <p className="text-on-surface-variant font-medium">Manage seller withdrawal requests.</p>
         </div>
-        <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
+        <select className="field w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="ALL">All Payouts</option>
           <option value="PENDING">Pending</option>
           <option value="PROCESSED">Processed</option>

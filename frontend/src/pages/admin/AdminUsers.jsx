@@ -451,7 +451,7 @@ function AdminUsers() {
       {activeTab === 'users' && <div className="mb-4">
           <div className="relative w-full md:w-80">
             <IconSearch size={18} stroke={1.5} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant" />
-            <input type="text" className="w-full pl-10 pr-4 py-3 bg-surface border border-outline/50 rounded-xl text-sm font-medium text-primary focus:border-primary focus:outline-none transition-colors" placeholder="Search by name or email..." value={search} onChange={e => setSearch(e.target.value)} />
+            <input type="text" className="field w-full pl-10 pr-4" placeholder="Search by name or email..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>}
 
@@ -556,8 +556,8 @@ function AdminUsers() {
                 </div>
 
                 {replyingTo === ticket.id && <div className="mt-4 flex gap-3 animate-in fade-in duration-200">
-                    <input type="text" className="flex-1 bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" placeholder="Type your reply..." value={replyText} onChange={e => setReplyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleReply(ticket.id)} />
-                    <button className="bg-primary text-white font-bold px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95" onClick={() => handleReply(ticket.id)}>
+                    <input type="text" className="field flex-1" placeholder="Type your reply..." value={replyText} onChange={e => setReplyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleReply(ticket.id)} />
+                    <button className="btn-primary" onClick={() => handleReply(ticket.id)}>
                       Send
                     </button>
                   </div>}

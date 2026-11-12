@@ -99,6 +99,8 @@ export default {
       // Compact type scale. The large Tailwind steps are deliberately smaller than the defaults so
       // that every page reads at a professional, contained size: page titles 24-28px, not 48-64px.
       "fontSize": {
+        "base": ["0.9375rem", { "lineHeight": "1.45rem" }],
+        "lg": ["1rem", { "lineHeight": "1.5rem" }],
         "xl": ["1.125rem", { "lineHeight": "1.6rem" }],
         "2xl": ["1.25rem", { "lineHeight": "1.75rem" }],
         "3xl": ["1.5rem", { "lineHeight": "2rem" }],

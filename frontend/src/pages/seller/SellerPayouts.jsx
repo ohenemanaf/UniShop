@@ -152,10 +152,10 @@ function SellerPayouts() {
       
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight mb-2">Payouts</h1>
+          <h1 className="page-title mb-2">Payouts</h1>
           <p className="text-on-surface-variant font-medium">Manage your earnings and withdraw funds directly to your bank account.</p>
         </div>
-        <button onClick={() => setWithdrawModal(true)} disabled={data.balance <= 0} className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-bold bg-primary text-white shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none">
+        <button onClick={() => setWithdrawModal(true)} disabled={data.balance <= 0} className="btn-primary inline-flex disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none btn-lg">
           <IconBuildingBank size={20} stroke={2} /> Request Withdrawal
         </button>
       </motion.div>
@@ -177,7 +177,7 @@ function SellerPayouts() {
             </div>
             <div>
               <p className="text-sm font-bold text-white/80 uppercase tracking-wider mb-1">Available Balance</p>
-              <p className="text-5xl font-black text-white">${parseFloat(data.balance).toLocaleString(undefined, {
+              <p className="text-5xl font-black text-white tabular">₵{parseFloat(data.balance).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}</p>
@@ -196,7 +196,7 @@ function SellerPayouts() {
                 <IconArrowUpRight size={24} stroke={2} />
               </div>
               <p className="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Total Earnings</p>
-              <p className="text-4xl font-black text-primary">${parseFloat(data.total_earnings).toLocaleString(undefined, {
+              <p className="text-4xl font-black text-primary tabular">₵{parseFloat(data.total_earnings).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}</p>
@@ -212,7 +212,7 @@ function SellerPayouts() {
                 <IconHistory size={24} stroke={2} />
               </div>
               <p className="text-sm font-bold text-on-surface-variant uppercase tracking-wider mb-1">Total Withdrawn</p>
-              <p className="text-4xl font-black text-primary">${parseFloat(data.total_withdrawn).toLocaleString(undefined, {
+              <p className="text-4xl font-black text-primary tabular">₵{parseFloat(data.total_withdrawn).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
               })}</p>
@@ -304,21 +304,21 @@ function SellerPayouts() {
 
               <form onSubmit={handleWithdraw} className="flex flex-col gap-6 relative z-10">
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Amount to Withdraw ($)</label>
+                  <label className="field-label">Amount to Withdraw ($)</label>
                   <div className="relative">
-                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-black text-xl">$</span>
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-primary font-black text-xl">₵</span>
                     <input type="number" step="0.01" min="1" max={data.balance} required value={amount} onChange={e => setAmount(e.target.value)} className="w-full bg-surface-variant/50 focus:bg-surface pl-10 pr-5 py-5 rounded-2xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none text-primary font-black text-xl transition-all shadow-sm" placeholder="0.00" />
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Bank Details</label>
+                  <label className="field-label">Bank Details</label>
                   <textarea required rows={4} placeholder="Account Name, Bank Name, Account Number, Routing/Swift Code" value={bankDetails} onChange={e => setBankDetails(e.target.value)} className="w-full bg-surface-variant/50 focus:bg-surface p-5 rounded-2xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none text-primary font-medium transition-all resize-none shadow-sm placeholder:text-on-surface-variant/40" />
                 </div>
                 <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-4">
                   <button type="button" onClick={() => setWithdrawModal(false)} className="w-full sm:w-auto px-8 py-4 font-bold text-on-surface-variant hover:text-primary bg-surface border border-outline/20 rounded-2xl active:scale-95 transition-all">
                     Cancel
                   </button>
-                  <button type="submit" disabled={submitting || !amount || !bankDetails} className="w-full sm:w-auto px-8 py-4 font-bold text-white bg-primary rounded-2xl active:scale-95 transition-all shadow-md shadow-primary/20 hover:shadow-lg disabled:opacity-50 disabled:shadow-none">
+                  <button type="submit" disabled={submitting || !amount || !bankDetails} className="btn-primary w-full sm:w-auto disabled:opacity-50 disabled:shadow-none btn-lg">
                     {submitting ? 'Submitting...' : 'Confirm Transfer'}
                   </button>
                 </div>

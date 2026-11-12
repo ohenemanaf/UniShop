@@ -59,7 +59,7 @@ function SellerStore() {
           </div>
           
           <div className="text-center md:text-left flex-1">
-            <h1 className="text-4xl md:text-5xl font-black text-primary mb-4 tracking-tight">{seller.name}</h1>
+            <h1 className="page-title mb-2">{seller.name}</h1>
             
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm font-bold text-on-surface-variant uppercase tracking-wider">
               <div className="flex items-center gap-2">

@@ -29,7 +29,7 @@ function FAQ() {
       <SEO title="FAQ | UniShop" />
       <div className="max-w-[800px] mx-auto">
         <div className="text-center mb-10 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 tracking-tight">Frequently Asked Questions</h1>
+          <h1 className="page-title mb-2">Frequently Asked Questions</h1>
           <p className="text-xl text-on-surface-variant">
             Everything you need to know about the product and how it works.
           </p>

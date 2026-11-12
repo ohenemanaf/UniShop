@@ -145,7 +145,7 @@ function SellerProducts() {
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight mb-2">My Products</h1>
+          <h1 className="page-title mb-2">My Products</h1>
           <p className="text-on-surface-variant font-medium">Manage your product catalog and listings.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -158,7 +158,7 @@ function SellerProducts() {
         }} onClick={handleBulkDelete} disabled={isDeleting} className="inline-flex items-center justify-center gap-2 bg-error/10 text-error font-bold px-6 py-3.5 rounded-2xl hover:bg-error hover:text-white transition-all active:scale-95">
               <IconTrash size={20} stroke={2} /> {isDeleting ? 'Deleting...' : `Delete (${selectedIds.length})`}
             </motion.button>}
-          <Link to="/seller/products/new" className="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-6 py-3.5 rounded-2xl shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+          <Link to="/seller/products/new" className="btn-primary inline-flex">
             <IconPlus size={20} stroke={2} /> Add Product
           </Link>
         </div>
@@ -247,7 +247,7 @@ function SellerProducts() {
           <p className="max-w-[400px] mx-auto mb-8 text-on-surface-variant font-medium">
             {searchTerm ? "We couldn't find any products matching your search. Try different keywords." : "You haven't listed any products yet. Create your first listing to start selling!"}
           </p>
-          {!searchTerm && <Link to="/seller/products/new" className="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-2xl shadow-md hover:-translate-y-1 transition-all">
+          {!searchTerm && <Link to="/seller/products/new" className="btn-primary inline-flex btn-lg">
               <IconPlus size={20} stroke={2} /> Post New Item
             </Link>}
         </motion.div>}

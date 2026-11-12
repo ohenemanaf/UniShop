@@ -110,7 +110,7 @@ function BuyerDashboard() {
       <div className="max-w-[1200px] mx-auto px-4 md:px-6">
         <SEO title="My UniShop | Dashboard" />
         <header className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">My UniShop</h1>
+          <h1 className="page-title mb-2">My UniShop</h1>
           <p className="text-lg text-on-surface-variant font-medium">Welcome back, {user?.name?.split(' ')[0]}. Here's a snapshot of your buyer activity.</p>
         </header>
 

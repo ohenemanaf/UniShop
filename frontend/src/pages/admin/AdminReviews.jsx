@@ -52,7 +52,7 @@ function AdminReviews() {
   return <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Customer Reviews</h1>
+          <h1 className="page-title mb-2">Customer Reviews</h1>
           <p className="text-on-surface-variant font-medium">Manage customer feedback and product ratings.</p>
         </div>
       </div>

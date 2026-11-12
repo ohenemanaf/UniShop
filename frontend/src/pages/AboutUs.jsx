@@ -15,7 +15,7 @@ function AboutUs() {
       <SEO title="About Us | UniShop" />
       <div className="max-w-[1024px] mx-auto">
         <div className="text-center mb-10 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 tracking-tight">Meet UniShop</h1>
+          <h1 className="page-title mb-2">Meet UniShop</h1>
           <p className="text-xl text-on-surface-variant max-w-2xl mx-auto">
             A portfolio marketplace exploring a simple idea: make campus shopping feel connected, considered, and easy.
           </p>

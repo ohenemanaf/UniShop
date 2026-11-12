@@ -110,7 +110,7 @@ function AdminAnalytics() {
   if (!data) {
     return <div className="flex flex-col items-center justify-center py-10 text-on-surface-variant">
         <p className="text-lg font-bold text-primary mb-4">Failed to load analytics data.</p>
-        <button onClick={fetchData} className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95">
+        <button onClick={fetchData} className="btn-primary inline-flex">
           <IconRefresh size={18} /> Retry
         </button>
       </div>;
@@ -146,7 +146,7 @@ function AdminAnalytics() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Analytics & Reports</h1>
+          <h1 className="page-title mb-2">Analytics & Reports</h1>
           <p className="text-on-surface-variant font-medium">Explore sample store performance over a selected period.</p>
         </div>
         <div className="flex items-center gap-3">

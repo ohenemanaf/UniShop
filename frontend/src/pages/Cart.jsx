@@ -57,7 +57,7 @@ function Cart() {
   if (error) return <div role="alert" className="max-w-3xl mx-auto p-6 bg-surface border border-outline rounded-2xl"><h1 className="text-xl font-bold mb-3">Your cart needs another look</h1><p className="text-error">{error}</p><button onClick={fetchCart} className="btn-primary mt-5">Reload cart</button></div>;
   if (loading && !cart.items.length) {
     return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8 tracking-tight">Your Cart</h1>
+        <h1 className="page-title mb-2">Your Cart</h1>
         <div className="flex flex-col gap-6 animate-pulse">
           {[1, 2, 3].map(i => <div key={i} className="w-full h-32 bg-surface-variant/50 rounded-2xl"></div>)}
         </div>
@@ -71,7 +71,7 @@ function Cart() {
         </div>
         <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 tracking-tight">Your cart is empty</h2>
         <p className="text-lg text-on-surface-variant mb-6 max-w-[28rem]">Looks like you haven't added anything yet. Discover our curated essentials.</p>
-        <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-full font-semibold shadow-sm hover:shadow-level-2 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+        <Link to="/products" className="btn-primary btn-lg">
           Start Shopping
         </Link>
       </div>
@@ -82,8 +82,8 @@ function Cart() {
     <PageTransition className="w-full pb-16">
       <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 pt-10">
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">Your Cart</h1>
-          <p className="text-lg text-on-surface-variant">{cart.items.reduce((sum,item)=>sum+Number(item.quantity),0)} items in your cart.</p>
+          <h1 className="page-title mb-2">Your Cart</h1>
+          <p className="text-lg text-on-surface-variant">{cart.item_count} item{cart.item_count === 1 ? '' : 's'} in your cart</p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -99,7 +99,7 @@ function Cart() {
                 <div className="flex-1 min-w-0 flex flex-col">
                   <div className="flex justify-between items-start gap-4">
                     <div>
-                      <span className="text-xs font-semibold text-on-surface-variant tracking-wider uppercase">{item.category_name || 'Category'}</span>
+                      {item.category_name && <span className="eyebrow">{item.category_name}</span>}
                       <Link to={`/products/${item.product_id}`} className="block text-base md:text-xl font-bold text-primary break-words hover:text-secondary transition-colors leading-tight mt-1.5 mb-1.5">
                         {item.product_name}
                       </Link>
@@ -153,7 +153,7 @@ function Cart() {
               
               <div className="flex flex-col gap-4 mb-8">
                 <div className="flex justify-between text-lg text-on-surface-variant font-medium">
-                  <span>Subtotal ({cart.item_count} items)</span>
+                  <span>Subtotal ({cart.item_count} item{cart.item_count === 1 ? '' : 's'})</span>
                   <span className="font-bold text-primary">{GHS(cart.total)}</span>
                 </div>
                 <div className="flex justify-between text-lg text-on-surface-variant font-medium">
@@ -173,7 +173,7 @@ function Cart() {
                 <span className="font-headline-xl text-5xl font-bold tracking-tight text-primary leading-none">{GHS(grandTotal)}</span>
               </div>
               
-              <button onClick={() => navigate('/checkout')} className="w-full bg-primary text-white py-4 rounded-full font-semibold text-lg hover:bg-primary-fixed shadow-sm hover:shadow-level-2 active:scale-95 transition-all flex items-center justify-center gap-2 group">
+              <button onClick={() => navigate('/checkout')} className="btn-primary w-full group btn-lg">
                 Proceed to Checkout <IconArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
               {isGuestCart && <p className="mt-3 text-sm text-center text-on-surface-variant">You will sign in or create an account at checkout. Your cart comes with you.</p>}

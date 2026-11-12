@@ -158,7 +158,7 @@ function AdminProductCreate() {
           <IconArrowLeft size={24} stroke={1.5} />
         </button>
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Add New Product</h1>
+          <h1 className="page-title mb-2">Add New Product</h1>
           <p className="text-on-surface-variant font-medium">Create a new product listing with multiple variants.</p>
         </div>
       </div>
@@ -180,51 +180,51 @@ function AdminProductCreate() {
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="admin-product-create-product-name" className="text-sm font-bold text-primary uppercase tracking-wider">Product Name *</label>
-                <input id="admin-product-create-product-name" name="name" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.name} onChange={handleProductChange} required placeholder="e.g. Premium Wireless Headphones" />
+                <label htmlFor="admin-product-create-product-name" className="field-label">Product Name *</label>
+                <input id="admin-product-create-product-name" name="name" className="field" value={product.name} onChange={handleProductChange} required placeholder="e.g. Premium Wireless Headphones" />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="admin-product-create-url-slug" className="text-sm font-bold text-primary uppercase tracking-wider">URL Slug *</label>
-                <input id="admin-product-create-url-slug" name="slug" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.slug} onChange={handleProductChange} required placeholder="e.g. premium-wireless-headphones" />
+                <label htmlFor="admin-product-create-url-slug" className="field-label">URL Slug *</label>
+                <input id="admin-product-create-url-slug" name="slug" className="field" value={product.slug} onChange={handleProductChange} required placeholder="e.g. premium-wireless-headphones" />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="admin-product-create-description" className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
-              <textarea id="admin-product-create-description" name="description" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y min-h-[120px]" value={product.description} onChange={handleProductChange} placeholder="Write a detailed product description..." />
+              <label htmlFor="admin-product-create-description" className="field-label">Description</label>
+              <textarea id="admin-product-create-description" name="description" className="field resize-y min-h-[120px]" value={product.description} onChange={handleProductChange} placeholder="Write a detailed product description..." />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="admin-product-create-category" className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
-                <select id="admin-product-create-category" name="category_id" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={product.category_id} onChange={handleProductChange}>
+                <label htmlFor="admin-product-create-category" className="field-label">Category</label>
+                <select id="admin-product-create-category" name="category_id" className="field appearance-none cursor-pointer" value={product.category_id} onChange={handleProductChange}>
                   <option value="">-- Select Category --</option>
                   {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="admin-product-create-brand" className="text-sm font-bold text-primary uppercase tracking-wider">Brand</label>
-                <input id="admin-product-create-brand" name="brand" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.brand} onChange={handleProductChange} placeholder="e.g. Sony" />
+                <label htmlFor="admin-product-create-brand" className="field-label">Brand</label>
+                <input id="admin-product-create-brand" name="brand" className="field" value={product.brand} onChange={handleProductChange} placeholder="e.g. Sony" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Main Image URL</label>
+                <label className="field-label">Main Image URL</label>
                 <ImageUpload value={product.image_url} onChange={url => setProduct(p => ({
                 ...p,
                 image_url: url
               }))} />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="admin-product-create-tags" className="text-sm font-bold text-primary uppercase tracking-wider">Tags</label>
-                <input id="admin-product-create-tags" name="tags" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.tags} onChange={handleProductChange} placeholder="audio, wireless, noise-cancelling" />
+                <label htmlFor="admin-product-create-tags" className="field-label">Tags</label>
+                <input id="admin-product-create-tags" name="tags" className="field" value={product.tags} onChange={handleProductChange} placeholder="audio, wireless, noise-cancelling" />
                 <span className="text-xs font-semibold text-on-surface-variant">Comma separated</span>
               </div>
             </div>
 
             <div className="flex flex-col gap-2 mt-4">
-              <label className="text-sm font-bold text-primary uppercase tracking-wider">Gallery Images (Optional)</label>
+              <label className="field-label">Gallery Images (Optional)</label>
               <p className="text-sm text-on-surface-variant mb-2">Upload additional angles like side view, detail shot, or in use. Maximum 4 images.</p>
               <div className="flex flex-col gap-3">
                 {[0, 1, 2, 3].map(index => <ImageUpload key={index} value={product.gallery_images[index] || ''} onChange={url => {
@@ -268,27 +268,27 @@ function AdminProductCreate() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor={`variant-${index}-sku`} className="text-xs font-bold text-primary uppercase tracking-wider">SKU *</label>
-                    <input id={`variant-${index}-sku`} className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.sku} onChange={e => handleVariantChange(index, 'sku', e.target.value)} required placeholder="e.g. WH-1000XM4-BLK" />
+                    <label htmlFor={`variant-${index}-sku`} className="field-label">SKU *</label>
+                    <input id={`variant-${index}-sku`} className="field" value={variant.sku} onChange={e => handleVariantChange(index, 'sku', e.target.value)} required placeholder="e.g. WH-1000XM4-BLK" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor={`variant-${index}-variant-name`} className="text-xs font-bold text-primary uppercase tracking-wider">Variant Name</label>
-                    <input id={`variant-${index}-variant-name`} className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.name} onChange={e => handleVariantChange(index, 'name', e.target.value)} placeholder="e.g. Midnight Black" />
+                    <label htmlFor={`variant-${index}-variant-name`} className="field-label">Variant Name</label>
+                    <input id={`variant-${index}-variant-name`} className="field" value={variant.name} onChange={e => handleVariantChange(index, 'name', e.target.value)} placeholder="e.g. Midnight Black" />
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor={`variant-${index}-price`} className="text-xs font-bold text-primary uppercase tracking-wider">Price ($) *</label>
-                    <input id={`variant-${index}-price`} type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.price} onChange={e => handleVariantChange(index, 'price', e.target.value)} required placeholder="0.00" />
+                    <label htmlFor={`variant-${index}-price`} className="field-label">Price ($) *</label>
+                    <input id={`variant-${index}-price`} type="number" step="0.01" className="field" value={variant.price} onChange={e => handleVariantChange(index, 'price', e.target.value)} required placeholder="0.00" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor={`variant-${index}-compare-at-price`} className="text-xs font-bold text-primary uppercase tracking-wider">Compare at Price ($)</label>
-                    <input id={`variant-${index}-compare-at-price`} type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.compare_price} onChange={e => handleVariantChange(index, 'compare_price', e.target.value)} placeholder="Original price" />
+                    <label htmlFor={`variant-${index}-compare-at-price`} className="field-label">Compare at Price ($)</label>
+                    <input id={`variant-${index}-compare-at-price`} type="number" step="0.01" className="field" value={variant.compare_price} onChange={e => handleVariantChange(index, 'compare_price', e.target.value)} placeholder="Original price" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor={`variant-${index}-initial-stock`} className="text-xs font-bold text-primary uppercase tracking-wider">Initial Stock</label>
-                    <input id={`variant-${index}-initial-stock`} type="number" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.stock} onChange={e => handleVariantChange(index, 'stock', e.target.value)} placeholder="0" />
+                    <label htmlFor={`variant-${index}-initial-stock`} className="field-label">Initial Stock</label>
+                    <input id={`variant-${index}-initial-stock`} type="number" className="field" value={variant.stock} onChange={e => handleVariantChange(index, 'stock', e.target.value)} placeholder="0" />
                   </div>
                 </div>
               </div>)}
@@ -300,7 +300,7 @@ function AdminProductCreate() {
           <button type="button" className="px-8 py-3.5 rounded-xl font-bold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => navigate(isAdmin ? '/admin/products' : '/seller/products')}>
             Cancel
           </button>
-          <button type="submit" className="px-8 py-3.5 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95" disabled={loading}>
+          <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Creating Product...' : 'Create Product'}
           </button>
         </div>

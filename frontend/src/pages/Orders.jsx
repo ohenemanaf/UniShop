@@ -8,7 +8,7 @@ import GHS from '../utils/currency';
 import { Link } from 'react-router-dom';
 import api from '../api';
 import SEO from '../components/SEO';
-import { IconPackage, IconArrowRight, IconHourglassEmpty, IconThumbUp, IconRefresh, IconTruckDelivery, IconCircleCheck, IconCancel, IconCurrencyDollar, IconInfoCircle } from '@tabler/icons-react';
+import { IconPackage, IconChevronRight, IconHourglassEmpty, IconThumbUp, IconRefresh, IconTruckDelivery, IconCircleCheck, IconCancel, IconCurrencyDollar, IconInfoCircle } from '@tabler/icons-react';
 /**
  * Arrow Function getStatusIcon
  * @param {any} status
@@ -34,14 +34,14 @@ const getStatusIcon = status => {
       return <IconInfoCircle size={16} />;
   }
 };
-const STATUS_COLORS = {
-  PENDING: 'bg-surface-variant text-on-surface-variant border-outline/50',
-  CONFIRMED: 'bg-secondary/10 text-secondary border-secondary/20',
-  PROCESSING: 'bg-secondary/10 text-secondary border-secondary/20',
-  SHIPPED: 'bg-primary/10 text-primary border-primary/20',
-  DELIVERED: 'bg-success/10 text-success border-success/20',
-  CANCELLED: 'bg-error/10 text-error border-error/20',
-  REFUNDED: 'bg-surface-variant text-on-surface-variant border-outline/50'
+const STATUS_PILL = {
+  PENDING: 'pill-neutral',
+  CONFIRMED: 'pill-accent',
+  PROCESSING: 'pill-accent',
+  SHIPPED: 'pill-brand',
+  DELIVERED: 'pill-success',
+  CANCELLED: 'pill-danger',
+  REFUNDED: 'pill-neutral'
 };
 export default /**
  * Function Orders
@@ -59,7 +59,7 @@ function Orders() {
   if (loading) {
     return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10">
         <SEO title="My Orders | UniShop" />
-        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8 tracking-tight">My Orders</h1>
+        <h1 className="page-title mb-2">My Orders</h1>
         <div className="flex flex-col gap-6 animate-pulse">
           {[1, 2, 3].map(i => <div key={i} className="w-full h-24 bg-surface-variant/50 rounded-xl" />)}
         </div>
@@ -71,7 +71,7 @@ function Orders() {
         
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">My Orders</h1>
+            <h1 className="page-title mb-2">My Orders</h1>
             <p className="text-lg text-on-surface-variant">Track and manage your purchases.</p>
           </div>
         </div>
@@ -82,50 +82,26 @@ function Orders() {
             </div>
             <h2 className="text-3xl font-bold text-primary mb-3 tracking-tight">No orders yet</h2>
             <p className="text-lg text-on-surface-variant mb-6 w-full min-w-[300px] max-w-[28rem]">Once you place an order, it will appear here so you can easily track its status.</p>
-            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm active:scale-95 shadow-sm hover:shadow-md transition-all">
+            <Link to="/products" className="btn-primary btn-lg">
               Start Shopping
             </Link>
-          </div> : <div className="flex flex-col gap-6">
-            {orders.map(order => <Link key={order.id} to={`/orders/${order.id}`} className="group block bg-surface border border-outline/30 rounded-xl p-6 md:p-6 hover:shadow-sm hover:border-outline/50 transition-all duration-300">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  
-                  {/* Left Side: Order Meta */}
-                  <div className="flex items-center gap-6">
-                    <div className="w-16 h-16 rounded-xl bg-surface-variant border border-outline/30 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                      <IconPackage size={28} stroke={1.5} />
-                    </div>
-                    <div>
-                      <h3 className="text-xl md:text-2xl font-bold text-primary mb-1 group-hover:text-secondary transition-colors">
-                        Order #{order.id.slice(0, 8).toUpperCase()}
-                      </h3>
-                      <p className="text-sm font-medium text-on-surface-variant">
-                        Placed on {new Date(order.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Right Side: Status & Total */}
-                  <div className="flex items-center justify-between md:justify-end gap-8 border-t border-outline/30 md:border-none pt-6 md:pt-0">
-                    <div className="text-left md:text-right">
-                      <p className="text-2xl font-bold text-primary">{GHS(order.total)}</p>
-                      <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mt-1">Total Amount</p>
-                    </div>
-
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border ${STATUS_COLORS[order.status] || STATUS_COLORS.PENDING}`}>
-                      {getStatusIcon(order.status)} {order.status}
-                    </div>
-
-                    <div className="text-on-surface-variant group-hover:text-primary transition-colors hidden md:block">
-                      <IconArrowRight size={24} stroke={1.5} />
-                    </div>
-                  </div>
-                </div>
-              </Link>)}
-          </div>}
+          </div> : <ul className="list-group">
+            {orders.map(order => <li key={order.id}><Link to={`/orders/${order.id}`} className="list-row group px-4 py-3">
+                <span className="w-9 h-9 rounded-lg bg-primary-container text-primary flex items-center justify-center shrink-0">
+                  <IconPackage size={18} stroke={1.7} />
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="block text-sm font-semibold text-on-surface group-hover:text-primary transition-colors">Order #{order.id.slice(0, 8).toUpperCase()}</span>
+                  <span className="block text-xs text-on-surface-variant">Placed {new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  <span className={`${STATUS_PILL[order.status] || 'pill-neutral'} mt-1.5 sm:hidden`}>{order.status.charAt(0) + order.status.slice(1).toLowerCase()}</span>
+                </span>
+                <span className={`${STATUS_PILL[order.status] || 'pill-neutral'} hidden sm:inline-flex`}>
+                  {getStatusIcon(order.status)} {order.status.charAt(0) + order.status.slice(1).toLowerCase()}
+                </span>
+                <span className="sm:w-24 text-right text-sm font-bold text-on-surface tabular shrink-0">{GHS(order.total)}</span>
+                <IconChevronRight size={16} className="text-on-surface-variant hidden sm:block" aria-hidden="true" />
+              </Link></li>)}
+          </ul>}
       </div>
     </div>;
 }

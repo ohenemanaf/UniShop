@@ -45,7 +45,7 @@ function Wishlist() {
   if (loading) {
     return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10">
         <SEO title="My Wishlist | UniShop" />
-        <h1 className="text-3xl font-bold text-primary mb-8">My Wishlist</h1>
+        <h1 className="page-title mb-2">My Wishlist</h1>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 animate-pulse">
           {[...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] bg-surface-variant/50 rounded-2xl" />)}
         </div>
@@ -70,7 +70,7 @@ function Wishlist() {
       <div className="max-w-[1200px] mx-auto px-4 md:px-6">
         
         <div className="mb-6 flex items-center gap-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">My Wishlist</h1>
+          <h1 className="page-title">My Wishlist</h1>
           <span className="bg-primary/10 text-primary text-sm font-bold px-3 py-1 rounded-full border border-primary/20">
             {items.length} {items.length === 1 ? 'item' : 'items'}
           </span>
@@ -82,7 +82,7 @@ function Wishlist() {
             </div>
             <h2 className="text-3xl font-bold text-primary mb-2">Your wishlist is empty</h2>
             <p className="text-lg text-on-surface-variant font-medium mb-8 max-w-[448px]">Save products you love and come back to them anytime.</p>
-            <Link to="/products" className="bg-primary text-white px-8 py-4 rounded-full font-semibold active:scale-95 shadow-sm hover:shadow-level-2 transition-all">
+            <Link to="/products" className="btn-primary btn-lg">
               Browse Products
             </Link>
           </div> : <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">

@@ -80,7 +80,7 @@ function AdminOrders() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+          <h1 className="page-title mb-2 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center text-primary border border-outline/30">
               <IconClipboardList size={24} stroke={1.5} />
             </div>
@@ -88,7 +88,7 @@ function AdminOrders() {
           </h1>
           <p className="text-on-surface-variant font-medium">Oversee platform-wide orders and statuses.</p>
         </div>
-        <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary cursor-pointer shadow-sm active:scale-95 transition-all focus:border-primary appearance-none min-w-[160px]" value={statusFilter} onChange={e => {
+        <select className="field cursor-pointer active:scale-95 appearance-none min-w-[160px]" value={statusFilter} onChange={e => {
         setStatusFilter(e.target.value);
         setPage(1);
       }}>

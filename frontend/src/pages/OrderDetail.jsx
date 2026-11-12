@@ -142,7 +142,7 @@ function OrderDetail() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-2 tracking-tight">
+            <h1 className="page-title mb-2">
               Order #{order.id.slice(0, 8).toUpperCase()}
             </h1>
             <p className="text-lg text-on-surface-variant font-medium">

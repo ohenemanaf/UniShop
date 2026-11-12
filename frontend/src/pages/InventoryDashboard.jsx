@@ -94,7 +94,7 @@ function InventoryDashboard() {
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+          <h1 className="page-title mb-2 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-surface-variant/50 text-primary flex items-center justify-center border border-outline/30">
               <IconPackage size={24} stroke={1.5} />
             </div>
@@ -102,7 +102,7 @@ function InventoryDashboard() {
           </h1>
           <p className="text-on-surface-variant font-medium">Quickly update stock levels across your products.</p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-level-2 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100" disabled={!hasEdits || saving} onClick={handleBulkSave}>
+        <button className="btn-primary inline-flex disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100" disabled={!hasEdits || saving} onClick={handleBulkSave}>
           <IconDeviceFloppy size={20} stroke={1.5} /> {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>

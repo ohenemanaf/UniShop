@@ -132,7 +132,7 @@ function SellerSection({
             <p className="text-sm text-on-surface-variant font-medium">Manage your listings, orders, and earnings from the Seller Dashboard.</p>
           </div>
         </div>
-        <Link to="/seller" className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl active:scale-95 transition-all hover:shadow-md shrink-0">
+        <Link to="/seller" className="btn-primary inline-flex shrink-0">
           Seller Dashboard <IconChevronRight size={18} stroke={2} />
         </Link>
       </div>;
@@ -194,7 +194,7 @@ function SellerSection({
           {msg.text && <div className={`w-full p-3 rounded-xl text-sm font-semibold flex items-center gap-2 border ${msg.type === 'error' ? 'bg-error/10 border-error/20 text-error' : 'bg-success/10 border-success/20 text-success'}`}>
               {msg.type === 'error' ? <IconAlertTriangle size={16} /> : <IconCheck size={16} />} {msg.text}
             </div>}
-          <button onClick={() => setShowForm(true)} className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl active:scale-95 transition-all hover:shadow-md">
+          <button onClick={() => setShowForm(true)} className="btn-primary inline-flex">
             Apply to Sell <IconChevronRight size={18} stroke={2} />
           </button>
         </div> : <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -206,16 +206,16 @@ function SellerSection({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="account-settings-store-name" className="text-sm font-bold text-primary uppercase tracking-wider">Store Name *</label>
-            <input id="account-settings-store-name" type="text" required maxLength={100} className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" placeholder="e.g. Alex's Tech Store" value={form.store_name} onChange={e => setForm({
+            <label htmlFor="account-settings-store-name" className="field-label">Store Name *</label>
+            <input id="account-settings-store-name" type="text" required maxLength={100} className="field w-full" placeholder="e.g. Alex's Tech Store" value={form.store_name} onChange={e => setForm({
           ...form,
           store_name: e.target.value
         })} />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="account-settings-category" className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
-            <select id="account-settings-category" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary appearance-none" value={form.category} onChange={e => setForm({
+            <label htmlFor="account-settings-category" className="field-label">Category</label>
+            <select id="account-settings-category" className="field w-full appearance-none" value={form.category} onChange={e => setForm({
           ...form,
           category: e.target.value
         })}>
@@ -225,16 +225,16 @@ function SellerSection({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="account-settings-phone-number" className="text-sm font-bold text-primary uppercase tracking-wider">Phone Number</label>
-            <input id="account-settings-phone-number" type="tel" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" placeholder="+1 (555) 000-0000" value={form.phone} onChange={e => setForm({
+            <label htmlFor="account-settings-phone-number" className="field-label">Phone Number</label>
+            <input id="account-settings-phone-number" type="tel" className="field w-full" placeholder="+1 (555) 000-0000" value={form.phone} onChange={e => setForm({
           ...form,
           phone: e.target.value
         })} />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="account-settings-tell-us-about-your-store" className="text-sm font-bold text-primary uppercase tracking-wider">Tell us about your store</label>
-            <textarea id="account-settings-tell-us-about-your-store" rows={3} className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary resize-y" placeholder="What will you sell? What makes your store unique?" value={form.description} onChange={e => setForm({
+            <label htmlFor="account-settings-tell-us-about-your-store" className="field-label">Tell us about your store</label>
+            <textarea id="account-settings-tell-us-about-your-store" rows={3} className="field w-full resize-y" placeholder="What will you sell? What makes your store unique?" value={form.description} onChange={e => setForm({
           ...form,
           description: e.target.value
         })} />
@@ -248,7 +248,7 @@ function SellerSection({
             <button type="button" onClick={() => setShowForm(false)} className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95">
               Cancel
             </button>
-            <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95 disabled:opacity-60">
+            <button type="submit" disabled={submitting} className="btn-primary inline-flex disabled:opacity-60">
               <IconSend size={18} stroke={1.5} />
               {submitting ? 'Submitting…' : 'Submit Application'}
             </button>
@@ -380,7 +380,7 @@ function AccountSettings() {
             {profileForm.avatar_url ? <img src={profileForm.avatar_url} alt="Avatar" className="w-full h-full object-cover rounded-2xl mix-blend-multiply" /> : <IconUser size={32} stroke={1.5} />}
           </div>
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">Account Settings</h1>
+            <h1 className="page-title">Account Settings</h1>
             <div className="flex items-center gap-2 mt-1">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${user?.role === 'admin' ? 'bg-error/10 text-error border-error/20' : user?.role === 'seller' ? 'bg-secondary/10 text-secondary border-secondary/20' : 'bg-surface-variant text-on-surface-variant border-outline/50'}`}>
                 {user?.role}
@@ -410,8 +410,8 @@ function AccountSettings() {
                   {profileForm.avatar_url ? <img src={profileForm.avatar_url} alt="Avatar" className="w-full h-full object-cover mix-blend-multiply" /> : <IconUser size={40} stroke={1.5} className="text-primary/50" />}
                 </div>
                 <div className="flex flex-col gap-2 flex-1 w-full">
-                  <label htmlFor="account-settings-avatar-image-url" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Avatar Image URL</label>
-                  <input id="account-settings-avatar-image-url" type="url" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" value={profileForm.avatar_url} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-avatar-image-url" className="field-label">Avatar Image URL</label>
+                  <input id="account-settings-avatar-image-url" type="url" className="field w-full" value={profileForm.avatar_url} onChange={e => setProfileForm({
                   ...profileForm,
                   avatar_url: e.target.value
                 })} placeholder="https://example.com/my-photo.jpg" />
@@ -419,8 +419,8 @@ function AccountSettings() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="account-settings-full-name" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Full Name</label>
-                <input id="account-settings-full-name" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.name} onChange={e => setProfileForm({
+                <label htmlFor="account-settings-full-name" className="field-label">Full Name</label>
+                <input id="account-settings-full-name" type="text" className="field w-full" value={profileForm.name} onChange={e => setProfileForm({
                 ...profileForm,
                 name: e.target.value
               })} required />
@@ -428,15 +428,15 @@ function AccountSettings() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-phone-number-2" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Phone Number</label>
-                  <input id="account-settings-phone-number-2" type="tel" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.phone} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-phone-number-2" className="field-label">Phone Number</label>
+                  <input id="account-settings-phone-number-2" type="tel" className="field w-full" value={profileForm.phone} onChange={e => setProfileForm({
                   ...profileForm,
                   phone: e.target.value
                 })} placeholder="+1 (555) 000-0000" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-email-address" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Email Address</label>
-                  <input id="account-settings-email-address" type="email" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent outline-none font-medium text-on-surface-variant opacity-70 cursor-not-allowed" value={user?.email || ''} disabled title="Email cannot be changed" />
+                  <label htmlFor="account-settings-email-address" className="field-label">Email Address</label>
+                  <input id="account-settings-email-address" type="email" className="field w-full text-on-surface-variant opacity-70 cursor-not-allowed" value={user?.email || ''} disabled title="Email cannot be changed" />
                 </div>
               </div>
 
@@ -446,7 +446,7 @@ function AccountSettings() {
                 </div>}
 
               <div className="mt-2">
-                <button type="submit" disabled={loadingProfile} className="bg-primary text-white font-semibold px-8 py-4 rounded-full active:scale-95 shadow-sm hover:shadow-level-2 transition-all">
+                <button type="submit" disabled={loadingProfile} className="btn-primary btn-lg">
                   {loadingProfile ? 'Saving...' : 'Save Personal Info'}
                 </button>
               </div>
@@ -467,30 +467,30 @@ function AccountSettings() {
 
             <form onSubmit={handleProfileSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="account-settings-address-line-1" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 1</label>
-                <input id="account-settings-address-line-1" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.address_line1} onChange={e => setProfileForm({
+                <label htmlFor="account-settings-address-line-1" className="field-label">Address Line 1</label>
+                <input id="account-settings-address-line-1" type="text" className="field w-full" value={profileForm.address_line1} onChange={e => setProfileForm({
                 ...profileForm,
                 address_line1: e.target.value
               })} placeholder="Street address, P.O. box, etc." />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="account-settings-address-line-2" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 2</label>
-                <input id="account-settings-address-line-2" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.address_line2} onChange={e => setProfileForm({
+                <label htmlFor="account-settings-address-line-2" className="field-label">Address Line 2</label>
+                <input id="account-settings-address-line-2" type="text" className="field w-full" value={profileForm.address_line2} onChange={e => setProfileForm({
                 ...profileForm,
                 address_line2: e.target.value
               })} placeholder="Apt, suite, unit, building, floor, etc." />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-city" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">City</label>
-                  <input id="account-settings-city" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.city} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-city" className="field-label">City</label>
+                  <input id="account-settings-city" type="text" className="field w-full" value={profileForm.city} onChange={e => setProfileForm({
                   ...profileForm,
                   city: e.target.value
                 })} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-state-province" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">State / Province</label>
-                  <input id="account-settings-state-province" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.state} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-state-province" className="field-label">State / Province</label>
+                  <input id="account-settings-state-province" type="text" className="field w-full" value={profileForm.state} onChange={e => setProfileForm({
                   ...profileForm,
                   state: e.target.value
                 })} />
@@ -498,22 +498,22 @@ function AccountSettings() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-zip-postal-code" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">ZIP / Postal Code</label>
-                  <input id="account-settings-zip-postal-code" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.zip} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-zip-postal-code" className="field-label">ZIP / Postal Code</label>
+                  <input id="account-settings-zip-postal-code" type="text" className="field w-full" value={profileForm.zip} onChange={e => setProfileForm({
                   ...profileForm,
                   zip: e.target.value
                 })} />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="account-settings-country" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Country</label>
-                  <input id="account-settings-country" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={profileForm.country} onChange={e => setProfileForm({
+                  <label htmlFor="account-settings-country" className="field-label">Country</label>
+                  <input id="account-settings-country" type="text" className="field w-full" value={profileForm.country} onChange={e => setProfileForm({
                   ...profileForm,
                   country: e.target.value
                 })} />
                 </div>
               </div>
               <div className="mt-2">
-                <button type="submit" disabled={loadingProfile} className="bg-primary text-white font-semibold px-8 py-4 rounded-full active:scale-95 shadow-sm hover:shadow-level-2 transition-all">
+                <button type="submit" disabled={loadingProfile} className="btn-primary btn-lg">
                   {loadingProfile ? 'Saving...' : 'Save Address'}
                 </button>
               </div>
@@ -534,15 +534,15 @@ function AccountSettings() {
 
             <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label htmlFor="account-settings-current-password" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Current Password</label>
-                <input id="account-settings-current-password" type="password" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={passwordForm.current_password} onChange={e => setPasswordForm({
+                <label htmlFor="account-settings-current-password" className="field-label">Current Password</label>
+                <input id="account-settings-current-password" type="password" className="field w-full" value={passwordForm.current_password} onChange={e => setPasswordForm({
                 ...passwordForm,
                 current_password: e.target.value
               })} required />
               </div>
               <div className="flex flex-col gap-2">
-                <label htmlFor="account-settings-new-password" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">New Password</label>
-                <input id="account-settings-new-password" type="password" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={passwordForm.new_password} onChange={e => setPasswordForm({
+                <label htmlFor="account-settings-new-password" className="field-label">New Password</label>
+                <input id="account-settings-new-password" type="password" className="field w-full" value={passwordForm.new_password} onChange={e => setPasswordForm({
                 ...passwordForm,
                 new_password: e.target.value
               })} minLength={6} required />

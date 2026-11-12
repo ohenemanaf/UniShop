@@ -59,7 +59,7 @@ function ForgotPassword() {
           <div className="w-16 h-16 bg-surface-variant text-primary rounded-full flex items-center justify-center mb-4 border border-outline/50 shadow-sm">
             <IconShieldCheck size={32} stroke={1.5} />
           </div>
-          <h1 className="text-3xl font-bold text-primary mb-2 tracking-tight">Reset Password</h1>
+          <h1 className="page-title mb-2">Reset Password</h1>
           <p className="text-lg text-on-surface-variant font-medium">Enter your email address to receive a password reset link.</p>
         </div>
 
@@ -70,16 +70,16 @@ function ForgotPassword() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label htmlFor="forgot-password-email-address" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Email Address</label>
+            <label htmlFor="forgot-password-email-address" className="field-label">Email Address</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant/50">
                 <IconMail size={20} stroke={1.5} />
               </div>
-              <input id="forgot-password-email-address" type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="w-full bg-surface-variant pl-12 p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" />
+              <input id="forgot-password-email-address" type="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="field w-full pl-12" />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 rounded-full font-semibold text-lg active:scale-95 shadow-sm hover:shadow-level-2 transition-all disabled:opacity-50 mt-4">
+          <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50 mt-4 btn-lg">
             {loading ? 'Sending Link...' : 'Send Reset Link'}
           </button>
         </form>

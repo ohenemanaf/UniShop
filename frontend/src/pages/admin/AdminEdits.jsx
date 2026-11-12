@@ -141,10 +141,10 @@ function AdminEdits() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Curated Edits</h1>
+          <h1 className="page-title mb-2">Curated Edits</h1>
           <p className="text-on-surface-variant font-medium">Manage the curated bundles grid on the storefront homepage.</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+        <button onClick={() => handleOpenModal()} className="btn-primary inline-flex">
           <IconPlus size={20} stroke={1.5} /> Add Edit
         </button>
       </div>
@@ -226,7 +226,7 @@ function AdminEdits() {
             
             <form onSubmit={handleSave} className="p-6 flex flex-col gap-5 overflow-y-auto flex-grow hide-scrollbar">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL *</label>
+                <label className="field-label">Image URL *</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({
               ...formData,
               image_url: url
@@ -235,40 +235,40 @@ function AdminEdits() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Title</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.title} onChange={e => setFormData({
+                  <label className="field-label">Title</label>
+                  <input type="text" className="field w-full" value={formData.title} onChange={e => setFormData({
                 ...formData,
                 title: e.target.value
               })} placeholder="e.g. Freshman Starter Kit" required />
                 </div>
 
                 <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Subtitle / Description</label>
-                  <textarea className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full resize-none h-24" value={formData.subtitle} onChange={e => setFormData({
+                  <label className="field-label">Subtitle / Description</label>
+                  <textarea className="field w-full resize-none h-24" value={formData.subtitle} onChange={e => setFormData({
                 ...formData,
                 subtitle: e.target.value
               })} placeholder="Brief description of the bundle..." />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Price (GHS)</label>
-                  <input type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.price} onChange={e => setFormData({
+                  <label className="field-label">Price (GHS)</label>
+                  <input type="number" step="0.01" className="field w-full" value={formData.price} onChange={e => setFormData({
                 ...formData,
                 price: e.target.value
               })} placeholder="149.00" required />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Item Count</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.item_count} onChange={e => setFormData({
+                  <label className="field-label">Item Count</label>
+                  <input type="text" className="field w-full" value={formData.item_count} onChange={e => setFormData({
                 ...formData,
                 item_count: e.target.value
               })} placeholder="e.g. 5 items" />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Size in Grid</label>
-                  <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.size} onChange={e => setFormData({
+                  <label className="field-label">Size in Grid</label>
+                  <select className="field w-full" value={formData.size} onChange={e => setFormData({
                 ...formData,
                 size: e.target.value
               })}>
@@ -278,8 +278,8 @@ function AdminEdits() {
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Target Link URL</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.link_url} onChange={e => setFormData({
+                  <label className="field-label">Target Link URL</label>
+                  <input type="text" className="field w-full" value={formData.link_url} onChange={e => setFormData({
                 ...formData,
                 link_url: e.target.value
               })} placeholder="e.g. /products?search=bundle" />
@@ -298,7 +298,7 @@ function AdminEdits() {
                 <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+                <button type="submit" className="btn-primary">
                   {isEditing ? 'Save Changes' : 'Create Bundle'}
                 </button>
               </div>

@@ -193,7 +193,7 @@ function SellerOrders() {
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight mb-2">Orders</h1>
+          <h1 className="page-title mb-2">Orders</h1>
           <p className="text-on-surface-variant font-medium">Manage and fulfill your customer orders.</p>
         </div>
       </div>
@@ -229,7 +229,7 @@ function SellerOrders() {
                       <h3 className="font-bold text-lg text-primary truncate mb-1">{item.product_name}</h3>
                       <div className="flex flex-wrap items-center gap-4 text-sm">
                         <span className="font-semibold text-on-surface-variant">Qty: {item.quantity}</span>
-                        <span className="font-black text-secondary">${item.price_at_purchase} <span className="font-medium text-xs text-on-surface-variant">ea</span></span>
+                        <span className="font-black text-secondary">₵{Number(item.price_at_purchase).toFixed(2)} <span className="font-medium text-xs text-on-surface-variant">ea</span></span>
                         {item.variant_name && <span className="px-2 py-0.5 bg-surface-variant rounded-md font-medium">{item.variant_name}</span>}
                       </div>
                     </div>
@@ -343,9 +343,9 @@ function SellerOrders() {
               
               <form onSubmit={submitTracking} className="flex flex-col gap-5 relative z-10">
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Carrier</label>
+                  <label className="field-label">Carrier</label>
                   <div className="relative">
-                    <select className="w-full bg-surface-variant/50 hover:bg-surface-variant focus:bg-surface p-4 rounded-xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-primary shadow-sm appearance-none cursor-pointer" value={trackingForm.carrier} onChange={e => setTrackingForm({
+                    <select className="field w-full appearance-none cursor-pointer" value={trackingForm.carrier} onChange={e => setTrackingForm({
                   ...trackingForm,
                   carrier: e.target.value
                 })} required>
@@ -360,8 +360,8 @@ function SellerOrders() {
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Tracking Number</label>
-                  <input type="text" className="w-full bg-surface-variant/50 focus:bg-surface p-4 rounded-xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-primary placeholder:text-on-surface-variant/40 shadow-sm" placeholder="e.g. 1Z9999999999999999" value={trackingForm.tracking_number} onChange={e => setTrackingForm({
+                  <label className="field-label">Tracking Number</label>
+                  <input type="text" className="field w-full placeholder:text-on-surface-variant/40" placeholder="e.g. 1Z9999999999999999" value={trackingForm.tracking_number} onChange={e => setTrackingForm({
                 ...trackingForm,
                 tracking_number: e.target.value
               })} required />
@@ -374,7 +374,7 @@ function SellerOrders() {
               })}>
                     Cancel
                   </button>
-                  <button type="submit" className="px-6 py-3.5 bg-primary text-white font-bold rounded-2xl active:scale-95 disabled:opacity-50 shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center gap-2" disabled={updating === trackingModal.itemId}>
+                  <button type="submit" className="btn-primary disabled:opacity-50" disabled={updating === trackingModal.itemId}>
                     {updating === trackingModal.itemId ? 'Saving...' : 'Save & Mark Shipped'}
                   </button>
                 </div>

@@ -57,7 +57,7 @@ function CheckoutFormWrapper({
       <div className="bg-surface-container-lowest p-4 rounded-xl border border-surface-variant">
         <PaymentElement />
       </div>
-      <button type="submit" disabled={isProcessing || !stripe} className="w-full bg-primary text-white py-4 rounded-full font-semibold text-lg hover:bg-primary-fixed shadow-sm hover:shadow-level-2 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+      <button type="submit" disabled={isProcessing || !stripe} className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed btn-lg">
         {isProcessing ? 'Processing Payment...' : `Pay ${GHS(grandTotal)} Securely`}
       </button>
     </form>;
@@ -245,11 +245,11 @@ function Checkout() {
           <div className="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mb-6 border border-success/20">
              <IconCircleCheck size={48} stroke={1.5} />
           </div>
-          <h1 className="text-3xl font-bold text-primary mb-3 tracking-tight">Order Confirmed!</h1>
+          <h1 className="page-title mb-2">Order Confirmed!</h1>
           <p className="text-lg text-on-surface-variant mb-8 leading-relaxed">
             Thank you for your purchase. Your order <strong>#{success.substring(0, 8)}</strong> is confirmed.
           </p>
-          <button className="w-full bg-primary text-white py-4 rounded-full font-semibold active:scale-95 hover:bg-primary-fixed shadow-sm transition-all" onClick={() => navigate('/orders')}>
+          <button className="btn-primary w-full btn-lg" onClick={() => navigate('/orders')}>
             View My Orders
           </button>
         </div>
@@ -261,7 +261,7 @@ function Checkout() {
   if (!cart || cart.items.length === 0) {
     return <div className="w-full min-h-[60vh] flex items-center justify-center p-6 text-center flex-col">
         <h2 className="text-3xl font-bold text-primary mb-6 tracking-tight">Your cart is empty</h2>
-        <button className="bg-primary text-white px-8 py-4 rounded-full font-semibold active:scale-95 shadow-sm transition-all" onClick={() => navigate('/products')}>
+        <button className="btn-primary btn-lg" onClick={() => navigate('/products')}>
           Continue Shopping
         </button>
       </div>;
@@ -270,7 +270,7 @@ function Checkout() {
       <div className="max-w-[1200px] mx-auto px-4 md:px-6">
 
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">Checkout</h1>
+          <h1 className="page-title mb-2">Checkout</h1>
           <p className="text-lg text-on-surface-variant">Complete your order securely.</p>
         </div>
 
@@ -313,34 +313,34 @@ function Checkout() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="md:col-span-2 flex flex-col gap-1.5">
-                    <label htmlFor="checkout-address-line-1" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 1 *</label>
-                    <input id="checkout-address-line-1" name="line1" autoComplete="address-line1" aria-invalid={Boolean(validation.line1)} aria-describedby={validation.line1 ? "checkout-line1-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.line1 ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="Street address" value={form.line1} onChange={handleChange} required />
+                    <label htmlFor="checkout-address-line-1" className="field-label">Address Line 1 *</label>
+                    <input id="checkout-address-line-1" name="line1" autoComplete="address-line1" aria-invalid={Boolean(validation.line1)} aria-describedby={validation.line1 ? "checkout-line1-error" : undefined} onBlur={handleBlur} className={`field w-full ${validation.line1 ? 'border-error focus:border-error bg-error/5' : ''}`} placeholder="Street address" value={form.line1} onChange={handleChange} required />
                     {validation.line1 && <span id="checkout-line1-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.line1}</span>}
                   </div>
                   <div className="md:col-span-2 flex flex-col gap-1.5">
-                    <label htmlFor="checkout-address-line-2" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 2</label>
-                    <input id="checkout-address-line-2" name="line2" autoComplete="address-line2" onBlur={handleBlur} className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors" placeholder="Apt, suite, etc." value={form.line2} onChange={handleChange} />
+                    <label htmlFor="checkout-address-line-2" className="field-label">Address Line 2</label>
+                    <input id="checkout-address-line-2" name="line2" autoComplete="address-line2" onBlur={handleBlur} className="field w-full" placeholder="Apt, suite, etc." value={form.line2} onChange={handleChange} />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="checkout-city" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">City *</label>
-                    <input id="checkout-city" name="city" autoComplete="address-level2" aria-invalid={Boolean(validation.city)} aria-describedby={validation.city ? "checkout-city-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.city ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="City" value={form.city} onChange={handleChange} required />
+                    <label htmlFor="checkout-city" className="field-label">City *</label>
+                    <input id="checkout-city" name="city" autoComplete="address-level2" aria-invalid={Boolean(validation.city)} aria-describedby={validation.city ? "checkout-city-error" : undefined} onBlur={handleBlur} className={`field w-full ${validation.city ? 'border-error focus:border-error bg-error/5' : ''}`} placeholder="City" value={form.city} onChange={handleChange} required />
                     {validation.city && <span id="checkout-city-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.city}</span>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="checkout-region" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Region *</label>
-                    <select id="checkout-region" name="region" autoComplete="address-level1" required className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
+                    <label htmlFor="checkout-region" className="field-label">Region *</label>
+                    <select id="checkout-region" name="region" autoComplete="address-level1" required className="field w-full appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
                       <option value="">Select Region</option>
                       {['Greater Accra', 'Ashanti', 'Western', 'Central', 'Eastern', 'Northern', 'Upper East', 'Upper West', 'Volta', 'Bono', 'Savannah', 'North East', 'Bono East', 'Ahafo', 'Oti', 'Western North'].map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="checkout-postal-code-ghanapost-gps" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Postal code / GhanaPost GPS *</label>
-                    <input id="checkout-postal-code-ghanapost-gps" maxLength={20} name="zip" autoComplete="postal-code" aria-invalid={Boolean(validation.zip)} aria-describedby={validation.zip ? "checkout-zip-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.zip ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="e.g. GA-123-4567" value={form.zip} onChange={handleChange} required />
+                    <label htmlFor="checkout-postal-code-ghanapost-gps" className="field-label">Postal code / GhanaPost GPS *</label>
+                    <input id="checkout-postal-code-ghanapost-gps" maxLength={20} name="zip" autoComplete="postal-code" aria-invalid={Boolean(validation.zip)} aria-describedby={validation.zip ? "checkout-zip-error" : undefined} onBlur={handleBlur} className={`field w-full ${validation.zip ? 'border-error focus:border-error bg-error/5' : ''}`} placeholder="e.g. GA-123-4567" value={form.zip} onChange={handleChange} required />
                     {validation.zip && <span id="checkout-zip-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.zip}</span>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="checkout-country" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Country</label>
-                    <select id="checkout-country" name="country" autoComplete="country-name" className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.country} onChange={handleChange}>
+                    <label htmlFor="checkout-country" className="field-label">Country</label>
+                    <select id="checkout-country" name="country" autoComplete="country-name" className="field w-full appearance-none cursor-pointer" value={form.country} onChange={handleChange}>
                       <option>Ghana</option>
                     </select>
                   </div>
@@ -367,30 +367,28 @@ function Checkout() {
                   Payment Method
                 </h2>
 
-                <fieldset className="flex flex-col gap-3">
+                <fieldset className="flex flex-col gap-2">
                   <legend className="sr-only">Payment method</legend>
-                  {PAYMENT_METHODS.map(method => <label key={method.id} className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2
-                        ${form.payment_method === method.id ? 'border-primary bg-surface-variant/30 shadow-sm' : 'border-transparent bg-surface-variant/50 hover:bg-surface-variant'}
-                      `}>
+                  {PAYMENT_METHODS.map(method => <label key={method.id} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-colors border ${form.payment_method === method.id ? 'border-primary bg-primary-container/40 ring-1 ring-primary' : 'border-outline-variant bg-surface hover:border-outline'}`}>
                       <input type="radio" name="payment_method" value={method.id} checked={form.payment_method === method.id} onChange={e => {
                   handleChange(e);
                   setClientSecret('');
-                }} className="w-5 h-5 accent-primary" />
-                      <div className="ml-4 flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${form.payment_method === method.id ? 'bg-primary text-white' : 'bg-surface text-on-surface-variant'}`}>
-                          {method.id === 'card' ? <IconCreditCard size={20} stroke={1.5} /> : <IconDeviceMobile size={20} stroke={1.5} />}
+                }} className="w-4 h-4 accent-primary shrink-0" />
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 ${form.payment_method === method.id ? 'bg-primary text-white' : 'bg-surface-variant text-on-surface-variant'}`}>
+                          {method.id === 'card' ? <IconCreditCard size={17} stroke={1.7} /> : <IconDeviceMobile size={17} stroke={1.7} />}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-primary">{method.label}</p>
-                          <p className="text-xs text-on-surface-variant font-medium">{method.sub}</p>
+                          <p className="text-[13px] font-semibold text-on-surface">{method.label}</p>
+                          <p className="text-xs text-on-surface-variant truncate">{method.sub}</p>
                         </div>
                       </div>
                     </label>)}
                 </fieldset>
 
                 {isMomo(form.payment_method) && <div className="flex flex-col gap-2 mt-6">
-                    <label htmlFor="checkout-momo-phone" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Mobile Money number *</label>
-                    <input id="checkout-momo-phone" name="momo_phone" type="tel" inputMode="tel" autoComplete="tel-national" maxLength={16} placeholder="024 123 4567" value={form.momo_phone} onChange={handleChange} onBlur={handleBlur} aria-invalid={Boolean(validation.momo_phone)} aria-describedby={validation.momo_phone ? 'checkout-momo-phone-error' : 'checkout-momo-phone-hint'} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.momo_phone ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} />
+                    <label htmlFor="checkout-momo-phone" className="field-label">Mobile Money number *</label>
+                    <input id="checkout-momo-phone" name="momo_phone" type="tel" inputMode="tel" autoComplete="tel-national" maxLength={16} placeholder="024 123 4567" value={form.momo_phone} onChange={handleChange} onBlur={handleBlur} aria-invalid={Boolean(validation.momo_phone)} aria-describedby={validation.momo_phone ? 'checkout-momo-phone-error' : 'checkout-momo-phone-hint'} className={`field w-full ${validation.momo_phone ? 'border-error focus:border-error bg-error/5' : ''}`} />
                     {validation.momo_phone ? <span id="checkout-momo-phone-error" role="alert" className="text-error text-xs font-medium mt-1">{validation.momo_phone}</span> : <span id="checkout-momo-phone-hint" className="text-xs text-on-surface-variant">The approval prompt goes to this phone. Demo mode: nothing is charged.</span>}
                   </div>}
 
@@ -487,8 +485,8 @@ function Checkout() {
               </div>
 
               <div className="mb-6 flex gap-2">
-                <input type="text" placeholder="Promo code" value={promoCodeInput} onChange={e => setPromoCodeInput(e.target.value.toUpperCase())} className="flex-1 bg-surface-variant p-3 rounded-xl border border-transparent focus:border-outline/50 outline-none text-sm font-medium transition-colors" />
-                <button onClick={applyPromoCode} className="bg-surface border border-outline/50 hover:border-primary text-primary px-6 rounded-xl font-semibold text-sm active:scale-95 transition-all">
+                <input type="text" placeholder="Promo code" value={promoCodeInput} onChange={e => setPromoCodeInput(e.target.value.toUpperCase())} className="field flex-1 uppercase" aria-label="Promo code" />
+                <button onClick={applyPromoCode} className="btn-outline">
                   Apply
                 </button>
               </div>

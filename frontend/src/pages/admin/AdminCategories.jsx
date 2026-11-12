@@ -173,10 +173,10 @@ function AdminCategories() {
   return <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Categories</h1>
+          <h1 className="page-title mb-2">Categories</h1>
           <p className="text-on-surface-variant font-medium">Manage your product hierarchy and collections.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-primary text-white shadow-sm hover:shadow-level-2 transition-all active:scale-95" onClick={() => handleOpenModal()}>
+        <button className="btn-primary inline-flex" onClick={() => handleOpenModal()}>
           <IconPlus size={20} stroke={1.5} /> New Category
         </button>
       </div>
@@ -216,24 +216,24 @@ function AdminCategories() {
             
             <form onSubmit={handleSave} className="p-6 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Name *</label>
-                <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.name} onChange={e => setFormData({
+                <label className="field-label">Name *</label>
+                <input type="text" className="field" value={formData.name} onChange={e => setFormData({
               ...formData,
               name: e.target.value
             })} required />
               </div>
 
               {!isEditing && <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Slug *</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.slug} onChange={e => setFormData({
+                  <label className="field-label">Slug *</label>
+                  <input type="text" className="field" value={formData.slug} onChange={e => setFormData({
               ...formData,
               slug: e.target.value
             })} required placeholder="e.g. electronics" />
                 </div>}
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Parent Category (Optional)</label>
-                <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none" value={formData.parent_id} onChange={e => setFormData({
+                <label className="field-label">Parent Category (Optional)</label>
+                <select className="field appearance-none" value={formData.parent_id} onChange={e => setFormData({
               ...formData,
               parent_id: e.target.value
             })}>
@@ -245,7 +245,7 @@ function AdminCategories() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL</label>
+                <label className="field-label">Image URL</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({
               ...formData,
               image_url: url
@@ -253,8 +253,8 @@ function AdminCategories() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
-                <textarea className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm resize-y" value={formData.description} onChange={e => setFormData({
+                <label className="field-label">Description</label>
+                <textarea className="field resize-y" value={formData.description} onChange={e => setFormData({
               ...formData,
               description: e.target.value
             })} rows={3} />
@@ -264,7 +264,7 @@ function AdminCategories() {
                 <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="px-6 py-3 rounded-xl font-semibold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+                <button type="submit" className="btn-primary">
                   {isEditing ? 'Save Changes' : 'Create Category'}
                 </button>
               </div>

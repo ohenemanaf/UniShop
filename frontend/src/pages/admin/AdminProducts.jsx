@@ -83,7 +83,7 @@ function AdminProducts() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+          <h1 className="page-title mb-2 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center text-primary border border-outline/30">
               <IconPackage size={24} stroke={1.5} />
             </div>
@@ -91,7 +91,7 @@ function AdminProducts() {
           </h1>
           <p className="text-on-surface-variant font-medium">Manage all products and platform inventory.</p>
         </div>
-        <button onClick={() => navigate('/admin/products/new')} className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-level-2 transition-all active:scale-95">
+        <button onClick={() => navigate('/admin/products/new')} className="btn-primary inline-flex">
           <IconPlus size={20} stroke={1.5} /> Add New Product
         </button>
       </div>
@@ -115,33 +115,33 @@ function AdminProducts() {
               return <tr key={product.sku} className={`hover:bg-surface-variant/30 transition-colors group ${isOutOfStock ? 'bg-error/5' : ''}`}>
                     <td className="p-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-surface-variant/50 overflow-hidden border border-outline/30 shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-surface-variant overflow-hidden shrink-0">
                           <img src={product.image_url || 'https://placehold.co/400x400/FAFAFA/333333.png?text=Product'} alt={product.product_name} className="w-full h-full object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-300" />
                         </div>
-                        <span className="text-base font-bold text-primary line-clamp-2">{product.product_name}</span>
+                        <span className="text-[13px] font-semibold text-on-surface line-clamp-2">{product.product_name}</span>
                       </div>
                     </td>
                     <td className="p-4">
-                      <code className="text-xs font-bold text-primary bg-surface-variant px-2 py-1 rounded-md border border-outline/30 block w-max mb-1">{product.sku}</code>
+                      <code className="text-[11px] font-semibold text-on-surface bg-surface-variant px-1.5 py-0.5 rounded block w-max mb-0.5">{product.sku}</code>
                       {product.variant_name && <span className="text-xs font-medium text-on-surface-variant">{product.variant_name}</span>}
                     </td>
-                    <td className="p-4 text-sm font-bold text-primary">
-                      ${parseFloat(product.price).toFixed(2)}
+                    <td className="p-4 text-[13px] font-semibold text-on-surface tabular">
+                      {GHS(product.price)}
                     </td>
                     <td className="p-4">
-                      <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border mb-1 ${isOutOfStock ? 'bg-error/10 text-error border-error/20' : isLowStock ? 'bg-secondary/10 text-secondary border-secondary/20' : 'bg-success/10 text-success border-success/20'}`}>
-                        {isOutOfStock ? <IconAlertTriangle size={14} stroke={2} /> : isLowStock ? <IconAlertTriangle size={14} stroke={2} /> : <IconCheck size={14} stroke={2} />}
+                      <span className={`mb-0.5 ${isOutOfStock ? 'pill-danger' : isLowStock ? 'pill-warning' : 'pill-success'}`}>
+                        {isOutOfStock || isLowStock ? <IconAlertTriangle size={12} stroke={2} /> : <IconCheck size={12} stroke={2} />}
                         {product.stock || 0} in stock
                       </span>
-                      {product.reserved > 0 && <span className="block text-xs font-bold text-on-surface-variant ml-1">{product.reserved} reserved</span>}
+                      {product.reserved > 0 && <span className="block text-xs text-on-surface-variant">{product.reserved} reserved</span>}
                     </td>
                     <td className="p-4 text-right">
                       <div className="flex justify-end gap-2">
-                        <button className="px-4 py-2 rounded-xl text-sm font-semibold bg-surface border border-outline/50 hover:border-primary transition-all active:scale-95 text-primary shadow-sm" onClick={() => navigate(`/admin/products/${product.product_id || ''}/edit`)}>
+                        <button className="btn-outline btn-sm" onClick={() => navigate(`/admin/products/${product.product_id || ''}/edit`)}>
                           Edit
                         </button>
-                        <button className="px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-white hover:shadow-md transition-all active:scale-95 disabled:opacity-50 shadow-sm" onClick={() => handleUpdateStock(product.sku, product.stock || 0)} disabled={updatingSku === product.sku}>
-                          {updatingSku === product.sku ? 'Updating...' : 'Stock'}
+                        <button className="btn-primary btn-sm" onClick={() => handleUpdateStock(product.sku, product.stock || 0)} disabled={updatingSku === product.sku}>
+                          {updatingSku === product.sku ? 'Updating…' : 'Update stock'}
                         </button>
                       </div>
                     </td>

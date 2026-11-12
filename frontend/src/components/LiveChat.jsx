@@ -253,7 +253,7 @@ function LiveChat() {
           {/* Input */}
           <div className="p-4 bg-white/80 backdrop-blur-xl border-t border-outline/20 shrink-0">
             <form onSubmit={handleSend} className="flex gap-2">
-              <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} placeholder="Type your message..." className="flex-1 px-4 py-3 rounded-xl border border-outline/30 bg-surface focus:bg-white focus:border-primary/50 focus:shadow-sm outline-none transition-all font-medium text-primary text-sm" />
+              <input type="text" value={inputText} onChange={e => setInputText(e.target.value)} placeholder="Type your message..." className="field flex-1 px-4 border-outline/30 focus:bg-white focus:shadow-sm" />
               <motion.button whileHover={{
             scale: 1.05
           }} whileTap={{

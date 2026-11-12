@@ -28,7 +28,7 @@ function NotFound() {
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/" className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-primary text-white font-semibold px-8 py-4 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95">
+          <Link to="/" className="btn-primary w-full sm:w-auto inline-flex btn-lg">
             <IconArrowLeft size={20} stroke={1.5} /> Back to Home
           </Link>
           <Link to="/products" className="w-full sm:w-auto inline-flex justify-center items-center gap-2 bg-surface border border-outline/50 text-primary font-semibold px-8 py-4 rounded-full hover:bg-surface-variant transition-colors active:scale-95">

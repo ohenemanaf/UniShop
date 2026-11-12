@@ -101,7 +101,7 @@ function AdminLiveChat() {
         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
           <IconMessageCircle size={28} stroke={1.5} />
         </div>
-        <h1 className="text-3xl font-bold text-primary">Live Support Chat</h1>
+        <h1 className="page-title">Live Support Chat</h1>
       </div>
 
       <div className="flex-1 bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm flex h-full min-h-0">
