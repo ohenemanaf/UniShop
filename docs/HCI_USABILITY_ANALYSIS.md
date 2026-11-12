@@ -114,7 +114,11 @@ The upgrade fixes these first, then makes feedback consistent. Success is measur
 | 7 — Buttons inside a link | Fixed | The card's title link stretches over the card; the wishlist and add buttons sit beside it. |
 | 8 — Very small text | Fixed on product cards | Badge, category and rating text is now at least 12px; the mobile add button is 40px. |
 | 9 — Generic errors | Partly fixed | Rewrote the messages touched above. |
-| 2 — Guest cart | Open | Needs a decision and a backend merge endpoint. |
-| 4 — Mobile Money hidden | Open | Product and payment-provider decision. |
+| 2 — Guest cart | Fixed | Guests add to cart without an account; `/cart/preview` prices it from the database and `/cart/merge` moves it into the account at sign-in. Sign-in is asked for only at checkout. |
+| 4 — Mobile Money hidden | Fixed (demo mode) | MTN, Telecel and AT Money are listed first, with network-checked phone entry and a clearly labelled simulated approval prompt. Live mode refuses MoMo until a provider is connected. |
 
 Verified in a browser against a mocked API (the local MySQL would not start): returning to `/products?category=study&sort=price_asc` after login, Quick Add for one-option and multi-option items, checkout label/autofill/error wiring, and the delete-review dialog (cancel does not delete, confirm deletes once).
+
+Also fixed along the way: toast notifications had no styles at all, so every success and error message rendered as plain text at the foot of the page. Checkout also no longer flashes "Your cart is empty" while the cart loads.
+
+Dependencies were upgraded to current versions (Express 5, React Stripe.js 7, framer-motion 14 and others). The frontend has 0 audit findings; the backend has one low-severity advisory with no upstream fix (deepmerge, via SendGrid).
