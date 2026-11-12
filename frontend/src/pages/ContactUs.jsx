@@ -94,22 +94,22 @@ function ContactUs() {
             <h3 className="text-2xl font-bold text-primary mb-6">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Your Name</label>
-                <input type="text" required value={formData.name} onChange={e => setFormData({
+                <label htmlFor="contact-us-your-name" className="block text-sm font-semibold text-on-surface-variant mb-2">Your Name</label>
+                <input id="contact-us-your-name" type="text" required value={formData.name} onChange={e => setFormData({
                 ...formData,
                 name: e.target.value
               })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Your Email</label>
-                <input type="email" required value={formData.email} onChange={e => setFormData({
+                <label htmlFor="contact-us-your-email" className="block text-sm font-semibold text-on-surface-variant mb-2">Your Email</label>
+                <input id="contact-us-your-email" type="email" required value={formData.email} onChange={e => setFormData({
                 ...formData,
                 email: e.target.value
               })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Message</label>
-                <textarea required rows="4" value={formData.message} onChange={e => setFormData({
+                <label htmlFor="contact-us-message" className="block text-sm font-semibold text-on-surface-variant mb-2">Message</label>
+                <textarea id="contact-us-message" required rows="4" value={formData.message} onChange={e => setFormData({
                 ...formData,
                 message: e.target.value
               })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors resize-none"></textarea>

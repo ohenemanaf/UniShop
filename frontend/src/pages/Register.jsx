@@ -4,7 +4,8 @@
  * Date: 2026-07-21
  */
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { returnPathFrom } from '../hooks/useLoginRedirect';
 import { IconSparkles, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext';
 export default /**
@@ -16,6 +17,7 @@ function Register() {
     register
   } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -54,7 +56,7 @@ function Register() {
     setLoading(true);
     try {
       await register(form.name, form.email, form.password);
-      navigate('/');
+      navigate(returnPathFrom(location.state) || '/', { replace: true });
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.errors?.[0]?.msg || 'Registration failed.');
     } finally {
@@ -115,7 +117,7 @@ function Register() {
           </form>
 
           <p className="font-medium text-on-surface-variant mt-10 text-center lg:text-left">
-            Already have an account? <Link to="/login" className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Sign in</Link>
+            Already have an account? <Link to="/login" state={location.state} className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Sign in</Link>
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@
  * Date: 2026-07-21
  */
 import { useState, useEffect } from 'react';
+import { useToast } from '../context/ToastContext';
 import GHS from '../utils/currency';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api';
@@ -16,6 +17,7 @@ export default /**
  * @returns {any}
  */
 function Invoice() {
+  const { showToast } = useToast();
   const {
     id
   } = useParams();
@@ -64,7 +66,7 @@ function Invoice() {
       pdf.save(`UniShop_Invoice_${order.id.slice(0, 8)}.pdf`);
     } catch (err) {
       console.error('Failed to generate PDF', err);
-      alert('Failed to generate PDF');
+      showToast('The PDF could not be created. Try Print instead and choose "Save as PDF".', 'error');
     }
   };
   return <div className="w-full bg-background min-h-screen py-8">

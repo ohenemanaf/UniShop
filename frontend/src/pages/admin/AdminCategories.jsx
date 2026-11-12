@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconEdit, IconTrash, IconPlus, IconFolder, IconSearch, IconX, IconCheck } from '@tabler/icons-react';
 import ImageUpload from '../../components/ImageUpload';
 export default /**
@@ -16,6 +17,7 @@ function AdminCategories() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -124,7 +126,7 @@ function AdminCategories() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this category? This might affect products.')) return;
+    if (!(await confirm({ title: 'Delete this category?', message: 'Products in this category may be left without one. This cannot be undone.', confirmLabel: 'Delete category', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/categories/${id}`);
       showToast('Category deleted.', 'success');

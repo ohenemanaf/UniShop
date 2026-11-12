@@ -8,6 +8,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { IconSparkles, IconLock, IconAlertTriangle, IconEye, IconEyeOff } from '@tabler/icons-react';
 import {demoAccounts,portfolioDemo} from '../utils/demo';
 import { useAuth } from '../context/AuthContext';
+import { returnPathFrom } from '../hooks/useLoginRedirect';
 export default /**
  * Function Login
  * @returns {any}
@@ -18,8 +19,7 @@ function Login() {
   } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const destination = location.state?.from;
-  const from = destination?.pathname?.startsWith('/') && !destination.pathname.startsWith('//') ? destination.pathname + (destination.search || '') : null;
+  const from = returnPathFrom(location.state);
   const [form, setForm] = useState(()=>{const account=portfolioDemo && demoAccounts[new URLSearchParams(location.search).get('demo')];return {email:account?.email||'',password:account?.password||''};});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -102,7 +102,7 @@ function Login() {
           </form>
 
           <p className="font-medium text-on-surface-variant mt-10 text-center lg:text-left">
-            Don't have an account? <Link to="/register" className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Create one</Link>
+            Don't have an account? <Link to="/register" state={location.state} className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Create one</Link>
           </p>
         </div>
       </div>

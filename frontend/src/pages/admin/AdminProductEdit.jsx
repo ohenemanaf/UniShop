@@ -143,26 +143,26 @@ function AdminProductEdit() {
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-primary uppercase tracking-wider">Product Name *</label>
-              <input name="name" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.name} onChange={handleChange} required />
+              <label htmlFor="admin-product-edit-product-name" className="text-sm font-bold text-primary uppercase tracking-wider">Product Name *</label>
+              <input id="admin-product-edit-product-name" name="name" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.name} onChange={handleChange} required />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
-              <textarea name="description" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y min-h-[120px]" rows="5" value={product.description} onChange={handleChange} />
+              <label htmlFor="admin-product-edit-description" className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
+              <textarea id="admin-product-edit-description" name="description" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y min-h-[120px]" rows="5" value={product.description} onChange={handleChange} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
-                <select name="category_id" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={product.category_id} onChange={handleChange}>
+                <label htmlFor="admin-product-edit-category" className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
+                <select id="admin-product-edit-category" name="category_id" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={product.category_id} onChange={handleChange}>
                   <option value="">-- No Category --</option>
                   {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Brand</label>
-                <input name="brand" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.brand} onChange={handleChange} />
+                <label htmlFor="admin-product-edit-brand" className="text-sm font-bold text-primary uppercase tracking-wider">Brand</label>
+                <input id="admin-product-edit-brand" name="brand" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.brand} onChange={handleChange} />
               </div>
             </div>
 
@@ -175,8 +175,8 @@ function AdminProductEdit() {
               }))} />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Tags (comma separated)</label>
-                <input name="tags" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.tags} onChange={handleChange} placeholder="e.g. tech, premium, wireless" />
+                <label htmlFor="admin-product-edit-tags-comma-separated" className="text-sm font-bold text-primary uppercase tracking-wider">Tags (comma separated)</label>
+                <input id="admin-product-edit-tags-comma-separated" name="tags" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.tags} onChange={handleChange} placeholder="e.g. tech, premium, wireless" />
               </div>
             </div>
 

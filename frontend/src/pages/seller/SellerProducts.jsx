@@ -4,6 +4,8 @@
  * Date: 2026-07-21
  */
 import { useState, useEffect } from 'react';
+import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import GHS from '../../utils/currency';
 import { Link } from 'react-router-dom';
 import api from '../../api';
@@ -16,6 +18,8 @@ export default /**
  * @returns {any}
  */
 function SellerProducts() {
+  const { showToast } = useToast();
+  const confirm = useConfirm();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -53,13 +57,13 @@ function SellerProducts() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    if (!(await confirm({ title: 'Delete this product?', message: 'It will be removed from the storefront. Products with existing orders cannot be deleted.', confirmLabel: 'Delete product', tone: 'danger' }))) return;
     try {
       await api.delete(`/products/${id}`);
       fetchProducts();
       setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to delete product');
+      showToast(err.response?.data?.error || 'The product could not be deleted. It may have existing orders.', 'error');
     }
   };
   /**
@@ -68,14 +72,14 @@ function SellerProducts() {
  */
   const handleBulkDelete = async () => {
     if (selectedIds.length === 0) return;
-    if (!window.confirm(`Are you sure you want to delete ${selectedIds.length} products?`)) return;
+    if (!(await confirm({ title: `Delete ${selectedIds.length} product${selectedIds.length === 1 ? '' : 's'}?`, message: 'They will be removed from the storefront. Products with existing orders cannot be deleted.', confirmLabel: 'Delete products', tone: 'danger' }))) return;
     setIsDeleting(true);
     try {
       await Promise.all(selectedIds.map(id => api.delete(`/products/${id}`)));
       setSelectedIds([]);
       fetchProducts();
     } catch {
-      alert('Failed to delete some products. They may have existing orders.');
+      showToast('Some products could not be deleted. They may have existing orders.', 'error');
     } finally {
       setIsDeleting(false);
     }

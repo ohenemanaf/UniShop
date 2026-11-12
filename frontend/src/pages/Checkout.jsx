@@ -223,7 +223,7 @@ function Checkout() {
       });
       handlePaymentSuccess();
     } catch (err) {
-      setError('Mock checkout failed');
+      setError(err.response?.data?.error || 'The demo payment could not be completed. Your cart is unchanged — please try again.');
       setLoading(false);
     }
   };
@@ -298,34 +298,34 @@ function Checkout() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="md:col-span-2 flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 1 *</label>
-                    <input name="line1" onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.line1 ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="Street address" value={form.line1} onChange={handleChange} required />
-                    {validation.line1 && <span className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.line1}</span>}
+                    <label htmlFor="checkout-address-line-1" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 1 *</label>
+                    <input id="checkout-address-line-1" name="line1" autoComplete="address-line1" aria-invalid={Boolean(validation.line1)} aria-describedby={validation.line1 ? "checkout-line1-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.line1 ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="Street address" value={form.line1} onChange={handleChange} required />
+                    {validation.line1 && <span id="checkout-line1-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.line1}</span>}
                   </div>
                   <div className="md:col-span-2 flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 2</label>
-                    <input name="line2" onBlur={handleBlur} className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors" placeholder="Apt, suite, etc." value={form.line2} onChange={handleChange} />
+                    <label htmlFor="checkout-address-line-2" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Address Line 2</label>
+                    <input id="checkout-address-line-2" name="line2" autoComplete="address-line2" onBlur={handleBlur} className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors" placeholder="Apt, suite, etc." value={form.line2} onChange={handleChange} />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">City *</label>
-                    <input name="city" onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.city ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="City" value={form.city} onChange={handleChange} required />
-                    {validation.city && <span className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.city}</span>}
+                    <label htmlFor="checkout-city" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">City *</label>
+                    <input id="checkout-city" name="city" autoComplete="address-level2" aria-invalid={Boolean(validation.city)} aria-describedby={validation.city ? "checkout-city-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.city ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="City" value={form.city} onChange={handleChange} required />
+                    {validation.city && <span id="checkout-city-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.city}</span>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Region *</label>
-                    <select name="region" required className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
+                    <label htmlFor="checkout-region" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Region *</label>
+                    <select id="checkout-region" name="region" autoComplete="address-level1" required className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.region} onChange={handleChange}>
                       <option value="">Select Region</option>
                       {['Greater Accra', 'Ashanti', 'Western', 'Central', 'Eastern', 'Northern', 'Upper East', 'Upper West', 'Volta', 'Bono', 'Savannah', 'North East', 'Bono East', 'Ahafo', 'Oti', 'Western North'].map(r => <option key={r} value={r}>{r}</option>)}
                     </select>
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Postal code / GhanaPost GPS *</label>
-                    <input maxLength={20} name="zip" onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.zip ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="e.g. GA-123-4567" value={form.zip} onChange={handleChange} required />
-                    {validation.zip && <span className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.zip}</span>}
+                    <label htmlFor="checkout-postal-code-ghanapost-gps" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Postal code / GhanaPost GPS *</label>
+                    <input id="checkout-postal-code-ghanapost-gps" maxLength={20} name="zip" autoComplete="postal-code" aria-invalid={Boolean(validation.zip)} aria-describedby={validation.zip ? "checkout-zip-error" : undefined} onBlur={handleBlur} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.zip ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} placeholder="e.g. GA-123-4567" value={form.zip} onChange={handleChange} required />
+                    {validation.zip && <span id="checkout-zip-error" role="alert" className="text-error text-xs font-medium mt-1 animate-in slide-in-from-top-1 fade-in duration-200">{validation.zip}</span>}
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Country</label>
-                    <select name="country" className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.country} onChange={handleChange}>
+                    <label htmlFor="checkout-country" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Country</label>
+                    <select id="checkout-country" name="country" autoComplete="country-name" className="bg-surface-variant w-full p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors appearance-none cursor-pointer" value={form.country} onChange={handleChange}>
                       <option>Ghana</option>
                     </select>
                   </div>
@@ -469,7 +469,7 @@ function Checkout() {
                   </div>}
               </div>}
 
-            {error && <div className="bg-error/10 border border-error/20 text-error p-4 rounded-xl font-medium flex items-center gap-2 text-sm animate-in fade-in slide-in-from-bottom-2">
+            {error && <div role="alert" className="bg-error/10 border border-error/20 text-error p-4 rounded-xl font-medium flex items-center gap-2 text-sm animate-in fade-in slide-in-from-bottom-2">
                 <IconAlertTriangle size={20} /> {error}
               </div>}
 

@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
+import { ConfirmProvider } from './context/ConfirmContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import { StoreSettingsProvider, useStoreSettings } from './context/StoreSettingsContext';
@@ -82,7 +83,7 @@ function App() {
           <AuthProvider>
             <SocketProvider>
               <CartProvider>
-                <ToastProvider>
+                <ToastProvider><ConfirmProvider>
                   <Suspense fallback={<GlobalLoader />}>
                     <Routes>
                       {/* Admin Routes */}
@@ -184,7 +185,7 @@ function App() {
                         </div>} />
                     </Routes>
                   </Suspense>
-                </ToastProvider>
+                </ConfirmProvider></ToastProvider>
               </CartProvider>
             </SocketProvider>
           </AuthProvider>

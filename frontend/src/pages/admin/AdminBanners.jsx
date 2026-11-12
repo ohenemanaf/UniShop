@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconPlus, IconEdit, IconTrash, IconPhoto, IconDeviceDesktopAnalytics, IconX, IconCheck } from '@tabler/icons-react';
 import ImageUpload from '../../components/ImageUpload';
 export default /**
@@ -16,6 +17,7 @@ function AdminBanners() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -105,7 +107,7 @@ function AdminBanners() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this banner?')) return;
+    if (!(await confirm({ title: 'Delete this banner?', message: 'It will be removed from the homepage straight away.', confirmLabel: 'Delete banner', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/banners/${id}`);
       showToast('Banner deleted.', 'success');

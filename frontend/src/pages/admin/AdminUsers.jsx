@@ -8,6 +8,7 @@ import GHS from '../../utils/currency';
 import api from '../../api';
 import { IconUsers, IconMessageCircle, IconX, IconInbox, IconShoppingBag, IconTicket, IconSearch, IconShieldLock, IconChevronRight, IconUserCheck, IconMail, IconPhone, IconCalendar, IconBuildingStore, IconCheck, IconClockHour4, IconChevronDown } from '@tabler/icons-react';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { useAuth } from '../../context/AuthContext';
 const ROLE_COLORS = {
   admin: 'bg-error/10 text-error border-error/20',
@@ -47,6 +48,7 @@ function UserDetailModal({
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const {
     user: currentUser
   } = useAuth();
@@ -68,7 +70,7 @@ function UserDetailModal({
  * @returns {any}
  */
   const handleRoleChange = async newRole => {
-    if (!window.confirm(`Change this user's role to "${newRole}"?`)) return;
+    if (!(await confirm({ title: `Change this user's role to ${newRole}?`, message: 'Their access changes as soon as you confirm.', confirmLabel: 'Change role' }))) return;
     setChangingRole(true);
     try {
       await api.patch(`/admin/users/${userId}/role`, {

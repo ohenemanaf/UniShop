@@ -4,6 +4,7 @@
  * Date: 2026-07-21
  */
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { loginStateFor } from '../hooks/useLoginRedirect';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -219,8 +220,8 @@ function Navbar() {
                 </AnimatePresence>
               </div>
             </div> : <div className="flex items-center gap-3 ml-2">
-              <Link to="/login" className="text-on-surface-variant font-medium text-sm hidden sm:block hover:text-primary transition-colors">Log In</Link>
-              <Link to="/register" className="bg-primary text-white px-5 py-2.5 rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-primary-fixed transition-colors shadow-sm active:scale-95">Sign Up</Link>
+              <Link to="/login" state={loginStateFor(location)} className="text-on-surface-variant font-medium text-sm hidden sm:block hover:text-primary transition-colors">Log In</Link>
+              <Link to="/register" state={loginStateFor(location)} className="bg-primary text-white px-5 py-2.5 rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-primary-fixed transition-colors shadow-sm active:scale-95">Sign Up</Link>
             </div>}
 
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="xl:hidden flex items-center justify-center w-10 h-10 rounded-xl text-on-surface-variant hover:bg-surface-variant transition-colors active:scale-95">

@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconTrash, IconStarFilled, IconMessageCircle } from '@tabler/icons-react';
 export default /**
  * Function AdminReviews
@@ -17,6 +18,7 @@ function AdminReviews() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const fetchReviews = useCallback(async () => {
     setLoading(true);
     try {
@@ -38,7 +40,7 @@ function AdminReviews() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this review? This action cannot be undone.')) return;
+    if (!(await confirm({ title: 'Delete this review?', message: 'It will disappear from the product page. This cannot be undone.', confirmLabel: 'Delete review', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/reviews/${id}`);
       showToast('Review deleted successfully', 'success');

@@ -86,15 +86,15 @@ function Support() {
             <h2 className="text-2xl font-bold text-primary mb-6 border-b border-outline/30 pb-4">Create New Support Ticket</h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Subject</label>
-                <input type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={form.subject} onChange={e => setForm({
+                <label htmlFor="support-subject" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Subject</label>
+                <input id="support-subject" type="text" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary" value={form.subject} onChange={e => setForm({
               ...form,
               subject: e.target.value
             })} required placeholder="Brief summary of your issue" />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Message</label>
-                <textarea className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary resize-y min-h-[120px]" rows="4" value={form.message} onChange={e => setForm({
+                <label htmlFor="support-message" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Message</label>
+                <textarea id="support-message" className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary resize-y min-h-[120px]" rows="4" value={form.message} onChange={e => setForm({
               ...form,
               message: e.target.value
             })} required placeholder="Please describe your issue in detail..."></textarea>

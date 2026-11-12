@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import GHS from '../../utils/currency';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconCircleCheck, IconX, IconWallet } from '@tabler/icons-react';
 export default /**
  * Function AdminPayouts
@@ -16,6 +17,7 @@ function AdminPayouts() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [payouts, setPayouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
@@ -45,7 +47,7 @@ function AdminPayouts() {
  * @returns {any}
  */
   const handleUpdateStatus = async (id, status) => {
-    if (!window.confirm(`Are you sure you want to mark this payout as ${status}?`)) return;
+    if (!(await confirm({ title: status === 'REJECTED' ? 'Reject this payout?' : 'Mark this payout as processed?', message: status === 'REJECTED' ? 'The seller will see that the withdrawal was rejected.' : 'Only confirm once the money has been sent to the seller.', confirmLabel: status === 'REJECTED' ? 'Reject payout' : 'Mark processed', tone: status === 'REJECTED' ? 'danger' : 'default' }))) return;
     setUpdating(id);
     try {
       await api.patch(`/admin/payouts/${id}`, {

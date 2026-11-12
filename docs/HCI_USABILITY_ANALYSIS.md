@@ -102,3 +102,19 @@ UniShop serves four kinds of user: guests, student buyers, student sellers and a
 - some checkout fields cannot be used with a screen reader
 
 The upgrade fixes these first, then makes feedback consistent. Success is measured with think-aloud tests, SUS scores taken before and after, and an accessibility audit.
+
+## Upgrade progress
+
+| Problem | Status | What changed |
+| --- | --- | --- |
+| 1 — Login loses your place | Fixed | `hooks/useLoginRedirect.js` remembers the page on every sign-in redirect (product card, product page, seller area, navbar Log In / Sign Up). Login and Register both send the user back to it. |
+| 3 — Unlinked form labels | Fixed | 45 labels linked to their fields across checkout, account settings, product create/edit, contact, support and password screens. Checkout also has address autofill, `aria-invalid`, and error messages that screen readers read out. |
+| 5 — Quick Add hover-only and guessing a variant | Fixed | Quick Add appears on keyboard focus too. Items with more than one option open the product page so the buyer can choose. |
+| 6 — Browser pop-ups | Fixed | New `ConfirmProvider` dialog (focus starts on Cancel, Escape closes it, focus returns to the button that opened it) replaces every `window.confirm`. Every `alert()` is now a toast. |
+| 7 — Buttons inside a link | Fixed | The card's title link stretches over the card; the wishlist and add buttons sit beside it. |
+| 8 — Very small text | Fixed on product cards | Badge, category and rating text is now at least 12px; the mobile add button is 40px. |
+| 9 — Generic errors | Partly fixed | Rewrote the messages touched above. |
+| 2 — Guest cart | Open | Needs a decision and a backend merge endpoint. |
+| 4 — Mobile Money hidden | Open | Product and payment-provider decision. |
+
+Verified in a browser against a mocked API (the local MySQL would not start): returning to `/products?category=study&sort=price_asc` after login, Quick Add for one-option and multi-option items, checkout label/autofill/error wiring, and the delete-review dialog (cancel does not delete, confirm deletes once).

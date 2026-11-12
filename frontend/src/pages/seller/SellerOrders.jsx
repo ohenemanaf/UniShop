@@ -4,6 +4,7 @@
  * Date: 2026-07-21
  */
 import { useState, useEffect } from 'react';
+import { useToast } from '../../context/ToastContext';
 import api from '../../api';
 import { useSocket } from '../../context/SocketContext';
 import { IconPackageExport, IconBox, IconTruckDelivery, IconMapPin, IconSearch, IconChevronRight } from '@tabler/icons-react';
@@ -41,6 +42,7 @@ export default /**
  * @returns {any}
  */
 function SellerOrders() {
+  const { showToast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -114,7 +116,7 @@ function SellerOrders() {
       });
       await fetchOrders(page);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update status');
+      showToast(err.response?.data?.error || 'The order status could not be updated. Please try again.', 'error');
     } finally {
       setUpdating(null);
     }
@@ -144,7 +146,7 @@ function SellerOrders() {
       });
       await fetchOrders(page);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit tracking info');
+      showToast(err.response?.data?.error || 'The tracking number could not be saved. Please try again.', 'error');
     } finally {
       setUpdating(null);
     }

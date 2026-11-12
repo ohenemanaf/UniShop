@@ -180,31 +180,31 @@ function AdminProductCreate() {
           <div className="flex flex-col gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Product Name *</label>
-                <input name="name" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.name} onChange={handleProductChange} required placeholder="e.g. Premium Wireless Headphones" />
+                <label htmlFor="admin-product-create-product-name" className="text-sm font-bold text-primary uppercase tracking-wider">Product Name *</label>
+                <input id="admin-product-create-product-name" name="name" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.name} onChange={handleProductChange} required placeholder="e.g. Premium Wireless Headphones" />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">URL Slug *</label>
-                <input name="slug" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.slug} onChange={handleProductChange} required placeholder="e.g. premium-wireless-headphones" />
+                <label htmlFor="admin-product-create-url-slug" className="text-sm font-bold text-primary uppercase tracking-wider">URL Slug *</label>
+                <input id="admin-product-create-url-slug" name="slug" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.slug} onChange={handleProductChange} required placeholder="e.g. premium-wireless-headphones" />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
-              <textarea name="description" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y min-h-[120px]" value={product.description} onChange={handleProductChange} placeholder="Write a detailed product description..." />
+              <label htmlFor="admin-product-create-description" className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
+              <textarea id="admin-product-create-description" name="description" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y min-h-[120px]" value={product.description} onChange={handleProductChange} placeholder="Write a detailed product description..." />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
-                <select name="category_id" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={product.category_id} onChange={handleProductChange}>
+                <label htmlFor="admin-product-create-category" className="text-sm font-bold text-primary uppercase tracking-wider">Category</label>
+                <select id="admin-product-create-category" name="category_id" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={product.category_id} onChange={handleProductChange}>
                   <option value="">-- Select Category --</option>
                   {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Brand</label>
-                <input name="brand" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.brand} onChange={handleProductChange} placeholder="e.g. Sony" />
+                <label htmlFor="admin-product-create-brand" className="text-sm font-bold text-primary uppercase tracking-wider">Brand</label>
+                <input id="admin-product-create-brand" name="brand" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.brand} onChange={handleProductChange} placeholder="e.g. Sony" />
               </div>
             </div>
 
@@ -217,8 +217,8 @@ function AdminProductCreate() {
               }))} />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Tags</label>
-                <input name="tags" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.tags} onChange={handleProductChange} placeholder="audio, wireless, noise-cancelling" />
+                <label htmlFor="admin-product-create-tags" className="text-sm font-bold text-primary uppercase tracking-wider">Tags</label>
+                <input id="admin-product-create-tags" name="tags" className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={product.tags} onChange={handleProductChange} placeholder="audio, wireless, noise-cancelling" />
                 <span className="text-xs font-semibold text-on-surface-variant">Comma separated</span>
               </div>
             </div>
@@ -268,27 +268,27 @@ function AdminProductCreate() {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider">SKU *</label>
-                    <input className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.sku} onChange={e => handleVariantChange(index, 'sku', e.target.value)} required placeholder="e.g. WH-1000XM4-BLK" />
+                    <label htmlFor={`variant-${index}-sku`} className="text-xs font-bold text-primary uppercase tracking-wider">SKU *</label>
+                    <input id={`variant-${index}-sku`} className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.sku} onChange={e => handleVariantChange(index, 'sku', e.target.value)} required placeholder="e.g. WH-1000XM4-BLK" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider">Variant Name</label>
-                    <input className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.name} onChange={e => handleVariantChange(index, 'name', e.target.value)} placeholder="e.g. Midnight Black" />
+                    <label htmlFor={`variant-${index}-variant-name`} className="text-xs font-bold text-primary uppercase tracking-wider">Variant Name</label>
+                    <input id={`variant-${index}-variant-name`} className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.name} onChange={e => handleVariantChange(index, 'name', e.target.value)} placeholder="e.g. Midnight Black" />
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider">Price ($) *</label>
-                    <input type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.price} onChange={e => handleVariantChange(index, 'price', e.target.value)} required placeholder="0.00" />
+                    <label htmlFor={`variant-${index}-price`} className="text-xs font-bold text-primary uppercase tracking-wider">Price ($) *</label>
+                    <input id={`variant-${index}-price`} type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.price} onChange={e => handleVariantChange(index, 'price', e.target.value)} required placeholder="0.00" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider">Compare at Price ($)</label>
-                    <input type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.compare_price} onChange={e => handleVariantChange(index, 'compare_price', e.target.value)} placeholder="Original price" />
+                    <label htmlFor={`variant-${index}-compare-at-price`} className="text-xs font-bold text-primary uppercase tracking-wider">Compare at Price ($)</label>
+                    <input id={`variant-${index}-compare-at-price`} type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.compare_price} onChange={e => handleVariantChange(index, 'compare_price', e.target.value)} placeholder="Original price" />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider">Initial Stock</label>
-                    <input type="number" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.stock} onChange={e => handleVariantChange(index, 'stock', e.target.value)} placeholder="0" />
+                    <label htmlFor={`variant-${index}-initial-stock`} className="text-xs font-bold text-primary uppercase tracking-wider">Initial Stock</label>
+                    <input id={`variant-${index}-initial-stock`} type="number" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={variant.stock} onChange={e => handleVariantChange(index, 'stock', e.target.value)} placeholder="0" />
                   </div>
                 </div>
               </div>)}

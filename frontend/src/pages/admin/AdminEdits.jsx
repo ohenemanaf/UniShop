@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconPlus, IconEdit, IconTrash, IconPhoto, IconDeviceDesktopAnalytics, IconX, IconCheck } from '@tabler/icons-react';
 import ImageUpload from '../../components/ImageUpload';
 import { GHS0 } from '../../utils/currency';
@@ -17,6 +18,7 @@ function AdminEdits() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [edits, setEdits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -112,7 +114,7 @@ function AdminEdits() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this edit?')) return;
+    if (!(await confirm({ title: 'Delete this edit?', message: 'This cannot be undone.', confirmLabel: 'Delete edit', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/edits/${id}`);
       showToast('Edit deleted.', 'success');

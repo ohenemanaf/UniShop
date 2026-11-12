@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import {useToast} from '../context/ToastContext';
+import { useLoginRedirect } from '../hooks/useLoginRedirect';
 import GHS from '../utils/currency';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -21,6 +22,7 @@ export default /**
  */
 function ProductDetail() {
   const {showToast}=useToast();
+  const goToLogin = useLoginRedirect();
   const [adding,setAdding]=useState(false);
   const {
     id
@@ -122,7 +124,7 @@ function ProductDetail() {
  */
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      goToLogin();
       return;
     }
     if (!selectedSku) return;
@@ -143,7 +145,7 @@ function ProductDetail() {
  */
   const handleToggleWishlist = async () => {
     if (!isAuthenticated) {
-      navigate('/login');
+      goToLogin();
       return;
     }
     try {
@@ -157,7 +159,7 @@ function ProductDetail() {
         setIsWishlisted(true);
       }
     } catch {
-      alert('Error updating wishlist');
+      showToast('Could not update your wishlist. Check your connection and try again.', 'error');
     }
   };
   /**
@@ -168,7 +170,7 @@ function ProductDetail() {
   const handleReviewSubmit = async e => {
     e.preventDefault();
     if (!isAuthenticated) {
-      navigate('/login');
+      goToLogin();
       return;
     }
     setSubmittingReview(true);
@@ -185,7 +187,7 @@ function ProductDetail() {
         body: ''
       });
     } catch (err) {
-      alert(err.response?.data?.error || 'Error submitting review');
+      showToast(err.response?.data?.error || 'Your review could not be posted. Please try again.', 'error');
     } finally {
       setSubmittingReview(false);
       setReviewModalOpen(false);
@@ -197,7 +199,7 @@ function ProductDetail() {
  * @returns {any}
  */
   const handleUpvote = reviewId => {
-    if (!isAuthenticated) return navigate('/login');
+    if (!isAuthenticated) return goToLogin();
     if (upvotedReviews.includes(reviewId)) return;
     setUpvotedReviews(prev => [...prev, reviewId]);
   };
@@ -409,7 +411,7 @@ function ProductDetail() {
                   <h3 className="text-2xl font-bold text-primary">Customer Reviews</h3>
                   {isAuthenticated ? <button onClick={() => setReviewModalOpen(true)} className="bg-primary text-white font-bold uppercase tracking-widest py-3 px-8 rounded-xl text-xs active:scale-95 shadow-sm hover:shadow-md transition-all">
                       Write a Review
-                    </button> : <button onClick={() => navigate('/login')} className="bg-surface-variant/50 border border-outline/30 text-primary font-bold uppercase tracking-widest py-3 px-8 rounded-xl text-xs active:scale-95 transition-all hover:bg-surface-variant">
+                    </button> : <button onClick={goToLogin} className="bg-surface-variant/50 border border-outline/30 text-primary font-bold uppercase tracking-widest py-3 px-8 rounded-xl text-xs active:scale-95 transition-all hover:bg-surface-variant">
                       Login to Review
                     </button>}
                 </div>

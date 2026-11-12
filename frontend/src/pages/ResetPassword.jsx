@@ -96,12 +96,12 @@ function ResetPassword() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">New Password</label>
+            <label htmlFor="reset-password-new-password" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">New Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant/50">
                 <IconLock size={20} stroke={1.5} />
               </div>
-              <input type="password" required minLength={6} placeholder="Min. 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-surface-variant pl-12 p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" />
+              <input id="reset-password-new-password" type="password" required minLength={6} placeholder="Min. 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-surface-variant pl-12 p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" />
             </div>
           </div>
 
