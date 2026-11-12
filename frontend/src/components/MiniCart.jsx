@@ -21,7 +21,8 @@ function MiniCart() {
     isCartOpen,
     setIsCartOpen,
     removeFromCart,
-    updateQuantity
+    updateQuantity,
+    isGuestCart
   } = useCart();
   return <AnimatePresence>
       {isCartOpen && <>
@@ -97,6 +98,7 @@ function MiniCart() {
                 <Link to="/checkout" onClick={() => setIsCartOpen(false)} className="btn-primary w-full flex items-center justify-center gap-2 text-lg py-4">
                   Proceed to Checkout <IconArrowRight size={20} />
                 </Link>
+                {isGuestCart && <p className="mt-3 text-xs text-center text-on-surface-variant">You will sign in or create an account at checkout. Your cart comes with you.</p>}
                 <Link to="/cart" onClick={() => setIsCartOpen(false)} className="block text-center mt-4 text-sm font-bold text-secondary hover:text-primary transition-colors">
                   View Full Cart
                 </Link>

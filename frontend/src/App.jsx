@@ -82,8 +82,9 @@ function App() {
         <StoreSettingsProvider><ThemeProvider>
           <AuthProvider>
             <SocketProvider>
+              <ToastProvider>
               <CartProvider>
-                <ToastProvider><ConfirmProvider>
+                <ConfirmProvider>
                   <Suspense fallback={<GlobalLoader />}>
                     <Routes>
                       {/* Admin Routes */}
@@ -144,7 +145,7 @@ function App() {
                               <Route path="/faq" element={<FAQ />} />
 
                               {/* Protected routes */}
-                              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                              <Route path="/cart" element={<Cart />} />
                               <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                               <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
                               <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
@@ -185,8 +186,9 @@ function App() {
                         </div>} />
                     </Routes>
                   </Suspense>
-                </ConfirmProvider></ToastProvider>
+                </ConfirmProvider>
               </CartProvider>
+              </ToastProvider>
             </SocketProvider>
           </AuthProvider>
         </ThemeProvider></StoreSettingsProvider>

@@ -68,6 +68,7 @@ export default /**
 function Checkout() {
   const {
     cart,
+    loading: cartLoading,
     clearCart
   } = useCart();
   const {
@@ -242,6 +243,9 @@ function Checkout() {
           </button>
         </div>
       </div>;
+  }
+  if (cartLoading && !cart?.items?.length) {
+    return <div className="w-full min-h-[60vh] flex items-center justify-center p-8" role="status"><p className="text-on-surface-variant font-medium">Loading your cart…</p></div>;
   }
   if (!cart || cart.items.length === 0) {
     return <div className="w-full min-h-[60vh] flex items-center justify-center p-8 text-center flex-col">

@@ -22,7 +22,8 @@ function Cart() {
     fetchCart,
     updateQuantity,
     removeFromCart,
-    clearCart
+    clearCart,
+    isGuestCart
   } = useCart();
   const navigate = useNavigate();
   const {showToast}=useToast();
@@ -175,6 +176,7 @@ function Cart() {
               <button onClick={() => navigate('/checkout')} className="w-full bg-primary text-white py-4 rounded-full font-semibold text-lg hover:bg-primary-fixed shadow-sm hover:shadow-level-2 active:scale-95 transition-all flex items-center justify-center gap-2 group">
                 Proceed to Checkout <IconArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </button>
+              {isGuestCart && <p className="mt-3 text-sm text-center text-on-surface-variant">You will sign in or create an account at checkout. Your cart comes with you.</p>}
               
               <div className="mt-6 flex items-center justify-center gap-2 text-sm font-medium text-on-surface-variant">
                 <IconLock size={16} stroke={1.5} /> Secure Campus Checkout

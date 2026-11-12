@@ -123,10 +123,6 @@ function ProductDetail() {
  * @returns {any}
  */
   const handleAddToCart = async () => {
-    if (!isAuthenticated) {
-      goToLogin();
-      return;
-    }
     if (!selectedSku) return;
     if(adding || quantity > availableStock || quantity < 1) return;
     setAdding(true);

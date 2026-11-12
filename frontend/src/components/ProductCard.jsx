@@ -77,10 +77,6 @@ function ProductCard({
  */
   const handleAddToCart = async e => {
     e.stopPropagation();
-    if (!isAuthenticated) {
-      goToLogin();
-      return;
-    }
     if (adding) return;
     setAdding(true);
     try {
