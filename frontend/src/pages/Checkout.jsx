@@ -9,7 +9,8 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
 import GHS from '../utils/currency';
-import { IconCircleCheck, IconPackage, IconCreditCard, IconDeviceMobile, IconBuildingBank, IconCash, IconAlertTriangle } from '@tabler/icons-react';
+import { PAYMENT_METHODS, DEFAULT_PAYMENT_METHOD, isMomo, momoPhoneError, maskPhone, paymentLabel } from '../utils/mobileMoney';
+import { IconCircleCheck, IconPackage, IconCreditCard, IconDeviceMobile, IconAlertTriangle } from '@tabler/icons-react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 const stripePromise = import.meta.env.VITE_STRIPE_PUBLIC_KEY ? loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY) : null;
@@ -82,7 +83,8 @@ function Checkout() {
     region: '',
     zip: '',
     country: 'Ghana',
-    payment_method: 'card'
+    payment_method: DEFAULT_PAYMENT_METHOD,
+    momo_phone: ''
   });
   const [validation, setValidation] = useState({});
   const [step, setStep] = useState(1);
@@ -96,6 +98,7 @@ function Checkout() {
     let err = '';
     if (name === 'zip' && value && !/^[a-zA-Z0-9 -]{3,20}$/.test(value.trim())) err = 'Enter a valid postal code or GhanaPost GPS address.';
     if (name === 'line1' && value && value.length < 5) err = 'Please provide a full street address.';
+    if (name === 'momo_phone' && value) err = momoPhoneError(form.payment_method, value);
 
     setValidation(prev => ({
       ...prev,
@@ -136,6 +139,13 @@ function Checkout() {
  * @param {any} e
  * @returns {any}
  */
+  // Step 2 to 3: a Mobile Money choice needs a number on the matching network.
+  const goToReview = () => {
+    const err = momoPhoneError(form.payment_method, form.momo_phone);
+    setValidation(prev => ({ ...prev, momo_phone: err }));
+    if (err) { document.getElementById('checkout-momo-phone')?.focus(); return; }
+    setStep(3);
+  };
   const handleChange = e => {setForm({...form,[e.target.name]:e.target.value});validateField(e.target.name,e.target.value);};
   const subtotal = Number(cart.total) || 0;
   let discountAmount = 0;
@@ -186,7 +196,8 @@ function Checkout() {
           zip: form.zip,
           country: form.country
         },
-        payment_method: form.payment_method
+        payment_method: form.payment_method,
+        ...(isMomo(form.payment_method) ? { momo_phone: form.momo_phone } : {})
       });
       setClientSecret(res.data.clientSecret);
       setIsMocked(res.data.mocked);
@@ -356,38 +367,9 @@ function Checkout() {
                   Payment Method
                 </h2>
 
-                <div className="flex flex-col gap-3">
-                  {[{
-                id: 'momo_mtn',
-                label: 'MTN Mobile Money',
-                sub: 'Pay via MTN MoMo',
-                icon: <IconDeviceMobile size={20} stroke={1.5} />
-              }, {
-                id: 'momo_voda',
-                label: 'Vodafone Cash',
-                sub: 'Pay via Vodafone Cash',
-                icon: <IconDeviceMobile size={20} stroke={1.5} />
-              }, {
-                id: 'momo_at',
-                label: 'AirtelTigo Money',
-                sub: 'Pay via AirtelTigo',
-                icon: <IconDeviceMobile size={20} stroke={1.5} />
-              }, {
-                id: 'card',
-                label: 'Debit / Credit Card',
-                sub: 'Visa, Mastercard, etc.',
-                icon: <IconCreditCard size={20} stroke={1.5} />
-              }, {
-                id: 'bank',
-                label: 'Bank Transfer (GH)',
-                sub: 'GCB, Ecobank, Stanbic…',
-                icon: <IconBuildingBank size={20} stroke={1.5} />
-              }, {
-                id: 'cod',
-                label: 'Cash on Delivery',
-                sub: 'Pay when item arrives',
-                icon: <IconCash size={20} stroke={1.5} />
-              }].filter(method => method.id === 'card').map(method => <label key={method.id} className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2
+                <fieldset className="flex flex-col gap-3">
+                  <legend className="sr-only">Payment method</legend>
+                  {PAYMENT_METHODS.map(method => <label key={method.id} className={`flex items-center p-4 rounded-xl cursor-pointer transition-all border-2
                         ${form.payment_method === method.id ? 'border-primary bg-surface-variant/30 shadow-sm' : 'border-transparent bg-surface-variant/50 hover:bg-surface-variant'}
                       `}>
                       <input type="radio" name="payment_method" value={method.id} checked={form.payment_method === method.id} onChange={e => {
@@ -396,7 +378,7 @@ function Checkout() {
                 }} className="w-5 h-5 accent-primary" />
                       <div className="ml-4 flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${form.payment_method === method.id ? 'bg-primary text-white' : 'bg-surface text-on-surface-variant'}`}>
-                          {method.icon}
+                          {method.id === 'card' ? <IconCreditCard size={20} stroke={1.5} /> : <IconDeviceMobile size={20} stroke={1.5} />}
                         </div>
                         <div>
                           <p className="text-sm font-bold text-primary">{method.label}</p>
@@ -404,11 +386,17 @@ function Checkout() {
                         </div>
                       </div>
                     </label>)}
-                </div>
+                </fieldset>
+
+                {isMomo(form.payment_method) && <div className="flex flex-col gap-2 mt-6">
+                    <label htmlFor="checkout-momo-phone" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Mobile Money number *</label>
+                    <input id="checkout-momo-phone" name="momo_phone" type="tel" inputMode="tel" autoComplete="tel-national" maxLength={16} placeholder="024 123 4567" value={form.momo_phone} onChange={handleChange} onBlur={handleBlur} aria-invalid={Boolean(validation.momo_phone)} aria-describedby={validation.momo_phone ? 'checkout-momo-phone-error' : 'checkout-momo-phone-hint'} className={`bg-surface-variant w-full p-4 rounded-xl border outline-none transition-colors ${validation.momo_phone ? 'border-error focus:border-error bg-error/5' : 'border-transparent focus:border-outline/50 focus:bg-surface'}`} />
+                    {validation.momo_phone ? <span id="checkout-momo-phone-error" role="alert" className="text-error text-xs font-medium mt-1">{validation.momo_phone}</span> : <span id="checkout-momo-phone-hint" className="text-xs text-on-surface-variant">The approval prompt goes to this phone. Demo mode: nothing is charged.</span>}
+                  </div>}
 
                 <div className="flex gap-4 mt-8">
                   <button onClick={() => setStep(1)} className="btn-outline flex-1">Back</button>
-                  <button onClick={() => setStep(3)} className="btn-primary flex-1">Review Order</button>
+                  <button onClick={goToReview} className="btn-primary flex-1">Review Order</button>
                 </div>
               </div>}
 
@@ -430,26 +418,27 @@ function Checkout() {
 
                 <div className="mb-8 p-5 bg-surface-variant/30 rounded-2xl border border-outline/30">
                   <p className="text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wider">Payment Method</p>
-                  <p className="text-primary font-bold text-lg capitalize">
-                    {form.payment_method === 'momo_mtn' ? 'MTN Mobile Money' : form.payment_method === 'momo_voda' ? 'Vodafone Cash' : form.payment_method === 'momo_at' ? 'AirtelTigo Money' : form.payment_method === 'card' ? 'Debit / Credit Card' : form.payment_method === 'bank' ? 'Bank Transfer (GH)' : 'Cash on Delivery'}
+                  <p className="text-primary font-bold text-lg">
+                    {paymentLabel(form.payment_method)}
                   </p>
+                  {isMomo(form.payment_method) && <p className="text-on-surface-variant font-medium">{maskPhone(form.momo_phone)}</p>}
                   <button onClick={() => {
                 setStep(2);
                 setClientSecret('');
               }} className="text-secondary text-sm font-bold mt-3 hover:underline">Change Method</button>
                 </div>
 
-                {form.payment_method === 'card' && <div className="mt-4 border-t border-outline/30 pt-6">
+                <div className="mt-4 border-t border-outline/30 pt-6">
                     {!clientSecret ? <button onClick={initPaymentIntent} disabled={loading} className="btn-primary w-full">
-                        {loading ? 'Initializing...' : 'Proceed to Card Details'}
+                        {loading ? 'Preparing your order...' : isMomo(form.payment_method) ? `Send payment prompt to ${maskPhone(form.momo_phone)}` : 'Proceed to Card Details'}
                       </button> : isMocked ? <div className="flex flex-col gap-4">
-                         <div className="bg-error/10 text-error p-4 rounded-xl text-sm font-medium border border-error/20">
-                           Demo checkout: no money will be charged.
+                         <div role="status" className="bg-secondary/10 text-on-surface p-4 rounded-xl text-sm font-medium border border-secondary/30">
+                           {isMomo(form.payment_method) ? <><strong className="block mb-1">Demo payment prompt</strong>On a live store, {paymentLabel(form.payment_method)} would now ask {maskPhone(form.momo_phone)} to approve {GHS(grandTotal)} with your PIN. In this demo nothing is charged.</> : 'Demo checkout: no money will be charged.'}
                          </div>
                          <button className="btn-primary w-full" onClick={handleAlternativeSubmit} disabled={loading}>
-                           {loading ? 'Processing...' : `Complete Demo Order — ${GHS(grandTotal)}`}
+                           {loading ? 'Processing...' : isMomo(form.payment_method) ? `Approve demo payment — ${GHS(grandTotal)}` : `Complete Demo Order — ${GHS(grandTotal)}`}
                          </button>
-                       </div> : <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                       </div> : form.payment_method !== 'card' ? null : <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Elements stripe={stripePromise} options={{
                   clientSecret,
                   appearance: {
@@ -464,13 +453,8 @@ function Checkout() {
                           <CheckoutFormWrapper grandTotal={grandTotal} onSuccess={handlePaymentSuccess} onError={setError} />
                         </Elements>
                       </div>}
-                  </div>}
+                  </div>
 
-                {form.payment_method !== 'card' && <div className="mt-4 border-t border-outline/30 pt-6">
-                    <button onClick={handleAlternativeSubmit} disabled={loading} className="btn-primary w-full">
-                      {loading ? 'Processing...' : `Place Order — ${GHS(grandTotal)}`}
-                    </button>
-                  </div>}
               </div>}
 
             {error && <div role="alert" className="bg-error/10 border border-error/20 text-error p-4 rounded-xl font-medium flex items-center gap-2 text-sm animate-in fade-in slide-in-from-bottom-2">

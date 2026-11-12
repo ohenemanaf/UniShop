@@ -16,7 +16,7 @@ const readGuest=()=>{
   } catch {return [];}
 };
 const writeGuest=items=>{
-  try {items.length?localStorage.setItem(GUEST_KEY,JSON.stringify(items)):localStorage.removeItem(GUEST_KEY);} catch {/* storage blocked: cart lasts for this page only */}
+  try {if(items.length) localStorage.setItem(GUEST_KEY,JSON.stringify(items)); else localStorage.removeItem(GUEST_KEY);} catch {/* storage blocked: cart lasts for this page only */}
 };
 const plural=(n,word)=>`${n} ${word}${n===1?'':'s'}`;
 

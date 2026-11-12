@@ -14,11 +14,11 @@ const {
 const db = require('../config/db');
 const router = express.Router();
 const {randomUUID}=require('crypto');
+const {validatePayment}=require('../utils/mobileMoney');
 router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const {
     shipping_address,
-    payment_method = 'card',
     promoCode,
     notes
   } = req.body;
@@ -27,6 +27,9 @@ router.post('/create-payment-intent', authenticate, asyncHandler(async (req, res
       error: 'Full shipping address is required.'
     });
   }
+  const payment = validatePayment(req.body, { demo: process.env.PORTFOLIO_DEMO === 'true' || !process.env.STRIPE_SECRET_KEY });
+  if (!payment.ok) return res.status(400).json({ error: payment.error });
+  const payment_method = payment.method;
 
   // Fetch cart items
   const [cart] = await db.query('SELECT id FROM cart WHERE user_id = ?', [userId]);
