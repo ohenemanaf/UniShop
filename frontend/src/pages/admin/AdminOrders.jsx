@@ -80,7 +80,7 @@ function AdminOrders() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+          <h1 className="page-title mb-2 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-surface-variant/50 flex items-center justify-center text-primary border border-outline/30">
               <IconClipboardList size={24} stroke={1.5} />
             </div>
@@ -88,7 +88,7 @@ function AdminOrders() {
           </h1>
           <p className="text-on-surface-variant font-medium">Oversee platform-wide orders and statuses.</p>
         </div>
-        <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary cursor-pointer shadow-sm active:scale-95 transition-all focus:border-primary appearance-none min-w-[160px]" value={statusFilter} onChange={e => {
+        <select className="field cursor-pointer active:scale-95 appearance-none min-w-[160px]" value={statusFilter} onChange={e => {
         setStatusFilter(e.target.value);
         setPage(1);
       }}>
@@ -97,7 +97,7 @@ function AdminOrders() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -113,7 +113,7 @@ function AdminOrders() {
             </thead>
             <tbody className="divide-y divide-outline/30">
               {orders.map(order => <tr key={order.id} className="hover:bg-surface-variant/30 transition-colors group">
-                  <td className="p-4 text-sm font-bold text-primary uppercase tracking-widest">
+                  <td className="p-4 text-sm font-bold text-primary uppercase tracking-wider">
                     #{order.id.slice(0, 8)}
                   </td>
                   <td className="p-4 text-base font-bold text-primary">{order.customer_name}</td>
@@ -134,7 +134,7 @@ function AdminOrders() {
                   </td>
                 </tr>)}
               {orders.length === 0 && <tr>
-                  <td colSpan="7" className="p-8 text-center">
+                  <td colSpan="7" className="p-6 text-center">
                     <div className="flex flex-col items-center justify-center text-on-surface-variant py-8">
                       <IconPackage size={48} stroke={1.5} className="mb-4 opacity-50" />
                       <p className="text-lg font-bold text-primary">No orders found</p>

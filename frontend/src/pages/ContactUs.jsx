@@ -46,17 +46,17 @@ function ContactUs() {
       setLoading(false);
     }
   };
-  return <div className="min-h-[75vh] bg-background pt-6 pb-20 px-4 md:px-8">
+  return <div className="min-h-[75vh] bg-background pt-6 pb-12 px-4 md:px-6">
       <SEO title="Contact Us | UniShop" />
       <div className="max-w-[1280px] mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 tracking-tight">Get in Touch</h1>
+        <div className="text-center mb-10 animate-fade-in-up">
+          <h1 className="page-title mb-2">Get in Touch</h1>
           <p className="text-xl text-on-surface-variant max-w-2xl mx-auto">
             Have a question, feedback, or need support? We'd love to hear from you.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 bg-surface rounded-[3rem] p-8 md:p-12 shadow-level-2 border border-outline/30">
+        <div className="grid md:grid-cols-2 gap-8 bg-surface rounded-2xl p-6 md:p-8 shadow-level-2 border border-outline/30">
           <div>
             <h2 className="text-3xl font-bold text-primary mb-8">Contact Information</h2>
             <div className="space-y-8">
@@ -90,29 +90,29 @@ function ContactUs() {
             </div>
           </div>
 
-          <div className="bg-surface-variant/30 p-8 rounded-[2rem] border border-outline/50">
+          <div className="bg-surface-variant/30 p-6 rounded-2xl border border-outline/50">
             <h3 className="text-2xl font-bold text-primary mb-6">Send a Message</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Your Name</label>
-                <input type="text" required value={formData.name} onChange={e => setFormData({
+                <label htmlFor="contact-us-your-name" className="block text-sm font-semibold text-on-surface-variant mb-2">Your Name</label>
+                <input id="contact-us-your-name" type="text" required value={formData.name} onChange={e => setFormData({
                 ...formData,
                 name: e.target.value
-              })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors" />
+              })} className="field w-full px-4" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Your Email</label>
-                <input type="email" required value={formData.email} onChange={e => setFormData({
+                <label htmlFor="contact-us-your-email" className="block text-sm font-semibold text-on-surface-variant mb-2">Your Email</label>
+                <input id="contact-us-your-email" type="email" required value={formData.email} onChange={e => setFormData({
                 ...formData,
                 email: e.target.value
-              })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors" />
+              })} className="field w-full px-4" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-2">Message</label>
-                <textarea required rows="4" value={formData.message} onChange={e => setFormData({
+                <label htmlFor="contact-us-message" className="block text-sm font-semibold text-on-surface-variant mb-2">Message</label>
+                <textarea id="contact-us-message" required rows="4" value={formData.message} onChange={e => setFormData({
                 ...formData,
                 message: e.target.value
-              })} className="w-full bg-surface px-4 py-3 rounded-xl border border-outline focus:border-primary outline-none transition-colors resize-none"></textarea>
+              })} className="field w-full px-4 resize-none"></textarea>
               </div>
               <button type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 mt-4 disabled:opacity-50">
                 <IconSend size={20} /> {loading ? 'Sending...' : 'Send Message'}

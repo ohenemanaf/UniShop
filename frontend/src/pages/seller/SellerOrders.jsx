@@ -4,6 +4,7 @@
  * Date: 2026-07-21
  */
 import { useState, useEffect } from 'react';
+import { useToast } from '../../context/ToastContext';
 import api from '../../api';
 import { useSocket } from '../../context/SocketContext';
 import { IconPackageExport, IconBox, IconTruckDelivery, IconMapPin, IconSearch, IconChevronRight } from '@tabler/icons-react';
@@ -41,6 +42,7 @@ export default /**
  * @returns {any}
  */
 function SellerOrders() {
+  const { showToast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -114,7 +116,7 @@ function SellerOrders() {
       });
       await fetchOrders(page);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update status');
+      showToast(err.response?.data?.error || 'The order status could not be updated. Please try again.', 'error');
     } finally {
       setUpdating(null);
     }
@@ -144,7 +146,7 @@ function SellerOrders() {
       });
       await fetchOrders(page);
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to submit tracking info');
+      showToast(err.response?.data?.error || 'The tracking number could not be saved. Please try again.', 'error');
     } finally {
       setUpdating(null);
     }
@@ -186,12 +188,12 @@ function SellerOrders() {
         </div>
       </div>;
   }
-  return <div className="w-full max-w-[1400px] mx-auto pb-12">
+  return <div className="w-full max-w-[1200px] mx-auto pb-12">
       <SEO title="Orders | Seller Dashboard" />
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight mb-2">Orders</h1>
+          <h1 className="page-title mb-2">Orders</h1>
           <p className="text-on-surface-variant font-medium">Manage and fulfill your customer orders.</p>
         </div>
       </div>
@@ -217,7 +219,7 @@ function SellerOrders() {
                     
                     <div className="flex-1 min-w-0 flex flex-col justify-center">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-black uppercase tracking-widest text-primary/60 bg-primary/5 px-2 py-0.5 rounded-md">
+                        <span className="text-xs font-black uppercase tracking-wider text-primary/60 bg-primary/5 px-2 py-0.5 rounded-md">
                           ORDER #{item.order_id.substring(0, 8)}
                         </span>
                         <span className="text-xs font-semibold text-on-surface-variant">
@@ -227,7 +229,7 @@ function SellerOrders() {
                       <h3 className="font-bold text-lg text-primary truncate mb-1">{item.product_name}</h3>
                       <div className="flex flex-wrap items-center gap-4 text-sm">
                         <span className="font-semibold text-on-surface-variant">Qty: {item.quantity}</span>
-                        <span className="font-black text-secondary">${item.price_at_purchase} <span className="font-medium text-xs text-on-surface-variant">ea</span></span>
+                        <span className="font-black text-secondary">₵{Number(item.price_at_purchase).toFixed(2)} <span className="font-medium text-xs text-on-surface-variant">ea</span></span>
                         {item.variant_name && <span className="px-2 py-0.5 bg-surface-variant rounded-md font-medium">{item.variant_name}</span>}
                       </div>
                     </div>
@@ -252,13 +254,13 @@ function SellerOrders() {
                     
                     <div className="w-full flex justify-between items-center xl:flex-col xl:items-end gap-2">
                       {/* Status Badge */}
-                      <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest border ${statusConfig.color} ${statusConfig.border}`}>
+                      <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border ${statusConfig.color} ${statusConfig.border}`}>
                         {statusConfig.label}
                       </span>
                       
                       {/* Tracking Info (if shipped) */}
                       {item.tracking_number && <div className="text-right">
-                          <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{item.carrier}</p>
+                          <p className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">{item.carrier}</p>
                           <p className="text-xs font-semibold text-primary font-mono">{item.tracking_number}</p>
                         </div>}
                     </div>
@@ -287,7 +289,7 @@ function SellerOrders() {
       }} animate={{
         opacity: 1,
         scale: 1
-      }} className="bg-surface border border-outline/20 rounded-[2rem] p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+      }} className="bg-surface border border-outline/20 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
             <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary mb-6">
               <IconBox size={48} stroke={1.5} />
             </div>
@@ -329,7 +331,7 @@ function SellerOrders() {
           type: "spring",
           stiffness: 300,
           damping: 25
-        }} className="bg-surface w-full max-w-[28rem] p-8 rounded-[2rem] shadow-level-3 border border-outline/20 relative overflow-hidden">
+        }} className="bg-surface w-full max-w-[28rem] p-6 rounded-2xl shadow-level-3 border border-outline/20 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-10"></div>
               
               <h2 className="text-2xl font-black text-primary mb-6 flex items-center gap-3">
@@ -341,9 +343,9 @@ function SellerOrders() {
               
               <form onSubmit={submitTracking} className="flex flex-col gap-5 relative z-10">
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Carrier</label>
+                  <label className="field-label">Carrier</label>
                   <div className="relative">
-                    <select className="w-full bg-surface-variant/50 hover:bg-surface-variant focus:bg-surface p-4 rounded-xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-primary shadow-sm appearance-none cursor-pointer" value={trackingForm.carrier} onChange={e => setTrackingForm({
+                    <select className="field w-full appearance-none cursor-pointer" value={trackingForm.carrier} onChange={e => setTrackingForm({
                   ...trackingForm,
                   carrier: e.target.value
                 })} required>
@@ -358,8 +360,8 @@ function SellerOrders() {
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Tracking Number</label>
-                  <input type="text" className="w-full bg-surface-variant/50 focus:bg-surface p-4 rounded-xl border border-transparent focus:border-primary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all font-bold text-primary placeholder:text-on-surface-variant/40 shadow-sm" placeholder="e.g. 1Z9999999999999999" value={trackingForm.tracking_number} onChange={e => setTrackingForm({
+                  <label className="field-label">Tracking Number</label>
+                  <input type="text" className="field w-full placeholder:text-on-surface-variant/40" placeholder="e.g. 1Z9999999999999999" value={trackingForm.tracking_number} onChange={e => setTrackingForm({
                 ...trackingForm,
                 tracking_number: e.target.value
               })} required />
@@ -372,7 +374,7 @@ function SellerOrders() {
               })}>
                     Cancel
                   </button>
-                  <button type="submit" className="px-6 py-3.5 bg-primary text-white font-bold rounded-2xl active:scale-95 disabled:opacity-50 shadow-md shadow-primary/20 hover:shadow-lg transition-all flex items-center gap-2" disabled={updating === trackingModal.itemId}>
+                  <button type="submit" className="btn-primary disabled:opacity-50" disabled={updating === trackingModal.itemId}>
                     {updating === trackingModal.itemId ? 'Saving...' : 'Save & Mark Shipped'}
                   </button>
                 </div>

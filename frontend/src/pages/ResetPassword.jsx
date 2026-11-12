@@ -62,30 +62,30 @@ function ResetPassword() {
     }
   };
   if (!token) {
-    return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-8 py-20 bg-background relative overflow-hidden">
+    return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-6 py-10 bg-background relative overflow-hidden">
         <SEO title="Reset Password | UniShop" />
-        <div className="w-full max-w-[448px] bg-surface p-8 md:p-12 rounded-[2rem] shadow-sm border border-outline/30 text-center relative z-10">
+        <div className="w-full max-w-[448px] bg-surface p-6 md:p-8 rounded-2xl shadow-sm border border-outline/30 text-center relative z-10">
           <div className="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6 border border-error/20">
             <IconAlertTriangle size={32} stroke={1.5} />
           </div>
-          <h1 className="text-3xl font-bold text-primary mb-6">Reset Password</h1>
+          <h1 className="page-title mb-2">Reset Password</h1>
           <div className="bg-error/10 text-error border border-error/20 p-4 rounded-xl font-medium text-sm mb-8">Invalid or missing reset token.</div>
           <Link to="/login" className="font-bold text-primary hover:text-secondary transition-colors">Back to Login →</Link>
         </div>
       </div>;
   }
-  return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-8 py-20 bg-background relative overflow-hidden">
+  return <div className="min-h-[80vh] flex flex-col justify-center items-center px-4 md:px-6 py-10 bg-background relative overflow-hidden">
       <SEO title="Reset Password | UniShop" />
       {/* Subtle Background Elements */}
 
       
-      <div className="w-full max-w-[448px] bg-surface p-8 md:p-12 rounded-[2rem] shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
+      <div className="w-full max-w-[448px] bg-surface p-6 md:p-8 rounded-2xl shadow-sm border border-outline/30 relative z-10 backdrop-blur-xl">
         
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-16 h-16 bg-surface-variant text-primary rounded-full flex items-center justify-center mb-4 border border-outline/50 shadow-sm">
             <IconShieldCheck size={32} stroke={1.5} />
           </div>
-          <h1 className="text-3xl font-bold text-primary mb-2 tracking-tight">New Password</h1>
+          <h1 className="page-title mb-2">New Password</h1>
           <p className="text-lg text-on-surface-variant font-medium">Enter your new password below.</p>
         </div>
 
@@ -96,16 +96,16 @@ function ResetPassword() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">New Password</label>
+            <label htmlFor="reset-password-new-password" className="field-label">New Password</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant/50">
                 <IconLock size={20} stroke={1.5} />
               </div>
-              <input type="password" required minLength={6} placeholder="Min. 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="w-full bg-surface-variant pl-12 p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" />
+              <input id="reset-password-new-password" type="password" required minLength={6} placeholder="Min. 6 characters" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="field w-full pl-12" />
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 rounded-full font-semibold text-lg active:scale-95 shadow-sm hover:shadow-level-2 transition-all disabled:opacity-50 mt-4">
+          <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50 mt-4 btn-lg">
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
         </form>

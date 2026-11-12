@@ -85,58 +85,57 @@ function AdminLayout() {
     path: '/admin/reviews',
     icon: IconStar
   }];
-  return <div className="bg-surface-variant text-on-background min-h-screen flex flex-col lg:flex-row antialiased">
+  return <div className="bg-background text-on-background min-h-screen flex flex-col lg:flex-row antialiased">
       {/* SideNavBar */}
-      <aside className={`bg-surface/80 backdrop-blur-2xl border-r border-outline/30 shadow-level-1 flex flex-col h-screen w-72 fixed left-0 top-0 z-50 overflow-y-auto transition-transform duration-300 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="mb-4 p-8 flex items-center justify-between lg:justify-start gap-4 border-b border-outline/20">
-          <div className="flex items-center gap-3">
-            <div className="bg-primary text-white p-2 rounded-xl shadow-md">
-              <IconShieldLock size={24} stroke={2} />
+      <aside className={`bg-surface border-r border-outline-variant flex flex-col h-screen w-60 fixed left-0 top-0 z-50 overflow-y-auto transition-transform duration-300 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="h-14 px-4 flex items-center justify-between gap-3 border-b border-outline-variant shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center">
+              <IconShieldLock size={17} stroke={2} />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-primary tracking-tight leading-none mb-1">UniShop.</h1>
-              <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Command Center</p>
+              <p className="text-[15px] font-extrabold text-on-surface tracking-tight leading-tight">UniShop</p>
+              <p className="text-[11px] text-on-surface-variant">Admin centre</p>
             </div>
           </div>
-          <button aria-label="Close navigation" className="lg:hidden text-on-surface-variant p-2 bg-surface-variant rounded-full active:scale-95" onClick={() => setMobileMenuOpen(false)}>
-            <IconX size={20} stroke={2} />
+          <button aria-label="Close navigation" className="icon-btn lg:hidden" onClick={() => setMobileMenuOpen(false)}>
+            <IconX size={18} />
           </button>
         </div>
         
-        <nav className="flex-1 flex flex-col gap-1.5 px-6 pb-8 pt-4">
+        <nav className="flex-1 flex flex-col gap-0.5 p-3" aria-label="Admin">
           {navItems.map(item => {
           const isActive = pathname === item.path || item.path !== '/admin' && pathname.startsWith(item.path);
           const IconComponent = item.icon;
-          return <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 active:scale-95 ${isActive ? 'bg-primary text-[#FFFFFF] font-bold shadow-md shadow-primary/20 scale-[1.02]' : 'text-on-surface hover:bg-surface-variant hover:text-primary font-semibold'}`}>
-                <IconComponent size={20} stroke={isActive ? 2.5 : 2} />
-                <span className="text-sm tracking-wide">{item.name}</span>
+          return <Link key={item.name} to={item.path} onClick={() => setMobileMenuOpen(false)} aria-current={isActive ? 'page' : undefined} className={`flex items-center gap-3 h-9 px-3 rounded-lg text-[13px] transition-colors ${isActive ? 'bg-primary-container text-on-primary-container font-semibold' : 'text-on-surface-variant font-medium hover:bg-surface-dim hover:text-on-surface'}`}>
+                <IconComponent size={18} stroke={isActive ? 2.2 : 1.8} />
+                <span>{item.name}</span>
               </Link>;
         })}
         </nav>
 
-        <div className="mt-auto p-6 bg-surface/50 backdrop-blur-md sticky bottom-0 border-t border-outline/30">
-          <button onClick={handleLogout} className="w-full bg-error/10 text-error hover:bg-error hover:text-white hover:shadow-md rounded-2xl px-4 py-3.5 text-sm font-bold transition-all flex items-center justify-center gap-2 active:scale-95">
-            <IconLogout size={20} stroke={2} />
-            Sign Out
+        <div className="mt-auto p-3 bg-surface sticky bottom-0 border-t border-outline-variant">
+          <button onClick={handleLogout} className="btn-ghost btn-sm w-full text-error hover:text-error hover:bg-error-container/60">
+            <IconLogout size={15} /> Sign out
           </button>
         </div>
       </aside>
 
       {mobileMenuOpen && <button aria-label="Close admin navigation" onClick={() => setMobileMenuOpen(false)} className="fixed inset-0 z-40 bg-black/40 lg:hidden" />}
       {/* Main Content */}
-      <main className="flex-1 min-w-0 lg:ml-72 p-4 lg:p-8 min-h-screen flex flex-col">
+      <main className="flex-1 min-w-0 lg:ml-60 p-4 lg:px-8 lg:py-6 min-h-screen flex flex-col">
         {/* Header area for mobile */}
-        <header className="lg:hidden flex items-center justify-between mb-8 bg-surface p-4 rounded-2xl shadow-sm border border-outline/30">
-          <div className="flex items-center gap-3">
-             <IconShieldLock size={24} stroke={1.5} className="text-primary" />
-             <h1 className="text-xl font-black text-primary">Admin Center</h1>
+        <header className="lg:hidden flex items-center justify-between mb-4 card h-12 px-3">
+          <div className="flex items-center gap-2">
+             <IconShieldLock size={18} stroke={1.8} className="text-primary" />
+             <p className="text-[15px] font-extrabold text-on-surface tracking-tight">Admin centre</p>
           </div>
-          <button aria-label="Open navigation" className="text-primary p-2 active:scale-95" onClick={() => setMobileMenuOpen(true)}>
-            <IconMenu2 size={24} stroke={1.5} />
+          <button aria-label="Open navigation" className="icon-btn" onClick={() => setMobileMenuOpen(true)}>
+            <IconMenu2 size={19} />
           </button>
         </header>
 
-        <div className="flex justify-between items-center gap-4 mb-6 text-sm text-on-surface-variant"><Link to="/demo" className="text-primary font-semibold">Portfolio demo · Explore roles</Link><Link to="/" className="text-primary font-semibold">View store ↗</Link></div>
+        <div className="flex justify-between items-center gap-4 mb-4 text-xs text-on-surface-variant"><Link to="/demo" className="text-primary font-semibold hover:underline">Portfolio demo · Explore roles</Link><Link to="/" className="hover:text-primary">View store ↗</Link></div>
         <div className="flex-1 w-full min-w-0">
            <Outlet />
         </div>

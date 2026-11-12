@@ -35,8 +35,8 @@ function SellerStore() {
     });
   }, [id]);
   if (loading) {
-    return <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-24 animate-pulse">
-        <div className="w-full h-[240px] bg-surface-variant/50 rounded-3xl mb-12"></div>
+    return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10 animate-pulse">
+        <div className="w-full h-[240px] bg-surface-variant/50 rounded-3xl mb-8"></div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {[1, 2, 3, 4, 5, 6, 7, 8].map(i => <div key={i} className="h-80 bg-surface-variant/50 rounded-2xl"></div>)}
         </div>
@@ -48,20 +48,20 @@ function SellerStore() {
         <p className="text-on-surface-variant">The storefront you are looking for does not exist or has been removed.</p>
       </div>;
   }
-  return <div className="w-full pb-32">
+  return <div className="w-full pb-16">
       <SEO title={`${seller.name}'s Store | UniShop`} description={`Shop all products from ${seller.name} on UniShop.`} />
 
       {/* Store Header */}
-      <div className="bg-primary/5 border-b border-primary/10 pt-24 pb-16">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center gap-8">
+      <div className="bg-primary/5 border-b border-primary/10 pt-10 pb-16">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center gap-8">
           <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden bg-white border-4 border-white shadow-lg flex items-center justify-center shrink-0">
             {seller.avatar_url ? <img src={seller.avatar_url} alt={seller.name} className="w-full h-full object-cover" /> : <IconBuildingStore size={64} className="text-primary/30" stroke={1.5} />}
           </div>
           
           <div className="text-center md:text-left flex-1">
-            <h1 className="text-4xl md:text-5xl font-black text-primary mb-4 tracking-tight">{seller.name}</h1>
+            <h1 className="page-title mb-2">{seller.name}</h1>
             
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm font-bold text-on-surface-variant uppercase tracking-widest">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 text-sm font-bold text-on-surface-variant uppercase tracking-wider">
               <div className="flex items-center gap-2">
                 <IconStarFilled size={18} className="text-amber-400" />
                 <span>{parseFloat(seller.stats?.shop_rating || 0).toFixed(1)} Shop Rating</span>
@@ -80,15 +80,15 @@ function SellerStore() {
       </div>
 
       {/* Products Grid */}
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 mt-12">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6 mt-12">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold text-primary uppercase tracking-widest">All Products</h2>
+          <h2 className="text-xl font-bold text-primary uppercase tracking-wider">All Products</h2>
           <span className="text-sm font-semibold text-on-surface-variant bg-surface-variant/50 px-3 py-1 rounded-full">
             {products.length} Items
           </span>
         </div>
 
-        {products.length === 0 ? <div className="py-24 text-center bg-surface-variant/20 rounded-3xl border border-outline/30">
+        {products.length === 0 ? <div className="py-10 text-center bg-surface-variant/20 rounded-3xl border border-outline/30">
             <p className="text-on-surface-variant font-medium">This seller has not published any products yet.</p>
           </div> : <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             {products.map(product => <ProductCard key={product.id} product={product} />)}

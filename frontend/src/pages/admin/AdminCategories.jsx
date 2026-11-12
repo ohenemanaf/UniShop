@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconEdit, IconTrash, IconPlus, IconFolder, IconSearch, IconX, IconCheck } from '@tabler/icons-react';
 import ImageUpload from '../../components/ImageUpload';
 export default /**
@@ -16,6 +17,7 @@ function AdminCategories() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -124,7 +126,7 @@ function AdminCategories() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this category? This might affect products.')) return;
+    if (!(await confirm({ title: 'Delete this category?', message: 'Products in this category may be left without one. This cannot be undone.', confirmLabel: 'Delete category', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/categories/${id}`);
       showToast('Category deleted.', 'success');
@@ -171,17 +173,17 @@ function AdminCategories() {
   return <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Categories</h1>
+          <h1 className="page-title mb-2">Categories</h1>
           <p className="text-on-surface-variant font-medium">Manage your product hierarchy and collections.</p>
         </div>
-        <button className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-primary text-white shadow-sm hover:shadow-level-2 transition-all active:scale-95" onClick={() => handleOpenModal()}>
+        <button className="btn-primary inline-flex" onClick={() => handleOpenModal()}>
           <IconPlus size={20} stroke={1.5} /> New Category
         </button>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -194,7 +196,7 @@ function AdminCategories() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {categories.length === 0 ? <tr>
-                    <td colSpan="4" className="p-8 text-center text-on-surface-variant font-medium">
+                    <td colSpan="4" className="p-6 text-center text-on-surface-variant font-medium">
                       No categories found. Start by creating one.
                     </td>
                   </tr> : renderCategoryRows(categories)}
@@ -205,33 +207,33 @@ function AdminCategories() {
 
       {/* Modal */}
       {showModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-[512px] rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-[512px] rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30">
               <h3 className="text-xl font-bold text-primary">
                 {isEditing ? 'Edit Category' : 'New Category'}
               </h3>
             </div>
             
-            <form onSubmit={handleSave} className="p-8 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
+            <form onSubmit={handleSave} className="p-6 flex flex-col gap-6 max-h-[80vh] overflow-y-auto">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Name *</label>
-                <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.name} onChange={e => setFormData({
+                <label className="field-label">Name *</label>
+                <input type="text" className="field" value={formData.name} onChange={e => setFormData({
               ...formData,
               name: e.target.value
             })} required />
               </div>
 
               {!isEditing && <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Slug *</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={formData.slug} onChange={e => setFormData({
+                  <label className="field-label">Slug *</label>
+                  <input type="text" className="field" value={formData.slug} onChange={e => setFormData({
               ...formData,
               slug: e.target.value
             })} required placeholder="e.g. electronics" />
                 </div>}
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Parent Category (Optional)</label>
-                <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none" value={formData.parent_id} onChange={e => setFormData({
+                <label className="field-label">Parent Category (Optional)</label>
+                <select className="field appearance-none" value={formData.parent_id} onChange={e => setFormData({
               ...formData,
               parent_id: e.target.value
             })}>
@@ -243,7 +245,7 @@ function AdminCategories() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL</label>
+                <label className="field-label">Image URL</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({
               ...formData,
               image_url: url
@@ -251,8 +253,8 @@ function AdminCategories() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Description</label>
-                <textarea className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm resize-y" value={formData.description} onChange={e => setFormData({
+                <label className="field-label">Description</label>
+                <textarea className="field resize-y" value={formData.description} onChange={e => setFormData({
               ...formData,
               description: e.target.value
             })} rows={3} />
@@ -262,7 +264,7 @@ function AdminCategories() {
                 <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="px-6 py-3 rounded-xl font-semibold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+                <button type="submit" className="btn-primary">
                   {isEditing ? 'Save Changes' : 'Create Category'}
                 </button>
               </div>

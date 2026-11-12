@@ -2,6 +2,7 @@
 @config "../tailwind.config.js";
 
 @theme {
+  --ease-out-soft: cubic-bezier(0.32, 0.72, 0, 1);
   --spacing-base: 8px;
   --spacing-container-max: 1280px;
   --spacing-sm: 12px;
@@ -69,45 +70,165 @@
 }
 
 @layer components {
-  .btn-primary {
-      @apply bg-primary text-white font-bold tracking-wide rounded-full px-8 py-3.5 shadow-level-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-level-2 hover:bg-primary-fixed active:scale-95 active:shadow-sm;
-  }
-  .btn-secondary {
-      @apply bg-secondary text-white font-bold tracking-wide rounded-full px-8 py-3.5 shadow-level-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-level-2 hover:bg-secondary-fixed active:scale-95 active:shadow-sm;
-  }
-  .btn-outline {
-      @apply border border-outline bg-surface text-primary font-bold tracking-wide rounded-full px-8 py-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-outline-variant hover:bg-surface-variant active:scale-95;
-  }
+  /* ── Layout ─────────────────────────────────────────────────────────────
+     One page width for header, content and footer so every edge lines up. */
+  .page { width: 100%; max-width: 1200px; margin-inline: auto; padding-inline: 16px; }
+  @media (min-width: 768px) { .page { padding-inline: 24px; } }
+
+  .page-title { @apply text-[22px] md:text-[26px] font-extrabold tracking-tight text-on-surface leading-tight; }
+  .page-subtitle { @apply text-sm text-on-surface-variant mt-1; }
+  .section-title { @apply text-base md:text-lg font-bold tracking-tight text-on-surface; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[0.08em] text-on-surface-variant; }
+
+  /* ── Buttons: 40px default, 32px small; sentence case; quick press (ClassFlow motion) ── */
+  .btn, .btn-primary, .btn-secondary, .btn-outline, .btn-ghost, .btn-danger { @apply inline-flex items-center justify-center gap-2 h-10 px-4 rounded-lg text-sm font-semibold whitespace-nowrap select-none disabled:opacity-60 disabled:pointer-events-none; transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 200ms var(--ease-out-soft); }
+  .btn:active, .btn-primary:active, .btn-secondary:active, .btn-outline:active, .btn-ghost:active, .btn-danger:active { transform: scale(0.97); }
+  .btn-primary { @apply bg-primary text-white hover:bg-primary-fixed; }
+  .btn-secondary { @apply bg-secondary text-white hover:bg-secondary-fixed; }
+  .btn-outline { @apply border border-outline bg-surface text-on-surface hover:bg-surface-dim hover:border-surface-container-highest; }
+  .btn-ghost { @apply text-on-surface-variant hover:bg-surface-variant hover:text-on-surface; }
+  .btn-danger { @apply bg-error text-white hover:opacity-90; }
+  .btn-sm { @apply h-8 px-3 text-[13px] rounded-md; }
+  .btn-lg { @apply h-11 px-5; }
+  .icon-btn { @apply inline-flex items-center justify-center w-9 h-9 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface relative; transition: background-color 160ms ease, color 160ms ease, transform 200ms var(--ease-out-soft); }
+  .icon-btn:active { transform: scale(0.94); }
+
+  /* ── Form fields ───────────────────────────────────────────────────────── */
+  .field { @apply w-full h-10 px-3 rounded-lg border border-outline bg-surface text-sm text-on-surface placeholder:text-on-surface-variant/60 outline-none; transition: border-color 160ms ease, box-shadow 160ms ease; }
+  textarea.field { @apply h-auto py-2.5 leading-relaxed; }
+  .field:focus { @apply border-primary; box-shadow: 0 0 0 3px rgb(24 92 67 / 0.14); }
+  .field[aria-invalid="true"] { @apply border-error; box-shadow: 0 0 0 3px rgb(220 38 38 / 0.10); }
+  .field-label { @apply block text-[13px] font-semibold text-on-surface mb-1.5; }
+  .field-hint { @apply text-xs text-on-surface-variant mt-1; }
+  .field-error { @apply text-xs font-medium text-error mt-1; }
+
+  /* ── Surfaces ──────────────────────────────────────────────────────────── */
+  .card { @apply bg-surface border border-outline-variant rounded-xl; }
+  .card-pad { @apply p-4 md:p-5; }
+
+  /* Grouped list (ClassFlow / iOS settings): rows split by hairlines inside one card. */
+  .list-group { @apply bg-surface border border-outline-variant rounded-xl overflow-hidden divide-y divide-outline-variant; }
+  .list-row { @apply flex items-center gap-3 px-4 min-h-11 py-2.5 text-sm text-on-surface; transition: background-color 140ms ease; }
+  a.list-row:hover, button.list-row:hover { @apply bg-surface-dim; }
+
+  /* Segmented control (ClassFlow): one active option on a soft track. */
+  .seg { @apply inline-flex items-center gap-1 p-1 rounded-lg bg-surface-variant; }
+  .seg-item { @apply inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-md text-[13px] font-semibold text-on-surface-variant whitespace-nowrap; transition: background-color 200ms var(--ease-out-soft), color 160ms ease, box-shadow 200ms ease; }
+  .seg-item:hover { @apply text-on-surface; }
+  .seg-item[aria-pressed="true"], .seg-item[aria-selected="true"], .seg-item.is-active { @apply bg-surface text-primary; box-shadow: 0 1px 2px rgb(16 39 27 / 0.08), 0 0 0 1px rgb(16 39 27 / 0.04); }
+
+  /* Soft status pills: tinted background + dark ink, always paired with text. */
+  .pill, .pill-brand, .pill-accent, .pill-success, .pill-warning, .pill-danger, .pill-neutral { @apply inline-flex items-center gap-1 h-6 px-2 rounded-full text-xs font-semibold whitespace-nowrap; }
+  .pill-brand { @apply bg-primary-container text-on-primary-container; }
+  .pill-accent { @apply bg-secondary-container text-on-secondary-container; }
+  .pill-success { @apply bg-[#E3F1E8] text-[#1B5E38]; }
+  .pill-warning { @apply bg-[#FDF0D5] text-[#7A4A06]; }
+  .pill-danger { @apply bg-error-container text-on-error-container; }
+  .pill-neutral { @apply bg-surface-variant text-on-surface-variant; }
+}
+
+/* Hover lift for cards, only on devices that really hover (never sticks on phones). */
+@media (hover: hover) {
+  .lift { transition: transform 280ms var(--ease-out-soft), box-shadow 280ms var(--ease-out-soft); }
+  .lift:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -12px rgb(16 39 27 / 0.18); }
 }
 
 
 /* Shared surfaces keep storefront and account pages visually aligned. */
 @layer base {
-  body { margin: 0; font-family: Manrope, ui-sans-serif, system-ui, sans-serif; }
+  body { margin: 0; font-family: Manrope, ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.55; letter-spacing: -0.005em; }
+  /* 16px fields on phones stop iOS Safari zooming the page when a field is focused. */
+  @media (max-width: 640px) { input, select, textarea { font-size: 16px !important; } }
+  .tabular { font-variant-numeric: tabular-nums; }
   button:disabled { cursor: not-allowed; }
   ::selection { background: #c8e2ce; color: #182d26; }
 }
-.storefront-main { padding-top: 112px; }
+.storefront-main { padding-top: 76px; }
 .shop-header { background: rgba(247,248,244,.96); border-bottom: 1px solid #e1e7de; }
-.product-card { background: #fff; border: 1px solid #e1e7de; border-radius: 16px; overflow: hidden; padding: 10px; }
-.product-card > div:first-child { border-radius: 10px; box-shadow: none; }
-.product-card > div:last-child { padding: 16px 6px 8px; }
-.shop-hero { display: grid; grid-template-columns: 1.05fr 1fr; overflow: hidden; border-radius: 24px; background: #eaf0e9; border: 1px solid #dde5da; }
-.shop-hero-copy { padding: clamp(28px,5vw,64px); align-self: center; }
-.shop-hero-copy h1 { font-size: clamp(38px,4.6vw,64px); line-height: 1.06; letter-spacing: -.045em; font-weight: 800; color: #182d26; margin: 20px 0; }
-.shop-hero-copy p { max-width: 400px; color: #59675f; line-height: 1.75; }
-.shop-hero-image { width: 100%; height: 100%; min-height: 420px; object-fit: cover; }
+.product-card { background: #fff; border: 1px solid #e1e7de; border-radius: 12px; overflow: hidden; }
+.shop-hero { display: grid; grid-template-columns: 1.1fr 1fr; overflow: hidden; border-radius: 16px; background: #eaf0e9; border: 1px solid #dde5da; }
+.shop-hero-copy { padding: clamp(24px,4vw,44px); align-self: center; }
+.shop-hero-copy h1 { font-size: clamp(28px,3.2vw,40px); line-height: 1.1; letter-spacing: -.035em; font-weight: 800; color: #182d26; margin: 12px 0 10px; }
+.shop-hero-copy p { max-width: 380px; color: #59675f; line-height: 1.6; font-size: 15px; }
+.shop-hero-image { width: 100%; height: 100%; min-height: 300px; max-height: 360px; object-fit: cover; }
 .shop-eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #185c43; }
-.shop-heading { font-size: clamp(24px,3vw,32px); line-height: 1.2; font-weight: 800; letter-spacing: -.035em; }
-.shop-collection { border-radius: 18px; overflow: hidden; position: relative; min-height: 250px; background: #182d26; }
-.shop-collection img { width: 100%; height: 280px; object-fit: cover; transition: transform .3s; }
+.shop-heading { font-size: clamp(18px,2vw,22px); line-height: 1.25; font-weight: 800; letter-spacing: -.02em; }
+.shop-collection { border-radius: 12px; overflow: hidden; position: relative; min-height: 180px; background: #182d26; }
+.shop-collection img { width: 100%; height: 200px; object-fit: cover; transition: transform .5s var(--ease-out-soft); }
 .shop-collection:hover img { transform: scale(1.03); }
-.shop-collection-copy { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: end; padding: 24px; color: white; background: linear-gradient(transparent,rgba(12,30,20,.85)); }
+.shop-collection-copy { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: end; padding: 16px; color: white; background: linear-gradient(transparent,rgba(12,30,20,.85)); }
 @media (max-width: 767px) {
-  .storefront-main { padding-top: 96px; }
+  .storefront-main { padding-top: 68px; }
   .shop-hero { grid-template-columns: 1fr; }
-  .shop-hero-image { min-height: 0; height: 240px; }
+  .shop-hero-image { min-height: 0; height: 180px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ── Toast notifications (ToastContext) ─────────────────────────────────────
+   These classes were referenced but never defined, so feedback rendered as
+   unstyled text at the foot of the page. Bottom-centre on phones (thumb reach),
+   bottom-right on wider screens; above dialogs so errors stay visible.
+   Lifted 96px so toasts never sit under the floating live-chat button. */
+.toast-container {
+  position: fixed;
+  z-index: 1100;
+  left: 16px;
+  right: 16px;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+@media (min-width: 640px) {
+  .toast-container { left: auto; right: 24px; align-items: flex-end; }
+}
+.toast-item {
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border-left: 4px solid theme('colors.primary');
+  background: theme('colors.inverse-surface');
+  color: theme('colors.inverse-on-surface');
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  animation: toast-in 220ms ease-out both;
+}
+.toast-exit { animation: toast-out 300ms ease-in both; }
+.toast-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: #22A06B;
+}
+.toast-message { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.toast-success { border-left-color: #22A06B; }
+.toast-error { border-left-color: theme('colors.error'); }
+.toast-error .toast-icon { background: theme('colors.error'); }
+.toast-warning { border-left-color: #D98E04; }
+.toast-warning .toast-icon { background: #D98E04; }
+.toast-info { border-left-color: #3B82F6; }
+.toast-info .toast-icon { background: #3B82F6; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) {
+  .toast-item, .toast-exit { animation-duration: 1ms; }
 }

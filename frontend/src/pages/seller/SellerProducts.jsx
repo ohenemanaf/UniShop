@@ -4,6 +4,8 @@
  * Date: 2026-07-21
  */
 import { useState, useEffect } from 'react';
+import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import GHS from '../../utils/currency';
 import { Link } from 'react-router-dom';
 import api from '../../api';
@@ -16,6 +18,8 @@ export default /**
  * @returns {any}
  */
 function SellerProducts() {
+  const { showToast } = useToast();
+  const confirm = useConfirm();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -53,13 +57,13 @@ function SellerProducts() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    if (!(await confirm({ title: 'Delete this product?', message: 'It will be removed from the storefront. Products with existing orders cannot be deleted.', confirmLabel: 'Delete product', tone: 'danger' }))) return;
     try {
       await api.delete(`/products/${id}`);
       fetchProducts();
       setSelectedIds(prev => prev.filter(selectedId => selectedId !== id));
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to delete product');
+      showToast(err.response?.data?.error || 'The product could not be deleted. It may have existing orders.', 'error');
     }
   };
   /**
@@ -68,14 +72,14 @@ function SellerProducts() {
  */
   const handleBulkDelete = async () => {
     if (selectedIds.length === 0) return;
-    if (!window.confirm(`Are you sure you want to delete ${selectedIds.length} products?`)) return;
+    if (!(await confirm({ title: `Delete ${selectedIds.length} product${selectedIds.length === 1 ? '' : 's'}?`, message: 'They will be removed from the storefront. Products with existing orders cannot be deleted.', confirmLabel: 'Delete products', tone: 'danger' }))) return;
     setIsDeleting(true);
     try {
       await Promise.all(selectedIds.map(id => api.delete(`/products/${id}`)));
       setSelectedIds([]);
       fetchProducts();
     } catch {
-      alert('Failed to delete some products. They may have existing orders.');
+      showToast('Some products could not be deleted. They may have existing orders.', 'error');
     } finally {
       setIsDeleting(false);
     }
@@ -136,12 +140,12 @@ function SellerProducts() {
         </div>
       </div>;
   }
-  return <div className="w-full max-w-[1400px] mx-auto">
+  return <div className="w-full max-w-[1200px] mx-auto">
       <SEO title="My Products | Seller Dashboard" />
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight mb-2">My Products</h1>
+          <h1 className="page-title mb-2">My Products</h1>
           <p className="text-on-surface-variant font-medium">Manage your product catalog and listings.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -154,7 +158,7 @@ function SellerProducts() {
         }} onClick={handleBulkDelete} disabled={isDeleting} className="inline-flex items-center justify-center gap-2 bg-error/10 text-error font-bold px-6 py-3.5 rounded-2xl hover:bg-error hover:text-white transition-all active:scale-95">
               <IconTrash size={20} stroke={2} /> {isDeleting ? 'Deleting...' : `Delete (${selectedIds.length})`}
             </motion.button>}
-          <Link to="/seller/products/new" className="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-6 py-3.5 rounded-2xl shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-95">
+          <Link to="/seller/products/new" className="btn-primary inline-flex">
             <IconPlus size={20} stroke={2} /> Add Product
           </Link>
         </div>
@@ -210,7 +214,7 @@ function SellerProducts() {
                   </div>}
                 {/* Status Badge */}
                 <div className="absolute bottom-4 left-4">
-                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md ${p.is_active ? 'bg-success/90 text-white' : 'bg-surface-variant/90 text-on-surface-variant'}`}>
+                  <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm backdrop-blur-md ${p.is_active ? 'bg-success/90 text-white' : 'bg-surface-variant/90 text-on-surface-variant'}`}>
                     {p.is_active ? 'Active' : 'Draft'}
                   </span>
                 </div>
@@ -235,7 +239,7 @@ function SellerProducts() {
     }} animate={{
       opacity: 1,
       scale: 1
-    }} className="bg-surface border border-outline/20 rounded-[2rem] p-12 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
+    }} className="bg-surface border border-outline/20 rounded-2xl p-8 text-center shadow-sm flex flex-col items-center justify-center min-h-[400px]">
           <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center text-primary mb-6">
             <IconPackage size={48} stroke={1.5} />
           </div>
@@ -243,7 +247,7 @@ function SellerProducts() {
           <p className="max-w-[400px] mx-auto mb-8 text-on-surface-variant font-medium">
             {searchTerm ? "We couldn't find any products matching your search. Try different keywords." : "You haven't listed any products yet. Create your first listing to start selling!"}
           </p>
-          {!searchTerm && <Link to="/seller/products/new" className="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-2xl shadow-md hover:-translate-y-1 transition-all">
+          {!searchTerm && <Link to="/seller/products/new" className="btn-primary inline-flex btn-lg">
               <IconPlus size={20} stroke={2} /> Post New Item
             </Link>}
         </motion.div>}

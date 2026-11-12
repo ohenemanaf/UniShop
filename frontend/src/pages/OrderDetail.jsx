@@ -122,10 +122,10 @@ function OrderDetail() {
     }
   };
   if (loading) {
-    return <div className="w-full max-w-[1440px] mx-auto px-4 md:px-8 py-20 animate-pulse">
+    return <div className="w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10 animate-pulse">
         <div className="h-8 w-48 bg-surface-variant/50 rounded-xl mb-8" />
-        <div className="h-32 w-full bg-surface-variant/50 rounded-[2rem] mb-8" />
-        <div className="h-64 w-full bg-surface-variant/50 rounded-[2rem]" />
+        <div className="h-32 w-full bg-surface-variant/50 rounded-2xl mb-8" />
+        <div className="h-64 w-full bg-surface-variant/50 rounded-2xl" />
       </div>;
   }
   if (!order) {
@@ -133,8 +133,8 @@ function OrderDetail() {
         <h2 className="text-2xl font-bold text-on-surface-variant">Order not found.</h2>
       </div>;
   }
-  return <div className="w-full pb-20 pt-24 bg-background min-h-[80vh]">
-      <div className="max-w-[1000px] mx-auto px-4 md:px-8">
+  return <div className="w-full pb-12 pt-10 bg-background min-h-[80vh]">
+      <div className="max-w-[1000px] mx-auto px-4 md:px-6">
         <Link to="/orders" className="inline-flex items-center gap-2 text-sm font-bold text-on-surface-variant hover:text-primary transition-colors mb-8 group active:scale-95">
           <IconArrowLeft size={18} stroke={1.5} className="group-hover:-translate-x-1 transition-transform" /> Back to Orders
         </Link>
@@ -142,7 +142,7 @@ function OrderDetail() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-2 tracking-tight">
+            <h1 className="page-title mb-2">
               Order #{order.id.slice(0, 8).toUpperCase()}
             </h1>
             <p className="text-lg text-on-surface-variant font-medium">
@@ -153,14 +153,14 @@ function OrderDetail() {
             })}
             </p>
           </div>
-          <div className="md:text-right bg-surface border border-outline/30 p-4 rounded-[1.5rem] md:border-none md:bg-transparent md:p-0 shadow-sm md:shadow-none">
+          <div className="md:text-right bg-surface border border-outline/30 p-4 rounded-2xl md:border-none md:bg-transparent md:p-0 shadow-sm md:shadow-none">
             <p className="text-xs font-semibold text-on-surface-variant tracking-wider uppercase mb-1">Total Amount</p>
             <p className="text-4xl md:text-5xl font-black text-primary leading-none">{GHS(order.total)}</p>
           </div>
         </div>
 
         {/* Tracking */}
-        <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 md:p-8 mb-8 shadow-sm">
+        <div className="bg-surface border border-outline/30 rounded-2xl p-6 md:p-6 mb-8 shadow-sm">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-2">
             <h2 className="text-2xl font-bold text-primary">Tracking Status</h2>
             <div className="flex items-center gap-3 w-full md:w-auto">
@@ -185,7 +185,7 @@ function OrderDetail() {
             </h2>
             
             <div className="flex flex-col gap-4">
-              {order.items?.map((item, i) => <div key={i} className="flex gap-4 items-center bg-surface border border-outline/30 p-4 rounded-[2rem] hover:shadow-level-1 transition-all">
+              {order.items?.map((item, i) => <div key={i} className="flex gap-4 items-center bg-surface border border-outline/30 p-4 rounded-2xl hover:shadow-level-1 transition-all">
                   <div className="w-20 h-20 rounded-2xl bg-surface-variant/50 overflow-hidden shrink-0 flex items-center justify-center">
                     {item.image_url ? <img src={item.image_url} alt={item.product_name} className="w-full h-full object-cover" /> : <IconBox size={32} stroke={1.5} className="text-on-surface-variant/50" />}
                   </div>
@@ -204,7 +204,7 @@ function OrderDetail() {
           {/* Shipping & Payment summary */}
           <div className="flex flex-col gap-6">
             
-            <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm">
+            <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
               <h2 className="text-xl font-bold text-primary flex items-center gap-2 mb-6 pb-4 border-b border-outline/30">
                 <IconTruck size={24} stroke={1.5} className="text-primary" /> Shipping Address
               </h2>
@@ -216,7 +216,7 @@ function OrderDetail() {
               </div>
             </div>
 
-            <div className="bg-surface border border-outline/30 rounded-[2rem] p-6 shadow-sm">
+            <div className="bg-surface border border-outline/30 rounded-2xl p-6 shadow-sm">
               <h2 className="text-xl font-bold text-primary mb-6 pb-4 border-b border-outline/30">Payment Summary</h2>
               
               <div className="flex flex-col gap-3 text-base font-medium mb-6">
@@ -251,7 +251,7 @@ function OrderDetail() {
 
       {/* Cancel Confirmation Modal */}
       {showCancelConfirm && <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setShowCancelConfirm(false)}>
-          <div className="bg-surface w-full max-w-[384px] p-8 rounded-[2rem] shadow-level-2 border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-[384px] p-6 rounded-2xl shadow-level-2 border border-outline/30 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="w-16 h-16 bg-error/10 text-error rounded-full flex items-center justify-center mx-auto mb-6 border border-error/20">
               <IconX size={32} stroke={1.5} />
             </div>

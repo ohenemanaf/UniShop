@@ -8,6 +8,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { IconSparkles, IconLock, IconAlertTriangle, IconEye, IconEyeOff } from '@tabler/icons-react';
 import {demoAccounts,portfolioDemo} from '../utils/demo';
 import { useAuth } from '../context/AuthContext';
+import { returnPathFrom } from '../hooks/useLoginRedirect';
 export default /**
  * Function Login
  * @returns {any}
@@ -18,8 +19,7 @@ function Login() {
   } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const destination = location.state?.from;
-  const from = destination?.pathname?.startsWith('/') && !destination.pathname.startsWith('//') ? destination.pathname + (destination.search || '') : null;
+  const from = returnPathFrom(location.state);
   const [form, setForm] = useState(()=>{const account=portfolioDemo && demoAccounts[new URLSearchParams(location.search).get('demo')];return {email:account?.email||'',password:account?.password||''};});
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -59,11 +59,11 @@ function Login() {
         
         <div className="max-w-[440px] w-full mx-auto">
           {/* Brand/Header */}
-          <div className="mb-12">
+          <div className="mb-8">
             <Link to="/" className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-xl mb-8">
               <IconSparkles size={24} stroke={1.5} />
             </Link>
-            <h1 className="text-4xl font-bold text-primary tracking-tight mb-2">Welcome back</h1>
+            <h1 className="page-title mb-2">Welcome back</h1>
             <p className="text-lg text-on-surface-variant">Sign in to your account to continue.</p>
           </div>
 
@@ -74,20 +74,20 @@ function Login() {
           {portfolioDemo && <div className="mb-7 rounded-2xl border border-outline-variant bg-surface p-4"><p className="text-sm font-bold mb-1">Try a demo account</p><p className="text-xs text-on-surface-variant mb-3">Choose a role to fill the form. Sample data, no real payments.</p><div className="flex gap-2">{Object.entries(demoAccounts).map(([role,account])=><button type="button" key={role} onClick={()=>{setForm({email:account.email,password:account.password});setError('');}} className="flex-1 py-2 text-sm font-semibold rounded-lg border border-outline hover:border-primary hover:bg-primary-container">{account.label}</button>)}</div></div>}
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label htmlFor="login-email" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Email Address</label>
-              <input id="login-email" type="email" name="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required className="w-full bg-surface-variant p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" autoComplete="email" />
+              <label htmlFor="login-email" className="field-label">Email Address</label>
+              <input id="login-email" type="email" name="email" placeholder="you@example.com" value={form.email} onChange={handleChange} required className="field w-full" autoComplete="email" />
             </div>
 
             <div className="flex flex-col gap-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="login-password" className="text-sm font-semibold text-on-surface-variant uppercase tracking-wider">Password</label>
+                <label htmlFor="login-password" className="field-label">Password</label>
                 <Link to="/forgot-password" className="text-sm font-bold text-primary hover:text-secondary transition-colors">Forgot Password?</Link>
               </div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant/50">
                   <IconLock size={20} stroke={1.5} />
                 </div>
-                <input id="login-password" autoComplete="current-password" type={showPassword ? "text" : "password"} name="password" value={form.password} onChange={handleChange} required placeholder="••••••••" className="w-full bg-surface-variant pl-12 pr-12 p-4 rounded-xl border border-transparent focus:border-outline/50 focus:bg-surface outline-none transition-colors font-medium text-primary placeholder:text-on-surface-variant/50" />
+                <input id="login-password" autoComplete="current-password" type={showPassword ? "text" : "password"} name="password" value={form.password} onChange={handleChange} required placeholder="••••••••" className="field w-full pl-12 pr-12" />
                 <button aria-label={showPassword ? "Hide password" : "Show password"} type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/50 hover:text-primary transition-colors">
                   {showPassword ? <IconEyeOff size={20} stroke={1.5} /> : <IconEye size={20} stroke={1.5} />}
                 </button>
@@ -96,19 +96,19 @@ function Login() {
 
             {error && <div role="alert" className="bg-error/10 border border-error/20 text-error p-4 rounded-xl text-sm font-semibold">{error}</div>}
 
-            <button type="submit" disabled={loading} className="w-full bg-primary text-white py-4 mt-2 rounded-xl font-bold text-lg active:scale-95 shadow-md hover:bg-primary-fixed transition-all disabled:opacity-50">
+            <button type="submit" disabled={loading} className="btn-primary w-full mt-2 disabled:opacity-50 btn-lg">
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
           <p className="font-medium text-on-surface-variant mt-10 text-center lg:text-left">
-            Don't have an account? <Link to="/register" className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Create one</Link>
+            Don't have an account? <Link to="/register" state={location.state} className="font-bold text-primary hover:text-secondary transition-colors underline underline-offset-4 decoration-primary/30">Create one</Link>
           </p>
         </div>
       </div>
 
       {/* Right Side: Image / Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-surface-variant relative overflow-hidden flex-col items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-surface-variant relative overflow-hidden flex-col items-center justify-center p-8">
         <div className="absolute inset-0 bg-primary"></div>
         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80" alt="Login Banner" className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30" />
         

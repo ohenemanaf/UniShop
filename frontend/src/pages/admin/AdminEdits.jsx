@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconPlus, IconEdit, IconTrash, IconPhoto, IconDeviceDesktopAnalytics, IconX, IconCheck } from '@tabler/icons-react';
 import ImageUpload from '../../components/ImageUpload';
 import { GHS0 } from '../../utils/currency';
@@ -17,6 +18,7 @@ function AdminEdits() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [edits, setEdits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -112,7 +114,7 @@ function AdminEdits() {
  * @returns {any}
  */
   const handleDelete = async id => {
-    if (!window.confirm('Are you sure you want to delete this edit?')) return;
+    if (!(await confirm({ title: 'Delete this edit?', message: 'This cannot be undone.', confirmLabel: 'Delete edit', tone: 'danger' }))) return;
     try {
       await api.delete(`/admin/edits/${id}`);
       showToast('Edit deleted.', 'success');
@@ -139,17 +141,17 @@ function AdminEdits() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Curated Edits</h1>
+          <h1 className="page-title mb-2">Curated Edits</h1>
           <p className="text-on-surface-variant font-medium">Manage the curated bundles grid on the storefront homepage.</p>
         </div>
-        <button onClick={() => handleOpenModal()} className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+        <button onClick={() => handleOpenModal()} className="btn-primary inline-flex">
           <IconPlus size={20} stroke={1.5} /> Add Edit
         </button>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -163,7 +165,7 @@ function AdminEdits() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {edits.length === 0 ? <tr>
-                    <td colSpan="5" className="p-12 text-center text-on-surface-variant">
+                    <td colSpan="5" className="p-8 text-center text-on-surface-variant">
                       <div className="flex flex-col items-center gap-3">
                         <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                           <IconDeviceDesktopAnalytics size={32} stroke={1.5} />
@@ -215,16 +217,16 @@ function AdminEdits() {
       </div>
 
       {showModal && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-[600px] rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh]">
+          <div className="bg-surface w-full max-w-[600px] rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh]">
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30 shrink-0">
               <h3 className="text-xl font-bold text-primary">
                 {isEditing ? 'Edit Curated Bundle' : 'New Curated Bundle'}
               </h3>
             </div>
             
-            <form onSubmit={handleSave} className="p-8 flex flex-col gap-5 overflow-y-auto flex-grow hide-scrollbar">
+            <form onSubmit={handleSave} className="p-6 flex flex-col gap-5 overflow-y-auto flex-grow hide-scrollbar">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-wider">Image URL *</label>
+                <label className="field-label">Image URL *</label>
                 <ImageUpload value={formData.image_url} onChange={url => setFormData({
               ...formData,
               image_url: url
@@ -233,40 +235,40 @@ function AdminEdits() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Title</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.title} onChange={e => setFormData({
+                  <label className="field-label">Title</label>
+                  <input type="text" className="field w-full" value={formData.title} onChange={e => setFormData({
                 ...formData,
                 title: e.target.value
               })} placeholder="e.g. Freshman Starter Kit" required />
                 </div>
 
                 <div className="flex flex-col gap-2 col-span-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Subtitle / Description</label>
-                  <textarea className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full resize-none h-24" value={formData.subtitle} onChange={e => setFormData({
+                  <label className="field-label">Subtitle / Description</label>
+                  <textarea className="field w-full resize-none h-24" value={formData.subtitle} onChange={e => setFormData({
                 ...formData,
                 subtitle: e.target.value
               })} placeholder="Brief description of the bundle..." />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Price (GHS)</label>
-                  <input type="number" step="0.01" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.price} onChange={e => setFormData({
+                  <label className="field-label">Price (GHS)</label>
+                  <input type="number" step="0.01" className="field w-full" value={formData.price} onChange={e => setFormData({
                 ...formData,
                 price: e.target.value
               })} placeholder="149.00" required />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Item Count</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.item_count} onChange={e => setFormData({
+                  <label className="field-label">Item Count</label>
+                  <input type="text" className="field w-full" value={formData.item_count} onChange={e => setFormData({
                 ...formData,
                 item_count: e.target.value
               })} placeholder="e.g. 5 items" />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Size in Grid</label>
-                  <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.size} onChange={e => setFormData({
+                  <label className="field-label">Size in Grid</label>
+                  <select className="field w-full" value={formData.size} onChange={e => setFormData({
                 ...formData,
                 size: e.target.value
               })}>
@@ -276,8 +278,8 @@ function AdminEdits() {
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Target Link URL</label>
-                  <input type="text" className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full" value={formData.link_url} onChange={e => setFormData({
+                  <label className="field-label">Target Link URL</label>
+                  <input type="text" className="field w-full" value={formData.link_url} onChange={e => setFormData({
                 ...formData,
                 link_url: e.target.value
               })} placeholder="e.g. /products?search=bundle" />
@@ -296,7 +298,7 @@ function AdminEdits() {
                 <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95">
+                <button type="submit" className="btn-primary">
                   {isEditing ? 'Save Changes' : 'Create Bundle'}
                 </button>
               </div>

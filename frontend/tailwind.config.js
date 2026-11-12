@@ -69,7 +69,8 @@ export default {
         "inverse-surface": "#182D26",
         "inverse-on-surface": "#F7F8F4"
       },
-      "borderRadius": { "none": "0px", "DEFAULT": "8px", "sm": "4px", "md": "8px", "lg": "12px", "xl": "16px", "2xl": "24px", "3xl": "32px", "full": "9999px" },
+      // Compact radius scale: cards 12px, panels 14px, nothing balloon-shaped.
+      "borderRadius": { "none": "0px", "DEFAULT": "6px", "sm": "4px", "md": "8px", "lg": "10px", "xl": "12px", "2xl": "14px", "3xl": "16px", "full": "9999px" },
       "maxWidth": {
         "xs": "20rem",
         "sm": "24rem",
@@ -95,15 +96,26 @@ export default {
         "body-lg": ["Manrope", "sans-serif"],
         "label-sm": ["Manrope", "sans-serif"]
       },
+      // Compact type scale. The large Tailwind steps are deliberately smaller than the defaults so
+      // that every page reads at a professional, contained size: page titles 24-28px, not 48-64px.
       "fontSize": {
-        "headline-xl": ["56px", { "lineHeight": "1.1", "letterSpacing": "-0.03em", "fontWeight": "800" }],
-        "headline-lg": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
-        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
-        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }],
-        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
-        "label-md": ["14px", { "lineHeight": "1.5", "letterSpacing": "0.02em", "fontWeight": "600" }],
-        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
-        "label-sm": ["12px", { "lineHeight": "1.5", "letterSpacing": "0.02em", "fontWeight": "500" }]
+        "base": ["0.9375rem", { "lineHeight": "1.45rem" }],
+        "lg": ["1rem", { "lineHeight": "1.5rem" }],
+        "xl": ["1.125rem", { "lineHeight": "1.6rem" }],
+        "2xl": ["1.25rem", { "lineHeight": "1.75rem" }],
+        "3xl": ["1.5rem", { "lineHeight": "2rem" }],
+        "4xl": ["1.75rem", { "lineHeight": "2.2rem" }],
+        "5xl": ["2rem", { "lineHeight": "2.4rem" }],
+        "6xl": ["2.25rem", { "lineHeight": "2.6rem" }],
+        "7xl": ["2.5rem", { "lineHeight": "2.8rem" }],
+        "headline-xl": ["36px", { "lineHeight": "1.15", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+        "headline-lg": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+        "headline-lg-mobile": ["24px", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+        "headline-md": ["20px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+        "body-md": ["14px", { "lineHeight": "1.55", "fontWeight": "400" }],
+        "label-md": ["13px", { "lineHeight": "1.45", "letterSpacing": "0.01em", "fontWeight": "600" }],
+        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+        "label-sm": ["12px", { "lineHeight": "1.45", "letterSpacing": "0.01em", "fontWeight": "500" }]
       },
       "boxShadow": {
         "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",

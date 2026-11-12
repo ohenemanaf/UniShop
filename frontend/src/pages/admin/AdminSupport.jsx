@@ -94,10 +94,10 @@ function AdminSupport() {
   return <div className="w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Support CRM</h1>
+          <h1 className="page-title mb-2">Support CRM</h1>
           <p className="text-on-surface-variant font-medium">Manage customer support tickets and inquiries.</p>
         </div>
-        <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
+        <select className="field w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="ALL">All Tickets</option>
           <option value="OPEN">Open</option>
           <option value="IN_PROGRESS">In Progress</option>
@@ -106,9 +106,9 @@ function AdminSupport() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         {loading ? <div className="w-full animate-pulse p-lg">
-             <div className="h-64 w-full bg-surface-variant/30 rounded-[2rem]" />
+             <div className="h-64 w-full bg-surface-variant/30 rounded-2xl" />
           </div> : <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -122,7 +122,7 @@ function AdminSupport() {
               </thead>
               <tbody className="divide-y divide-outline/30">
                 {filteredTickets.length === 0 ? <tr>
-                    <td colSpan="5" className="p-12 text-center">
+                    <td colSpan="5" className="p-8 text-center">
                       <div className="flex flex-col items-center gap-3 text-on-surface-variant">
                         <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                           <IconLifebuoy size={32} stroke={1.5} />
@@ -160,7 +160,7 @@ function AdminSupport() {
 
       {/* Ticket Modal */}
       {selectedTicket && <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-          <div className="bg-surface w-full max-w-2xl rounded-[2rem] shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-surface w-full max-w-2xl rounded-2xl shadow-level-3 overflow-hidden border border-outline/30 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
             <div className="px-8 py-6 border-b border-outline/30 flex justify-between items-center bg-surface-variant/30 shrink-0">
               <h3 className="text-xl font-bold text-primary flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
@@ -173,7 +173,7 @@ function AdminSupport() {
               </button>
             </div>
             
-            <div className="p-8 overflow-y-auto flex-grow flex flex-col gap-8">
+            <div className="p-6 overflow-y-auto flex-grow flex flex-col gap-8">
               <div className="bg-surface-variant/30 p-6 rounded-2xl border border-outline/30">
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -190,13 +190,13 @@ function AdminSupport() {
 
               <form onSubmit={handleUpdateTicket} className="flex flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Admin Reply</label>
-                  <textarea className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-medium text-primary focus:border-primary transition-colors shadow-sm resize-y" value={replyText} onChange={e => setReplyText(e.target.value)} rows={5} placeholder="Type your response here. This will be sent to the customer..." />
+                  <label className="field-label">Admin Reply</label>
+                  <textarea className="field resize-y" value={replyText} onChange={e => setReplyText(e.target.value)} rows={5} placeholder="Type your response here. This will be sent to the customer..." />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-primary uppercase tracking-wider">Status</label>
-                  <select className="bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm appearance-none cursor-pointer" value={ticketStatus} onChange={e => setTicketStatus(e.target.value)}>
+                  <label className="field-label">Status</label>
+                  <select className="field appearance-none cursor-pointer" value={ticketStatus} onChange={e => setTicketStatus(e.target.value)}>
                     <option value="OPEN">Open</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="RESOLVED">Resolved</option>
@@ -208,7 +208,7 @@ function AdminSupport() {
                   <button type="button" className="px-6 py-3 rounded-xl font-semibold bg-surface border border-outline/50 text-primary hover:border-primary transition-all active:scale-95 shadow-sm" onClick={() => setSelectedTicket(null)}>
                     Cancel
                   </button>
-                  <button type="submit" className="px-6 py-3 rounded-xl font-bold bg-primary text-white shadow-sm hover:shadow-md transition-all active:scale-95 inline-flex items-center gap-2" disabled={updating}>
+                  <button type="submit" className="btn-primary inline-flex" disabled={updating}>
                     {updating ? 'Saving...' : <><IconCheck size={20} stroke={1.5} /> Save & Reply</>}
                   </button>
                 </div>

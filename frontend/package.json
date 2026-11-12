@@ -10,11 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@stripe/react-stripe-js": "^6.7.0",
-    "@stripe/stripe-js": "^9.9.0",
+    "@stripe/react-stripe-js": "^7.0.1",
+    "@stripe/stripe-js": "^10.3.0",
     "@tabler/icons-react": "^3.44.0",
     "axios": "^1.18.1",
-    "framer-motion": "^12.42.2",
+    "framer-motion": "^14.13.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "rc-slider": "^11.1.9",

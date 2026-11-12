@@ -60,7 +60,7 @@ function ImageUpload({
   };
   return <div className="flex flex-col gap-2 w-full">
       <div className="flex gap-2">
-        <input type="text" className="flex-1 bg-surface border border-outline/50 p-4 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" value={value || ''} onChange={e => onChange(e.target.value)} placeholder={placeholder || 'https://...'} />
+        <input type="text" className="field flex-1" value={value || ''} onChange={e => onChange(e.target.value)} placeholder={placeholder || 'https://...'} />
         <button type="button" onClick={() => fileInputRef.current?.click()} disabled={loading} className="bg-primary/10 text-primary px-4 rounded-xl font-bold flex items-center gap-2 hover:bg-primary/20 transition-colors disabled:opacity-50">
           {loading ? <IconLoader2 className="animate-spin" size={20} /> : <IconUpload size={20} />}
           Upload

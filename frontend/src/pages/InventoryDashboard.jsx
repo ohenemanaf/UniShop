@@ -94,7 +94,7 @@ function InventoryDashboard() {
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2 flex items-center gap-3">
+          <h1 className="page-title mb-2 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-surface-variant/50 text-primary flex items-center justify-center border border-outline/30">
               <IconPackage size={24} stroke={1.5} />
             </div>
@@ -102,7 +102,7 @@ function InventoryDashboard() {
           </h1>
           <p className="text-on-surface-variant font-medium">Quickly update stock levels across your products.</p>
         </div>
-        <button className="inline-flex items-center justify-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl shadow-sm hover:shadow-level-2 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100" disabled={!hasEdits || saving} onClick={handleBulkSave}>
+        <button className="btn-primary inline-flex disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100" disabled={!hasEdits || saving} onClick={handleBulkSave}>
           <IconDeviceFloppy size={20} stroke={1.5} /> {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
@@ -114,7 +114,7 @@ function InventoryDashboard() {
           <IconCheck size={20} stroke={1.5} /> {successMsg}
         </div>}
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -164,7 +164,7 @@ function InventoryDashboard() {
                   </tr>;
             })}
               {inventory.length === 0 && <tr>
-                  <td colSpan="7" className="p-8 text-center">
+                  <td colSpan="7" className="p-6 text-center">
                     <div className="flex flex-col items-center justify-center text-on-surface-variant py-8">
                       <IconPackage size={48} stroke={1.5} className="mb-4 opacity-50" />
                       <p className="text-lg font-bold text-primary">No inventory items found</p>

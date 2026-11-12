@@ -93,7 +93,7 @@ function SellerDashboard() {
       }
     }
   };
-  return <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-[1400px] mx-auto">
+  return <motion.div variants={containerVariants} initial="hidden" animate="show" className="max-w-[1200px] mx-auto">
       {/* Stats Overview Bento Grid */}
       <motion.section variants={itemVariants} className="mb-8">
         <div className="flex items-center justify-between mb-6">
@@ -227,10 +227,10 @@ function SellerDashboard() {
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-black text-primary">{GHS(Number(order.price_at_purchase)*Number(order.quantity))}</p>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-success">{order.fulfillment_status}</span>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-success">{order.fulfillment_status}</span>
                     </div>
                   </div>)}
-              </div> : <div className="p-8 text-center text-on-surface-variant">
+              </div> : <div className="p-6 text-center text-on-surface-variant">
                 <p className="font-medium">No recent orders yet.</p>
               </div>}
           </div>
@@ -256,12 +256,12 @@ function SellerDashboard() {
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-sm font-black text-primary">{GHS(item.price)}</p>
-                      <span className={`text-[10px] font-bold uppercase tracking-wider ${item.is_active ? 'text-success' : 'text-error'}`}>
+                      <span className={`text-[11px] font-bold uppercase tracking-wider ${item.is_active ? 'text-success' : 'text-error'}`}>
                         {item.is_active ? 'Active' : 'Draft'}
                       </span>
                     </div>
                   </div>)}
-              </div> : <div className="p-8 text-center text-on-surface-variant">
+              </div> : <div className="p-6 text-center text-on-surface-variant">
                 <p className="font-medium">No products listed yet.</p>
               </div>}
           </div>

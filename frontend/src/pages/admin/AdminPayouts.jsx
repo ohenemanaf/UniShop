@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import GHS from '../../utils/currency';
 import api from '../../api';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { IconCircleCheck, IconX, IconWallet } from '@tabler/icons-react';
 export default /**
  * Function AdminPayouts
@@ -16,6 +17,7 @@ function AdminPayouts() {
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const [payouts, setPayouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('ALL');
@@ -45,7 +47,7 @@ function AdminPayouts() {
  * @returns {any}
  */
   const handleUpdateStatus = async (id, status) => {
-    if (!window.confirm(`Are you sure you want to mark this payout as ${status}?`)) return;
+    if (!(await confirm({ title: status === 'REJECTED' ? 'Reject this payout?' : 'Mark this payout as processed?', message: status === 'REJECTED' ? 'The seller will see that the withdrawal was rejected.' : 'Only confirm once the money has been sent to the seller.', confirmLabel: status === 'REJECTED' ? 'Reject payout' : 'Mark processed', tone: status === 'REJECTED' ? 'danger' : 'default' }))) return;
     setUpdating(id);
     try {
       await api.patch(`/admin/payouts/${id}`, {
@@ -68,10 +70,10 @@ function AdminPayouts() {
   return <div className="w-full">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Payouts</h1>
+          <h1 className="page-title mb-2">Payouts</h1>
           <p className="text-on-surface-variant font-medium">Manage seller withdrawal requests.</p>
         </div>
-        <select className="bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
+        <select className="field w-full sm:w-48 appearance-none cursor-pointer" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="ALL">All Payouts</option>
           <option value="PENDING">Pending</option>
           <option value="PROCESSED">Processed</option>
@@ -79,7 +81,7 @@ function AdminPayouts() {
         </select>
       </div>
 
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -94,7 +96,7 @@ function AdminPayouts() {
             </thead>
             <tbody className="divide-y divide-outline/30">
               {filteredPayouts.length === 0 ? <tr>
-                  <td colSpan="6" className="p-12 text-center text-on-surface-variant">
+                  <td colSpan="6" className="p-8 text-center text-on-surface-variant">
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center mb-2">
                         <IconWallet size={32} stroke={1.5} />

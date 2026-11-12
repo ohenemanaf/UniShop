@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
 import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
+import { ConfirmProvider } from './context/ConfirmContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import { StoreSettingsProvider, useStoreSettings } from './context/StoreSettingsContext';
@@ -17,7 +18,7 @@ const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
 const AdminControlCenter = lazy(() => import('./pages/admin/AdminControlCenter'));
 function StoreChat() { const {settings} = useStoreSettings(); return settings.live_chat_enabled ? <LiveChat /> : null; }
 function StoreFooterBrand() { const {settings} = useStoreSettings(); return settings.store_name; }
-function StoreContact() { const {settings} = useStoreSettings(); return settings.support_email ? <a href={'mailto:' + settings.support_email} className="text-sm text-primary">{settings.support_email}</a> : null; }
+function StoreContact() { const {settings} = useStoreSettings(); return settings.support_email ? <a href={'mailto:' + settings.support_email} className="text-primary hover:underline">{settings.support_email}</a> : null; }
 import MiniCart from './components/MiniCart';
 import LiveChat from './components/LiveChat';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -81,8 +82,9 @@ function App() {
         <StoreSettingsProvider><ThemeProvider>
           <AuthProvider>
             <SocketProvider>
+              <ToastProvider>
               <CartProvider>
-                <ToastProvider>
+                <ConfirmProvider>
                   <Suspense fallback={<GlobalLoader />}>
                     <Routes>
                       {/* Admin Routes */}
@@ -143,7 +145,7 @@ function App() {
                               <Route path="/faq" element={<FAQ />} />
 
                               {/* Protected routes */}
-                              <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+                              <Route path="/cart" element={<Cart />} />
                               <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                               <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
                               <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
@@ -160,21 +162,19 @@ function App() {
                           </main>
 
                           {/* Footer */}
-                          <div className="text-center py-4"><StoreContact /></div>
-                          <footer className="bg-surface-container-low border-t border-outline-variant w-full">
-                            <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-lg max-w-container-max mx-auto gap-md text-center md:text-left">
-                              <div className="font-headline-md text-headline-md font-bold text-on-surface opacity-80 hover:opacity-100 transition-opacity">
-                                <StoreFooterBrand />
-                              </div>
-                              <div className="flex flex-wrap justify-center gap-md font-label-sm text-label-sm">
-                                <Link to="/demo" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Explore demo</Link>
-                                <Link to="/about" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">About Us</Link>
-                                <Link to="/contact" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Contact</Link>
-                                <Link to="/faq" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">FAQ</Link>
-                                <Link to="/support" className="text-secondary-fixed-variant hover:text-primary transition-colors duration-200">Support</Link>
-                              </div>
-                              <div className="font-label-sm text-label-sm text-secondary-fixed-variant">
-                                © {new Date().getFullYear()} <StoreFooterBrand /> University Marketplace
+                          <footer className="mt-12 border-t border-outline-variant bg-surface-container-low">
+                            <div className="page py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-[13px]">
+                              <span className="font-extrabold tracking-tight text-on-surface"><StoreFooterBrand /></span>
+                              <nav className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-on-surface-variant" aria-label="Footer">
+                                <Link to="/demo" className="hover:text-primary transition-colors">Explore demo</Link>
+                                <Link to="/about" className="hover:text-primary transition-colors">About</Link>
+                                <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+                                <Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link>
+                                <Link to="/support" className="hover:text-primary transition-colors">Support</Link>
+                              </nav>
+                              <div className="text-xs text-on-surface-variant flex flex-wrap items-center justify-center gap-x-2">
+                                <span>© {new Date().getFullYear()} <StoreFooterBrand /></span>
+                                <StoreContact />
                               </div>
                             </div>
                           </footer>
@@ -184,8 +184,9 @@ function App() {
                         </div>} />
                     </Routes>
                   </Suspense>
-                </ToastProvider>
+                </ConfirmProvider>
               </CartProvider>
+              </ToastProvider>
             </SocketProvider>
           </AuthProvider>
         </ThemeProvider></StoreSettingsProvider>

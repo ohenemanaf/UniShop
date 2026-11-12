@@ -25,18 +25,18 @@ export default /**
  */
 function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
-  return <div className="min-h-screen bg-background pt-24 pb-20 px-4 md:px-8">
+  return <div className="min-h-screen bg-background pt-10 pb-12 px-4 md:px-6">
       <SEO title="FAQ | UniShop" />
       <div className="max-w-[800px] mx-auto">
-        <div className="text-center mb-16 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6 tracking-tight">Frequently Asked Questions</h1>
+        <div className="text-center mb-10 animate-fade-in-up">
+          <h1 className="page-title mb-2">Frequently Asked Questions</h1>
           <p className="text-xl text-on-surface-variant">
             Everything you need to know about the product and how it works.
           </p>
         </div>
 
         <div className="space-y-4">
-          {FAQS.map((faq, idx) => <div key={idx} className={`bg-surface border ${openIndex === idx ? 'border-primary shadow-md' : 'border-outline/50 hover:border-primary/50'} rounded-[1.5rem] overflow-hidden transition-all duration-300`}>
+          {FAQS.map((faq, idx) => <div key={idx} className={`bg-surface border ${openIndex === idx ? 'border-primary shadow-md' : 'border-outline/50 hover:border-primary/50'} rounded-2xl overflow-hidden transition-all duration-300`}>
               <button className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none" onClick={() => setOpenIndex(openIndex === idx ? null : idx)}>
                 <span className="text-lg font-bold text-primary">{faq.question}</span>
                 <IconChevronDown size={24} className={`text-on-surface-variant transition-transform duration-300 ${openIndex === idx ? 'rotate-180 text-primary' : ''}`} />
@@ -49,7 +49,7 @@ function FAQ() {
             </div>)}
         </div>
         
-        <div className="mt-16 text-center">
+        <div className="mt-10 text-center">
           <p className="text-lg text-on-surface-variant mb-6">Still have questions?</p>
           <a href="/contact" className="btn-outline inline-block">Contact Support</a>
         </div>

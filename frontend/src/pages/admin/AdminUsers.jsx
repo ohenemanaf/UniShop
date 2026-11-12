@@ -8,6 +8,7 @@ import GHS from '../../utils/currency';
 import api from '../../api';
 import { IconUsers, IconMessageCircle, IconX, IconInbox, IconShoppingBag, IconTicket, IconSearch, IconShieldLock, IconChevronRight, IconUserCheck, IconMail, IconPhone, IconCalendar, IconBuildingStore, IconCheck, IconClockHour4, IconChevronDown } from '@tabler/icons-react';
 import { useToast } from '../../context/ToastContext';
+import { useConfirm } from '../../context/ConfirmContext';
 import { useAuth } from '../../context/AuthContext';
 const ROLE_COLORS = {
   admin: 'bg-error/10 text-error border-error/20',
@@ -47,6 +48,7 @@ function UserDetailModal({
   const {
     showToast
   } = useToast();
+  const confirm = useConfirm();
   const {
     user: currentUser
   } = useAuth();
@@ -68,7 +70,7 @@ function UserDetailModal({
  * @returns {any}
  */
   const handleRoleChange = async newRole => {
-    if (!window.confirm(`Change this user's role to "${newRole}"?`)) return;
+    if (!(await confirm({ title: `Change this user's role to ${newRole}?`, message: 'Their access changes as soon as you confirm.', confirmLabel: 'Change role' }))) return;
     setChangingRole(true);
     try {
       await api.patch(`/admin/users/${userId}/role`, {
@@ -85,7 +87,7 @@ function UserDetailModal({
   };
   if (loading) {
     return <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4">
-        <div className="bg-surface w-full max-w-2xl rounded-[2rem] p-12 flex items-center justify-center">
+        <div className="bg-surface w-full max-w-2xl rounded-2xl p-8 flex items-center justify-center">
           <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
         </div>
       </div>;
@@ -99,7 +101,7 @@ function UserDetailModal({
   } = data;
   const isSelf = user.id === currentUser?.id;
   return <div className="fixed inset-0 z-50 flex items-center justify-center bg-scrim/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-surface w-full max-w-3xl rounded-[2rem] shadow-level-3 border border-outline/30 overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+      <div className="bg-surface w-full max-w-3xl rounded-2xl shadow-level-3 border border-outline/30 overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-outline/30 bg-surface-variant/30 shrink-0">
           <div className="flex items-center gap-4">
@@ -449,7 +451,7 @@ function AdminUsers() {
       {activeTab === 'users' && <div className="mb-4">
           <div className="relative w-full md:w-80">
             <IconSearch size={18} stroke={1.5} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant" />
-            <input type="text" className="w-full pl-10 pr-4 py-3 bg-surface border border-outline/50 rounded-xl text-sm font-medium text-primary focus:border-primary focus:outline-none transition-colors" placeholder="Search by name or email..." value={search} onChange={e => setSearch(e.target.value)} />
+            <input type="text" className="field w-full pl-10 pr-4" placeholder="Search by name or email..." value={search} onChange={e => setSearch(e.target.value)} />
           </div>
         </div>}
 
@@ -461,8 +463,8 @@ function AdminUsers() {
         </div>}
 
       {/* Content */}
-      <div className="bg-surface border border-outline/30 rounded-[2rem] overflow-hidden shadow-sm">
-        {loading ? <div className="p-12 flex items-center justify-center">
+      <div className="bg-surface border border-outline/30 rounded-2xl overflow-hidden shadow-sm">
+        {loading ? <div className="p-8 flex items-center justify-center">
             <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
           </div> : activeTab === 'users' ? <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -502,7 +504,7 @@ function AdminUsers() {
                     </td>
                   </tr>)}
                 {filteredUsers.length === 0 && <tr>
-                    <td colSpan="5" className="p-12 text-center">
+                    <td colSpan="5" className="p-8 text-center">
                       <div className="flex flex-col items-center text-on-surface-variant">
                         <IconUsers size={48} stroke={1.5} className="mb-4 opacity-40" />
                         <p className="font-bold text-primary">{search ? 'No users match your search.' : 'No users found.'}</p>
@@ -512,7 +514,7 @@ function AdminUsers() {
               </tbody>
             </table>
           </div> : activeTab === 'applications' ? <div className="p-6 space-y-4">
-            {applications.length === 0 ? <div className="flex flex-col items-center text-on-surface-variant py-16">
+            {applications.length === 0 ? <div className="flex flex-col items-center text-on-surface-variant py-10">
                 <IconBuildingStore size={64} stroke={1.5} className="mb-4 opacity-40" />
                 <p className="text-xl font-bold text-primary mb-2">No {appFilter || ''} Applications</p>
                 <p className="text-sm font-medium">Seller applications will appear here once customers submit them.</p>
@@ -554,13 +556,13 @@ function AdminUsers() {
                 </div>
 
                 {replyingTo === ticket.id && <div className="mt-4 flex gap-3 animate-in fade-in duration-200">
-                    <input type="text" className="flex-1 bg-surface border border-outline/50 p-3.5 rounded-xl outline-none font-semibold text-primary focus:border-primary transition-colors shadow-sm" placeholder="Type your reply..." value={replyText} onChange={e => setReplyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleReply(ticket.id)} />
-                    <button className="bg-primary text-white font-bold px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md transition-all active:scale-95" onClick={() => handleReply(ticket.id)}>
+                    <input type="text" className="field flex-1" placeholder="Type your reply..." value={replyText} onChange={e => setReplyText(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleReply(ticket.id)} />
+                    <button className="btn-primary" onClick={() => handleReply(ticket.id)}>
                       Send
                     </button>
                   </div>}
               </div>)}
-            {tickets.length === 0 && <div className="flex flex-col items-center justify-center text-on-surface-variant py-16">
+            {tickets.length === 0 && <div className="flex flex-col items-center justify-center text-on-surface-variant py-10">
                 <IconInbox size={64} stroke={1.5} className="mb-4 opacity-40" />
                 <p className="text-xl font-bold text-primary mb-2">No Support Tickets</p>
                 <p className="text-sm font-medium">When customers submit support requests, they'll appear here.</p>

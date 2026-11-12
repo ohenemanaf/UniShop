@@ -104,19 +104,19 @@ function BuyerDashboard() {
     navigate('/cart');
   };
   if (loading) {
-    return <div className="flex-grow w-full max-w-[1440px] mx-auto px-4 md:px-8 py-24 animate-pulse"><div className="h-32 bg-surface-variant/50 rounded-[2rem] mb-6"></div><div className="h-64 bg-surface-variant/50 rounded-[2rem]"></div></div>;
+    return <div className="flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-6 py-10 animate-pulse"><div className="h-32 bg-surface-variant/50 rounded-2xl mb-6"></div><div className="h-64 bg-surface-variant/50 rounded-2xl"></div></div>;
   }
-  return <main className={`flex-grow w-full pb-20 pt-24 bg-background ${largeText ? 'text-lg' : ''}`}>
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+  return <main className={`flex-grow w-full pb-12 pt-10 bg-background ${largeText ? 'text-lg' : ''}`}>
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
         <SEO title="My UniShop | Dashboard" />
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-3 tracking-tight">My UniShop</h1>
+        <header className="mb-8">
+          <h1 className="page-title mb-2">My UniShop</h1>
           <p className="text-lg text-on-surface-variant font-medium">Welcome back, {user?.name?.split(' ')[0]}. Here's a snapshot of your buyer activity.</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
           {/* Recent Orders */}
-          <section className="md:col-span-8 bg-surface rounded-[2rem] p-6 md:p-8 shadow-sm border border-outline/30">
+          <section className="md:col-span-8 bg-surface rounded-2xl p-6 md:p-6 shadow-sm border border-outline/30">
             <div className="flex justify-between items-center mb-6 pb-4 border-b border-outline/30">
               <h2 className="text-xl font-bold text-primary flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-surface-variant text-primary flex items-center justify-center border border-outline/50">
@@ -146,7 +146,7 @@ function BuyerDashboard() {
           </section>
 
           {/* Account Settings / Accessibility */}
-          <section className="md:col-span-4 bg-surface rounded-[2rem] p-6 md:p-8 shadow-sm border border-outline/30 flex flex-col">
+          <section className="md:col-span-4 bg-surface rounded-2xl p-6 md:p-6 shadow-sm border border-outline/30 flex flex-col">
             <div className="flex items-center gap-3 mb-6 pb-4 border-b border-outline/30">
               <div className="w-10 h-10 rounded-full bg-surface-variant text-primary flex items-center justify-center border border-outline/50">
                 <IconAccessible size={20} stroke={1.5} />
@@ -210,7 +210,7 @@ function BuyerDashboard() {
                 </div>
               </div>)}
 
-            {wishlist.length === 0 && <div className="col-span-2 md:col-span-4 bg-surface border border-outline/30 border-dashed rounded-[2rem] flex flex-col items-center justify-center p-12 text-center min-h-[250px]">
+            {wishlist.length === 0 && <div className="col-span-2 md:col-span-4 bg-surface border border-outline/30 border-dashed rounded-2xl flex flex-col items-center justify-center p-8 text-center min-h-[250px]">
                 <IconBookmarkPlus className="text-primary/50 mb-4" size={48} stroke={1.5} />
                 <p className="text-lg font-medium text-on-surface-variant">Discover more items to save.</p>
                 <Link to="/products" className="mt-6 px-8 py-3 bg-surface border border-outline/50 text-primary font-semibold rounded-full hover:border-primary transition-all inline-block active:scale-95 shadow-sm">
