@@ -19,7 +19,7 @@ Buyers, sellers and admins each get their own workspace, on one full-stack React
 ## What it does
 
 ### For buyers
-- Browse and filter the catalogue by category, price and rating, and open product pages with variants, reviews and seller details.
+- Browse the catalogue with filters for category, price, colour and size, sort it (by rating, for example), and open product pages with variants, reviews and seller details.
 - Keep a wishlist and a cart that is saved between visits, then check out across several sellers in one order.
 - Pay by card through Stripe. In demo mode, Mobile Money (MTN, Telecel Cash, AT Money) is also available, with Ghanaian number validation.
 - Track orders, download PDF invoices, and get help through support tickets or live chat.
